@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PatientTickets.Domain.Enums;
 using Reviews.Api.JsonSerializer;
 using Reviews.Application.Abstractions.Service;
 using Reviews.Application.Behavior;
+using Reviews.Domain.Enums;
 
 namespace Reviews.Api;
 

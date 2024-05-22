@@ -26,6 +26,8 @@ namespace Authorization.Api.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("CreateJwtToken")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateJwtTokenAsync([FromBody] CreateJwtTokenCommand createJwtTokenCommand, CancellationToken cancellationToken)
         {
             var createdToken = await _mediator.Send(createJwtTokenCommand, cancellationToken);

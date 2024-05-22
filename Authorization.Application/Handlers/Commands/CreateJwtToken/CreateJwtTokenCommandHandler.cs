@@ -1,3 +1,4 @@
+using Authorization.Application.Abstractions.ExternalProviders;
 using Authorization.Application.Abstractions.Persistence.Repository.Read;
 using Authorization.Application.Abstractions.Persistence.Repository.Writing;
 using Authorization.Application.Abstractions.Service;
@@ -18,6 +19,7 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
     private readonly ICreateJwtTokenService _createJwtTokenService;
     private readonly IJwtProvider _jwtProvider;
     private readonly IConfiguration _configuration;
+    private readonly IApplicationUsersProviders _applicationUsersProviders;
 
 
 
@@ -25,24 +27,28 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
         IBaseReadRepository<ApplicationUser> users, 
         IBaseWriteRepository<RefreshToken> refreshTokens,
         ICreateJwtTokenService createJwtTokenService,
-        IConfiguration configuration, IJwtProvider jwtProvider, ICurrentUserService currentUserService)
+        IConfiguration configuration, IJwtProvider jwtProvider, 
+        ICurrentUserService currentUserService,
+        IApplicationUsersProviders applicationUsersProviders)
     {
         _users = users;
         _refreshTokens = refreshTokens;
         _createJwtTokenService = createJwtTokenService;
         _configuration = configuration;
         _jwtProvider = jwtProvider;
-        
+        _applicationUsersProviders = applicationUsersProviders;
     }
     
     public async Task<JwtTokenDto> Handle(CreateJwtTokenCommand request, CancellationToken cancellationToken)
     {
+
         var user = await _users.AsAsyncRead().SingleOrDefaultAsync(u => u.Login == request.Login.Trim(), cancellationToken);
+        var applicationUser = await _applicationUsersProviders.GetApplicationUserAsync(user.ApplicationUserId, cancellationToken);
         if (user is null)
         {
             throw new NotFoundException($"User with login {request.Login} don't exist");
         }
-        
+
         if (!PasswordHashUtil.Verify(request.Password, user.PasswordHash))
         {
             throw new ForbiddenException();

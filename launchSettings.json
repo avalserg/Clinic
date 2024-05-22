@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "authorization.api": "StartDebugging",
+        "manageusers.api": "StartDebugging",
+        "medicalcards.api": "StartDebugging",
+        "patienttickets.api": "StartDebugging",
+        "reviews.api": "StartDebugging"
+      }
+    }
+  }
+}

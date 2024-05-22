@@ -1,4 +1,4 @@
-namespace PatientTickets.Domain.Enums;
+namespace Reviews.Domain.Enums;
 
 public enum ApplicationUserRolesEnum
 {

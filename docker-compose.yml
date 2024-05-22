@@ -1,0 +1,36 @@
+services:
+
+  mssql:
+    container_name: clinic-sql-server
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "0bd7903b-f568-4894-8d72-3c1b507e5644"
+    volumes:
+      - my-volume:/var/opt/mssql
+    ports:
+      - "1433:1433"
+          
+  
+
+  proxy:
+    container_name: clinic_proxy_container
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    ports:
+      - "80:80"
+
+  authorization.api:
+    image: authorization.api
+    build:
+      context: .
+      dockerfile: Authorization.Api/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+
+volumes:
+  my-volume:

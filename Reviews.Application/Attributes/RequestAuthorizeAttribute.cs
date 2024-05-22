@@ -1,4 +1,4 @@
-using PatientTickets.Domain.Enums;
+using Reviews.Domain.Enums;
 
 namespace Reviews.Application.Attributes;
 

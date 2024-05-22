@@ -53,7 +53,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCards.Persistence", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCards.Domain", "MedicalCards.Domain\MedicalCards.Domain.csproj", "{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1C6BAD9E-7078-4B60-9113-A1D5763CC96E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{CB695518-70CF-4D15-B4EE-EE13A24408F2}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		nginx.conf = nginx.conf
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.ExternalProviders", "Authorization.ExternalProviders\Authorization.ExternalProviders.csproj", "{C36FEC23-224B-4954-811F-C3D542AD4CB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +147,10 @@ Global
 		{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +176,7 @@ Global
 		{B4D7EB65-BB8B-4E56-AC25-54596D9C2ED2} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
 		{2EA6D6C2-9BBC-4524-B100-CBE5279E8B4F} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
 		{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
+		{C36FEC23-224B-4954-811F-C3D542AD4CB3} = {79E294A1-CAFB-4F32-B099-5EC638507E19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E99E4150-DDB4-4F6B-A0FD-B3623AC405C5}

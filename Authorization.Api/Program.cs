@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Authorization.ExternalProviders;
 
 try
 {
@@ -37,6 +38,8 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
+        .AddExternalProviders()
+        .AddHttpClient()
         //.AddAllCors()
         .AddAuthApplication()
         .AddControllers()
