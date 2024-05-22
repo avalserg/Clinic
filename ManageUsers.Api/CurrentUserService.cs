@@ -28,12 +28,15 @@ public class CurrentUserService : ICurrentUserService
 
     
 
-    public bool UserInRole(ApplicationUserRoles role)
+    public bool UserInRole(ApplicationUserRolesEnum roleEnum)
     {
-        return CurrentUserRole.Equals(role);
+        
+        return CurrentUserRoleEnum.Equals(roleEnum.ToString());
     }
 
-    public ApplicationUserRoles[] CurrentUserRole =>
-        _httpContextAccessor.HttpContext!.User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c=>c.Value).Select(Enum.Parse<ApplicationUserRoles>).ToArray();
+    //public ApplicationUserRolesEnum CurrentUserRoleEnum =>
+    //    _httpContextAccessor.HttpContext!.User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c=>c.Value).Select(Enum.Parse<ApplicationUserRolesEnum>);
+    public string CurrentUserRoleEnum => _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.Role).Value;
+        
 
 }

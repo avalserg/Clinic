@@ -1,6 +1,9 @@
 using System.Net;
 using FluentValidation;
 using ManageUsers.Application.Exceptions;
+using ManageUsers.Domain.Exceptions.Base;
+using ValidationException = ManageUsers.Application.Exceptions.ValidationException;
+//using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace ManageUsers.Api.Middlewares;
 

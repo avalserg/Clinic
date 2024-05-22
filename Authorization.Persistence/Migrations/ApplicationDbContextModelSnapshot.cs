@@ -24,11 +24,9 @@ namespace Authorization.Persistence.Migrations
 
             modelBuilder.Entity("Authorization.Domain.ApplicationUser", b =>
                 {
-                    b.Property<int>("ApplicationUserId")
+                    b.Property<Guid>("ApplicationUserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationUserId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ApplicationUserRoleId")
                         .HasColumnType("int");
@@ -51,21 +49,21 @@ namespace Authorization.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            ApplicationUserId = 1,
+                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"),
                             ApplicationUserRoleId = 1,
                             Login = "Admin",
                             PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
                         },
                         new
                         {
-                            ApplicationUserId = 2,
+                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"),
                             ApplicationUserRoleId = 2,
                             Login = "Patient1",
                             PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
                         },
                         new
                         {
-                            ApplicationUserId = 3,
+                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"),
                             ApplicationUserRoleId = 3,
                             Login = "Doctor1",
                             PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
@@ -113,8 +111,8 @@ namespace Authorization.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Expired")
                         .HasColumnType("datetime2");

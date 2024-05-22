@@ -15,20 +15,20 @@ public class ApplicationUserTypeConfiguration : IEntityTypeConfiguration<Applica
         builder.Navigation(e => e.ApplicationUserRole).AutoInclude();
         builder.HasData(new ApplicationUser
         {
-            ApplicationUserId = 1,
+            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"),
             PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
             Login = "Admin",
             ApplicationUserRoleId = 1
         },
             new ApplicationUser()
             {
-                ApplicationUserId = 2,
+                ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"),
                 PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
                 Login = "Patient1",
                 ApplicationUserRoleId = 2
             },
         new ApplicationUser()
-        {ApplicationUserId = 3,
+        {ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"),
             PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
             Login = "Doctor1",
             ApplicationUserRoleId = 3

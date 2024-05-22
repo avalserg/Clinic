@@ -28,8 +28,8 @@ internal class CoreExceptionsHandlerMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<CoreExceptionsHandlerMiddleware> logger)
     {
-        var code = HttpStatusCode.InternalServerError;
-        var result = string.Empty;
+        HttpStatusCode code = HttpStatusCode.InternalServerError;
+        string result = string.Empty;
         switch (exception)
         {
             case ValidationException validationException:
@@ -50,8 +50,10 @@ internal class CoreExceptionsHandlerMiddleware
         context.Response.StatusCode = (int)code;
 
         if (result == string.Empty)
+        {
             result = System.Text.Json.JsonSerializer.Serialize(new {error = exception.Message, innerMessage = exception.InnerException?.Message, exception.StackTrace});
-        
+        }
+
         logger.Log(code == HttpStatusCode.InternalServerError ? LogLevel.Error : LogLevel.Warning, exception, $"Response error {code}: {exception.Message}");
 
         return context.Response.WriteAsync(result);

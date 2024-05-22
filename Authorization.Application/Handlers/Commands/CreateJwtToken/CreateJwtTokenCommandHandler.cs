@@ -1,5 +1,6 @@
 using Authorization.Application.Abstractions.Persistence.Repository.Read;
 using Authorization.Application.Abstractions.Persistence.Repository.Writing;
+using Authorization.Application.Abstractions.Service;
 using Authorization.Application.DTOs;
 using Authorization.Application.Exceptions;
 using Authorization.Application.Services;
@@ -18,17 +19,20 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
     private readonly IJwtProvider _jwtProvider;
     private readonly IConfiguration _configuration;
 
+
+
     public CreateJwtTokenCommandHandler(
         IBaseReadRepository<ApplicationUser> users, 
         IBaseWriteRepository<RefreshToken> refreshTokens,
         ICreateJwtTokenService createJwtTokenService,
-        IConfiguration configuration, IJwtProvider jwtProvider)
+        IConfiguration configuration, IJwtProvider jwtProvider, ICurrentUserService currentUserService)
     {
         _users = users;
         _refreshTokens = refreshTokens;
         _createJwtTokenService = createJwtTokenService;
         _configuration = configuration;
         _jwtProvider = jwtProvider;
+        
     }
     
     public async Task<JwtTokenDto> Handle(CreateJwtTokenCommand request, CancellationToken cancellationToken)
@@ -49,12 +53,19 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
         var token = _jwtProvider.Generate(user, jwtTokenDateExpires);
         //var token = _createJwtTokenService.CreateJwtToken(user, jwtTokenDateExpires);
         var refreshToken = await _refreshTokens.AddAsync(new RefreshToken {RefreshTokenId = Guid.NewGuid(), ApplicationUserId = user.ApplicationUserId, Expired = refreshTokenDateExpires}, cancellationToken);
-        
+        GetUserDto application = new GetUserDto()
+        {
+            Login = user.Login,
+            ApplicationUserId = user.ApplicationUserId,
+            ApplicationUserRole = user.ApplicationUserRole.Name.ToUpper(),
+
+        };
         return new JwtTokenDto
         {
             JwtToken = token,
             RefreshToken = refreshToken.RefreshTokenId.ToString(),
-            Expires = jwtTokenDateExpires
+            Expires = jwtTokenDateExpires,
+            ApplicationUser = application
         };
     }
 }

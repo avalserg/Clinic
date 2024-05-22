@@ -1,20 +1,26 @@
 using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Patients;
 using ManageUsers.Application.DTOs;
+using ManageUsers.Application.DTOs.ApplicationUser;
 using ManageUsers.Application.Exceptions;
 using ManageUsers.Application.Utils;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
+using ManageUsers.Domain.Errors;
+using ManageUsers.Domain.Exceptions.Base;
+using ManageUsers.Domain.Shared;
+using ManageUsers.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
 
-internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand, CreateApplicationUserDto>
+internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand, Result<CreateApplicationUserDto>>
 {
     private readonly IBaseWriteRepository<Domain.Doctor> _doctors;
-    private readonly IBaseWriteRepository<ApplicationUser> _users;
+    private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
 
     private readonly IMapper _mapper;
     
@@ -26,7 +32,7 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
 
     public CreateDoctorCommandHandler(
         IBaseWriteRepository<Domain.Doctor> doctors,
-        IBaseWriteRepository<ApplicationUser> users,
+        IBaseWriteRepository<Domain.ApplicationUser> users,
         IMapper mapper,
         PatientsListMemoryCache listCache,
         ILogger<CreateDoctorCommandHandler> logger,
@@ -40,44 +46,50 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
         _countCache = countCache;
     }
     /// <summary>
-    /// Create ApllicationUser and Patient
+    /// Create ApllicationUser and PatientDomainErrors
     /// </summary>
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="BadOperationException"></exception>
-    public async Task<CreateApplicationUserDto> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateApplicationUserDto>> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
+        var fullName = FullName.Create(request.FirstName, request.LastName, request.Patronymic);
+
+        if (fullName.IsFailure)
+        {
+            return Result.Failure<CreateApplicationUserDto>(fullName.Error);
+        }
         var isUserExist = await _users.AsAsyncRead().AnyAsync(e => e.Login == request.Login, cancellationToken);
         if (isUserExist)
         {
-            throw new BadOperationException($"User with login {request.Login} already exists.");
+            return Result.Failure<CreateApplicationUserDto>(DomainErrors.ApplicationUserDomainErrors.LoginAlreadyInUse(request.Login));
+        }
+        var phoneNumber = PhoneNumber.Create(request.PhoneNumber);
+        if (phoneNumber.IsFailure)
+        {
+            return Result.Failure<CreateApplicationUserDto>(phoneNumber.Error);
         }
         var newUserGuid = Guid.NewGuid();
-       
-        var user = new ApplicationUser()
-        {
-            ApplicationUserId = newUserGuid,
-            PasswordHash = PasswordHashUtil.Hash(request.Password),
-            Login = request.Login,
-            ApplicationUserRole = ApplicationUserRoles.Doctor
-        };
-        user = await _users.AddAsync(user, cancellationToken);
-        var doctor = new Domain.Doctor()
-        {
 
-            DateBirthday = request.DateBirthday,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Patronymic = request.Patronymic,
-            Address = request.Address,
-            Phone = request.Phone,
-            CabinetNumber = request.CabinetNumber,
-            Category = request.Category,
-            Experience = request.Experience,
-            Photo = request.Photo,
-            ApplicationUserId = newUserGuid
-        };
+        var applicationUser = Domain.ApplicationUser.Create(
+            newUserGuid,
+            request.Login,
+            PasswordHashUtil.Hash(request.Password),
+            ApplicationUserRolesEnum.Doctor);
+        applicationUser = await _users.AddAsync(applicationUser, cancellationToken);
+        var doctor = Domain.Doctor.Create(
+            newUserGuid,
+            fullName.Value,
+            request.DateBirthday,
+            request.Address,
+            phoneNumber.Value,
+            request.Photo,
+            request.Experience,
+            request.CabinetNumber,
+            request.Category,
+            newUserGuid);
+       
         doctor = await _doctors.AddAsync(doctor, cancellationToken);
 
 
@@ -86,6 +98,6 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
         
         _logger.LogInformation($"New user {doctor.Id} created.");
         
-        return _mapper.Map<CreateApplicationUserDto>(user);
+        return _mapper.Map<CreateApplicationUserDto>(applicationUser);
     }
 }

@@ -2,7 +2,7 @@ namespace Authorization.Domain;
 
 public class ApplicationUser
 {
-    public int ApplicationUserId { get; set; }
+    public Guid ApplicationUserId { get; set; }
 
     public string Login { get; set; } = default!;
 

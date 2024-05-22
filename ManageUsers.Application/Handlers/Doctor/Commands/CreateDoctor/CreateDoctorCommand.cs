@@ -1,10 +1,12 @@
 using ManageUsers.Application.DTOs;
 using MediatR;
 using System.ComponentModel.DataAnnotations.Schema;
+using ManageUsers.Application.DTOs.ApplicationUser;
+using ManageUsers.Domain.Shared;
 
 namespace ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
 
-public class CreateDoctorCommand : IRequest<CreateApplicationUserDto>
+public class CreateDoctorCommand : IRequest<Result<CreateApplicationUserDto>>
 {
     public string Login { get; init; } = default!;
 
@@ -14,7 +16,7 @@ public class CreateDoctorCommand : IRequest<CreateApplicationUserDto>
     public string Patronymic { get; set; }
     public DateTime DateBirthday { get; set; }
     public string Address { get; set; }
-    public string Phone { get; set; }
+    public string PhoneNumber { get; set; }
     public string? Photo { get; set; }
     public int Experience { get; set; }
     public int? CabinetNumber { get; set; }

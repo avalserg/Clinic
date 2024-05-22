@@ -6,7 +6,7 @@ public interface ICurrentUserService
 {
     public Guid? CurrentUserId { get; }
     
-    public ApplicationUserRoles[] CurrentUserRole { get; }
+    public string CurrentUserRoleEnum { get; }
 
-    public bool UserInRole(ApplicationUserRoles role);
+    public bool UserInRole(ApplicationUserRolesEnum roleEnum);
 }

@@ -2,9 +2,9 @@ using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.BaseRealizations;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.DTOs.Doctor;
-using ManageUsers.Application.DTOs.Patient;
-using ManageUsers.Application.Exceptions;
+using ManageUsers.Domain.Exceptions;
 
 namespace ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
 
@@ -27,7 +27,7 @@ internal class GetDoctorQueryHandler : BaseCashedQuery<GetDoctorQuery, GetDoctor
         var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (user is null)
         {
-            throw new NotFoundException(request);
+            throw new DoctorNotFoundDomainException(request.Id);
         }
        
         return _mapper.Map<GetDoctorDto>(user);

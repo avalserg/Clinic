@@ -4,6 +4,10 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Administrator;
+using ManageUsers.Application.Caches.ApplicationUserMemoryCache;
+using ManageUsers.Application.Caches.Doctors;
+using ManageUsers.Application.Caches.Patients;
 
 namespace ManageUsers.Application;
 
@@ -11,7 +15,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddAuthServices(this IServiceCollection services)
     {
-        return services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+        return services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(DatabaseTransactionBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizePermissionsBehavior<,>));
     }
@@ -27,6 +31,11 @@ public static class DependencyInjection
             .AddSingleton<DoctorsListMemoryCache>()
             .AddSingleton<DoctorsCountMemoryCache>()
             .AddSingleton<DoctorMemoryCache>()
+            .AddSingleton<AdministratorMemoryCache>()
+            .AddSingleton<AdministratorsListMemoryCache>()
+            .AddSingleton<AdministratorsCountMemoryCache>()
+            .AddSingleton<ApplicationUserMemoryCache>()
+            
             
             ; 
 

@@ -16,7 +16,7 @@ namespace Authorization.Api.Controllers
             _mediator = mediator;
         }
         /// <summary>
-        /// 
+        /// Get info about current login ApplicationUser 
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>

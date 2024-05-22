@@ -1,9 +1,10 @@
+using ManageUsers.Application.Abstractions.Messaging;
 using MediatR;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 
 //[RequestAuthorize]
-public class DeletePatientCommand : IRequest
+public class DeletePatientCommand : ICommand
 {
-    public string Id { get; init; } = default!;
+    public Guid Id { get; init; } = default!;
 }

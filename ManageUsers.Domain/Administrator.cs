@@ -1,17 +1,43 @@
 ﻿using ManageUsers.Domain.Primitives;
-using System.ComponentModel.DataAnnotations;
+using ManageUsers.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ManageUsers.Domain
 {
     public class Administrator:Entity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Patronymic { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public Guid ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        private Administrator(
+            Guid id,
+            FullName fullName,
+            Guid applicationUserId
+        ) : base(id)
+        {
+            FullName = fullName;
+            ApplicationUserId = applicationUserId;
+        }
 
+        private Administrator()
+        {
+            
+        }
+        public FullName FullName { get; private set; }
+        [ForeignKey("ApplicationUserDomainErrors")]
+        public Guid ApplicationUserId { get; private set; }
+        public ApplicationUser? ApplicationUser { get; private set; }
+        public static Administrator Create(
+            Guid id,
+            FullName fullName,
+            Guid applicationUserId
+        )
+        {
+            var administrator = new Administrator(
+                id,
+               fullName,
+               applicationUserId
+            );
+
+            //some  logic to create entity
+            return administrator;
+        }
     }
 }

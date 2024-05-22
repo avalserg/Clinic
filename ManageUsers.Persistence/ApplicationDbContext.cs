@@ -1,5 +1,6 @@
 using System.Reflection;
 using ManageUsers.Domain;
+using ManageUsers.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManageUsers.Persistence;
@@ -15,26 +16,26 @@ public  class ApplicationDbContext : DbContext
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-
+    
 
     #endregion
 
-    
 
-    
+
+
 
     #region Ef
 
- 
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        
+        //base.OnModelCreating(modelBuilder);
     }
 
 

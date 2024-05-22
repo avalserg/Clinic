@@ -1,6 +1,7 @@
 ﻿using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.BaseRealizations;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Doctors;
 
 namespace ManageUsers.Application.Handlers.Doctor.Queries.GetCountDoctors
 {

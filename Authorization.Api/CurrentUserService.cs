@@ -11,7 +11,7 @@ public class CurrentUserService : ICurrentUserService
     {
         _httpContextAccessor = httpContextAccessor;
     }
-    public int? CurrentUserId
+    public Guid? CurrentUserId
     {
         get
         {
@@ -21,7 +21,7 @@ public class CurrentUserService : ICurrentUserService
                 return null;
             }
 
-            return int.Parse(userId);
+            return Guid.Parse(userId);
         }
     }
 

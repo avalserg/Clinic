@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Authorization.Api;
 
@@ -25,22 +26,19 @@ public static class DependencyInjection
                 options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             })
-            .AddResponseCompression(options => { options.EnableForHttps = true; });
+            .AddResponseCompression(options => options.EnableForHttps = true);
     }
 
     public static IServiceCollection AddAllCors(this IServiceCollection services)
     {
         return services
-            .AddCors(options =>
-            {
-                options.AddPolicy(CorsPolicy.AllowAll, policy =>
+            .AddCors(options => options.AddPolicy(CorsPolicy.AllowAll, policy =>
                 {
                     policy.AllowAnyHeader();
                     policy.AllowAnyMethod();
                     policy.AllowAnyOrigin();
                     policy.WithExposedHeaders("*");
-                });
-            });
+                }));
     }
     public static IServiceCollection AddSwaggerWidthJwtAuth(
        this IServiceCollection services,
@@ -87,7 +85,7 @@ public static class DependencyInjection
                 });
 
                 // using System.Reflection;
-                var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
+                string xmlFilename = $"{apiAssembly.GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
     }
@@ -130,22 +128,19 @@ public static class DependencyInjection
     {
         services.AddAuthorization()
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
-                };
             });
 
-        var authBuilder = services.AddAuthorizationBuilder();
+        AuthorizationBuilder authBuilder = services.AddAuthorizationBuilder();
         authBuilder
             .AddPolicy(AuthorizationPoliciesEnum.AdminGreetings.ToString(), policy =>
                 policy.RequireRole(ApplicationUserRolesEnum.Admin.ToString()));

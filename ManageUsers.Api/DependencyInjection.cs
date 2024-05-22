@@ -151,7 +151,7 @@ public static class DependencyInjection
         var authBuilder = services.AddAuthorizationBuilder();
         authBuilder
             .AddPolicy(AuthorizationPoliciesEnum.AdminGreetings.ToString(), policy =>
-                policy.RequireRole(ApplicationUserRoles.Admin.ToString()));
+                policy.RequireRole(ApplicationUserRolesEnum.Admin.ToString()));
 
         return services.AddTransient<ICurrentUserService, CurrentUserService>();
     }
@@ -161,7 +161,7 @@ public static class DependencyInjection
     }
     public static IServiceCollection AddCoreApplicationServices(this IServiceCollection services)
     {
-        return services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+        return services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(DatabaseTransactionBehavior<,>));
     }
    

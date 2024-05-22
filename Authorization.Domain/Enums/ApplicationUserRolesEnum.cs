@@ -2,6 +2,7 @@ namespace Authorization.Domain.Enums;
 
 public enum ApplicationUserRolesEnum
 {
-    Client = 1,
-    Admin = 2
+    Admin = 1,
+    Patient = 2,
+    Doctor=3
 }

@@ -7,6 +7,6 @@ internal class DeletePatientCommandValidator : AbstractValidator<DeletePatientCo
 {
     public DeletePatientCommandValidator()
     {
-        RuleFor(e => e.Id).NotEmpty().IsGuid();
+       // RuleFor(e => e.Id).NotEmpty().IsGuid();
     }
 }

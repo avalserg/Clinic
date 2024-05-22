@@ -10,9 +10,9 @@ using System.Text.Json.Serialization;
 
 try
 {
-    const string appPrefix = "Authorization";
+    const string appPrefix = "Users";
     const string version = "v1";
-    const string appName = "Authorization API v1";
+    const string appName = "Users API v1";
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +30,6 @@ try
 
     builder.Services
         .AddSwaggerWidthJwtAuth(Assembly.GetExecutingAssembly(), appName, version, appName)
-        //.AddSwaggerForControllersWidthJwtAuth()
         .AddCoreApiServices()
         .AddCoreApplicationServices()
         .AddCoreAuthApiServices(builder.Configuration)
@@ -53,15 +52,12 @@ try
         .UseHttpsRedirection();
     if (app.Environment.IsDevelopment())
     {
-        //app.UseSwagger(c => { c.RouteTemplate = appPrefix + "/swagger/{documentname}/swagger.json"; });
-        //app.UseSwaggerUI(options =>
-        //{
-
-        //    options.SwaggerEndpoint("/" + appPrefix + $"/swagger/{version}/swagger.json", version);
-        //    options.RoutePrefix = appPrefix + "/swagger";
-        //});
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwagger(c => { c.RouteTemplate =  "swagger/{documentname}/swagger.json"; });
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint( $"/swagger/{version}/swagger.json", version);
+            options.RoutePrefix =  "swagger";
+        });
     }
     app.UseCors(x => x
         .AllowAnyMethod()

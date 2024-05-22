@@ -1,7 +1,9 @@
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Authorization.Domain;
+using Authorization.Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -22,10 +24,11 @@ public class CreateJwtTokenService : ICreateJwtTokenService
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Login),
-            new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString())
+            new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString()),
+            new(ClaimTypes.Role, ((ApplicationUserRolesEnum)user.ApplicationUserRoleId).ToString())
         };
 
-        //claims.AddRange(user.ApplicationUserRole.Select(role => new Claim(ClaimTypes.Role, ((ApplicationUserRolesEnum)role.ApplicationUserRoleId).ToString())));
+        
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var credentials = new SigningCredentials(securityKey,
@@ -51,7 +54,8 @@ public class JwtProvider : IJwtProvider
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Login),
-            new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString())
+            new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString()),
+            new(ClaimTypes.Role, ((ApplicationUserRolesEnum)user.ApplicationUserRoleId).ToString())
         };
 
         var signingCredentials = new SigningCredentials(

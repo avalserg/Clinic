@@ -1,5 +1,5 @@
 using ManageUsers.Domain;
-using ManageUsers.Domain.Enums;
+using ManageUsers.Persistence.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,16 +9,22 @@ public class AdministratorTypeConfiguration : IEntityTypeConfiguration<Administr
 {
     public void Configure(EntityTypeBuilder<Administrator> builder)
     {
-        
-        
-        builder.HasData(new Administrator()
+        builder.ToTable(TableNames.Administrators);
+        builder.HasKey(x => x.Id);
+
+        builder.ComplexProperty(c => c.FullName, b =>
         {
-            Id = 1,
-            FirstName = "Admin",
-            LastName = "Admin",
-            Patronymic = "Admin",
-            ApplicationUserId = Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950a")
+            b.IsRequired();
+            b.Property(f => f.FirstName).HasColumnName("FirstName");
+            b.Property(f => f.LastName).HasColumnName("LastName");
+            b.Property(f => f.Patronymic).HasColumnName("Patronymic");
         });
 
+        //builder.HasData(Administrator.Create(
+        //    Guid.NewGuid(),
+        //    FullName.Create("Admin", "Admin", "Admin").Value,
+        //    new Guid("0f8fad5b-d9cb-469f-a165-70867728950a")
+        //));
+       
     }
 }

@@ -1,4 +1,4 @@
-using ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
+using ManageUsers.Api.Abstractions;
 using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 using ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatients;
@@ -10,66 +10,100 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManageUsers.Api.Controllers
 {
-    [ApiController]
+
     [Route("[controller]")]
-    public class PatientsController : ControllerBase
+    public class PatientsController : ApiController
     {
-        private readonly IMediator _mediator;
-
-        public PatientsController(IMediator mediator)
+      
+        public PatientsController(ISender sender):base(sender)
         {
-            _mediator = mediator;
+            
         }
-
+        /// <summary>
+        /// Add patient
+        /// </summary>
+        /// <param name="createUserCommand"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddPatientAsync(
             CreatePatientCommand createUserCommand,
             CancellationToken cancellationToken)
         {
-            var user = await _mediator.Send(createUserCommand, cancellationToken);
-
-            return Created($"users/{user.ApplicationUserId}", user);
+            var result = await Sender.Send(createUserCommand, cancellationToken);
+            if (result.IsFailure)
+            {
+                return HandleFailure(result);
+            }
+            return Created($"users/{result.Value.ApplicationUserId}", result.Value);
         }
+        /// <summary>
+        /// Get certain patient by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientByIdAsync(
-            int id,
+            Guid id,
             CancellationToken cancellationToken)
         {
-            var user = await _mediator.Send(new GetPatientQuery(){Id =id}, cancellationToken);
+            var user = await Sender.Send(new GetPatientQuery(){Id =id}, cancellationToken);
 
             return Ok(user);
         }
+        /// <summary>
+        /// Get all patients with search, sorting and limit
+        /// </summary>
+        /// <param name="getListPatientsQuery"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersAsync(
+        public async Task<IActionResult> GetAllPatientsAsync(
             [FromQuery] GetPatientsQuery getListPatientsQuery,
             CancellationToken cancellationToken)
         {
-            var users = await _mediator.Send(getListPatientsQuery, cancellationToken);
-            var countPatients = await _mediator.Send(
+            var users = await Sender.Send(getListPatientsQuery, cancellationToken);
+            var countPatients = await Sender.Send(
                 new GetCountPatientsQuery() { FreeText = getListPatientsQuery.FreeText },
                 cancellationToken);
             HttpContext.Response.Headers.Append("X-Total-Count", countPatients.ToString());
             return Ok(users);
         }
+        /// <summary>
+        /// Get count all patients
+        /// </summary>
+        /// <param name="labelFreeText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("totalCount")]
-        public async Task<IActionResult> GetCountUserAsync(string? labelFreeText, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetCountPatientAsync(string? labelFreeText, CancellationToken cancellationToken)
         {
 
-            var users = await _mediator.Send(new GetCountPatientsQuery() { FreeText = labelFreeText },
+            var users = await Sender.Send(new GetCountPatientsQuery() { FreeText = labelFreeText },
                 cancellationToken);
 
             return Ok(users);
         }
+        /// <summary>
+        /// Delete patient
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> RemoveUserAsync([FromBody] string id, CancellationToken cancellationToken)
+        [Authorize]
+        public async Task<IActionResult> DeletePatientAsync([FromBody] Guid id, CancellationToken cancellationToken)
         {
-            await _mediator.Send(new DeletePatientCommand() { Id = id }, cancellationToken);
+            await Sender.Send(new DeletePatientCommand() { Id = id }, cancellationToken);
 
             return Ok($"User with ID = {id} was deleted");
         }
+
+       
     }
 }

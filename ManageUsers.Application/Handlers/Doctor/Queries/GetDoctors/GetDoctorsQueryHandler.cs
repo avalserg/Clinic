@@ -2,6 +2,7 @@ using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.BaseRealizations;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.DTOs;
 using ManageUsers.Application.DTOs.Doctor;
 using ManageUsers.Application.DTOs.Patient;
@@ -12,11 +13,11 @@ namespace ManageUsers.Application.Handlers.Doctor.Queries.GetDoctors;
 internal class GetDoctorsQueryHandler : BaseCashedQuery<GetDoctorsQuery, BaseListDto<GetDoctorDto>>
 {
     private readonly IBaseReadRepository<Domain.Doctor> _users;
-    private readonly IBaseReadRepository<ApplicationUser> _applicationUsers;
+    private readonly IBaseReadRepository<Domain.ApplicationUser> _applicationUsers;
     
     private readonly IMapper _mapper;
     
-    public GetDoctorsQueryHandler(IBaseReadRepository<Domain.Doctor> users, IBaseReadRepository<ApplicationUser> applicationUsers, IMapper mapper, DoctorsListMemoryCache cache) : base(cache)
+    public GetDoctorsQueryHandler(IBaseReadRepository<Domain.Doctor> users, IBaseReadRepository<Domain.ApplicationUser> applicationUsers, IMapper mapper, DoctorsListMemoryCache cache) : base(cache)
     {
         _applicationUsers = applicationUsers;
         _users = users;

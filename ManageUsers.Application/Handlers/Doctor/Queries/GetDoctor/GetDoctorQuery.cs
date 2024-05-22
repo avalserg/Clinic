@@ -6,5 +6,5 @@ namespace ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
 
 public class GetDoctorQuery : IRequest<GetDoctorDto>
 {
-    public int Id { get; init; } = default!;
+    public Guid Id { get; init; } = default!;
 }

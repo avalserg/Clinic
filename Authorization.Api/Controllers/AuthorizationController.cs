@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Authorization.Api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AuthorizationController : ControllerBase
     {
+       
         private readonly IMediator _mediator;
 
 

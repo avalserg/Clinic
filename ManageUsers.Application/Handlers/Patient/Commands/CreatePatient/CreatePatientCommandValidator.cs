@@ -1,13 +1,18 @@
+using System.Data;
 using FluentValidation;
+using ManageUsers.Domain.ValueObjects;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 
-internal class CreateDoctorCommandValidator : AbstractValidator<CreatePatientCommand>
+internal class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
 {
-    public CreateDoctorCommandValidator()
+    public CreatePatientCommandValidator()
     {
         RuleFor(e => e.Login).MinimumLength(3).MaximumLength(50).NotEmpty();
 
         RuleFor(e => e.Password).MinimumLength(8).MaximumLength(100).NotEmpty();
+        RuleFor(e => e.FirstName).NotEmpty().MaximumLength(FullName.MaxLength);
+        RuleFor(e => e.LastName).NotEmpty().MaximumLength(FullName.MaxLength);
+        RuleFor(e => e.Patronymic).NotEmpty().MaximumLength(FullName.MaxLength);
     }
 }

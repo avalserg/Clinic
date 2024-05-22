@@ -1,16 +1,32 @@
 using ManageUsers.Domain.Enums;
-using ManageUsers.Domain.Primitives;
+using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace ManageUsers.Domain;
 
-public class ApplicationUser:Entity
+public class ApplicationUser
 {
-    public Guid ApplicationUserId { get; set; } = default!;
 
-    public string Login { get; set; } = default!;
+    private ApplicationUser(
+        Guid applicationUserId,
+        string login,
+        string passwordHash,
+        ApplicationUserRolesEnum applicationUserRole)
+    {
+        ApplicationUserId = applicationUserId;
+        Login = login;
+        PasswordHash = passwordHash;
+        ApplicationUserRole = applicationUserRole;
+    }
 
-    public string PasswordHash { get; set; } = default!;
-    public ApplicationUserRoles ApplicationUserRole { get; set; } = default!;
+    private ApplicationUser() { }
+    [Key]
+    public Guid ApplicationUserId { get; private set; }
+
+    public string Login { get; private set; }
+
+    public string PasswordHash { get; private set; }
+    public ApplicationUserRolesEnum ApplicationUserRole { get; private set; }
 
     //public DateTime CreatedDate { get; set; }
 
@@ -18,5 +34,21 @@ public class ApplicationUser:Entity
 
     //public DateTime? LastSingInDate { get; set; }
 
+    public static ApplicationUser Create(
+        Guid applicationUserId,
+        string login,
+        string passwordHash,
+        ApplicationUserRolesEnum applicationUserRole
+    )
+    {
+        var applicationUser = new ApplicationUser(
+            applicationUserId,
+            login,
+            passwordHash,
+            applicationUserRole
+        );
+        //some  logic create entity
+        return applicationUser;
+    }
 
 }

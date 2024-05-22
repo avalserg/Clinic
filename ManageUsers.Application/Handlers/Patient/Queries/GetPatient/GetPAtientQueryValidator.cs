@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
 
-public class GetPAtientQueryValidator : AbstractValidator<GetPatientQuery>
+public class GetPatientQueryValidator : AbstractValidator<GetPatientQuery>
 {
-    public GetPAtientQueryValidator()
+    public GetPatientQueryValidator()
     {
         //RuleFor(e => e.Id).NotEmpty().IsGuid();
     }

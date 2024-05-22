@@ -1,18 +1,25 @@
+using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Patients;
+using ManageUsers.Application.DTOs;
 using ManageUsers.Application.Exceptions;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
+using ManageUsers.Domain.Errors;
+using ManageUsers.Domain.Exceptions;
+using ManageUsers.Domain.Exceptions.Base;
+using ManageUsers.Domain.Shared;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 
-internal class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand>
+internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientCommand>
 {
-    private readonly IBaseWriteRepository<ApplicationUser> _users;
+    private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
     private readonly IBaseWriteRepository<Domain.Patient> _patient;
 
     private readonly ICurrentUserService _currentUserService;
@@ -26,7 +33,7 @@ internal class DeletePatientCommandHandler : IRequestHandler<DeletePatientComman
     private readonly PatientMemoryCache _userCase;
 
     public DeletePatientCommandHandler(
-        IBaseWriteRepository<ApplicationUser> users, 
+        IBaseWriteRepository<Domain.ApplicationUser> users, 
         IBaseWriteRepository<Domain.Patient> patient, 
         ICurrentUserService currentUserService,
         PatientsListMemoryCache listCache,
@@ -42,32 +49,40 @@ internal class DeletePatientCommandHandler : IRequestHandler<DeletePatientComman
         _logger = logger;
         _userCase = userCase;
     }
-    
-    public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
+    // TODO check as removed
+    public async Task<Result> Handle(DeletePatientCommand request, CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(request.Id);
-        var u = _currentUserService.CurrentUserId;
-        if (!_currentUserService.UserInRole(ApplicationUserRoles.Admin))
+        var userId = request.Id;
+        //var u = _currentUserService.CurrentUserId;
+        //var role = _currentUserService.CurrentUserRoleEnum;
+        if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
             throw new ForbiddenException();
         }
 
-        var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.ApplicationUserId == userId, cancellationToken);
-        if (user is null)
-        {
-            throw new NotFoundException(request);
-        }
-        var patient = await _patient.AsAsyncRead().SingleOrDefaultAsync(e => e.ApplicationUserId == user.ApplicationUserId, cancellationToken);
+        
+        var patient = await _patient.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == userId, cancellationToken);
         if (patient is null)
         {
-            throw new NotFoundException(request);
+            return Result.Failure(
+                DomainErrors.PatientDomainErrors.NotFound(request.Id));
+        }
+        var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.ApplicationUserId == patient.ApplicationUserId, cancellationToken);
+        if (user is null)
+        {
+            return Result.Failure(
+                DomainErrors.ApplicationUserDomainErrors.NotFound(request.Id));
         }
         await _patient.RemoveAsync(patient, cancellationToken);
 
         await _users.RemoveAsync(user, cancellationToken);
         _listCache.Clear();
         _countCache.Clear();
-        _logger.LogWarning($"User {user.ApplicationUserId.ToString()} deleted by {_currentUserService.CurrentUserId.ToString()}");
-        //_userCase.DeleteItem(new GetPatientQuery() {Id = user.ApplicationUserId});
+        _logger.LogWarning(
+            $"User {user.ApplicationUserId} deleted by {_currentUserService.CurrentUserId}");
+        _userCase.DeleteItem(new GetPatientQuery{Id = user.ApplicationUserId});
+        return Result.Success();
     }
+
+   
 }

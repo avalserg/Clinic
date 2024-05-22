@@ -1,16 +1,13 @@
-using System.Reflection;
-using System.Text.Json.Serialization;
 using Authorization.Api;
 using Authorization.Api.Middlewares;
 using Authorization.Api.OptionsSetup;
 using Authorization.Application;
 using Authorization.Application.Middlewares;
-using Authorization.Application.Services;
 using Authorization.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 try
 {
@@ -40,15 +37,17 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
-        .AddAllCors()
+        //.AddAllCors()
         .AddAuthApplication()
-        .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        .AddControllers()
+        .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
    
     builder.Services.AddEndpointsApiExplorer();
     var app = builder.Build();
 
     app.RunDbMigrations();
-        //.RegisterApis(Assembly.GetExecutingAssembly(), $"{appPrefix}/api/{version}");
+    //.RegisterApis(Assembly.GetExecutingAssembly(), $"{appPrefix}/api/{version}");
+   
 
     app.UseCoreExceptionHandler()
         .UseAuthExceptionHandler()
@@ -57,7 +56,7 @@ try
         .UseHttpsRedirection();
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger(c => { c.RouteTemplate = appPrefix + "/swagger/{documentname}/swagger.json"; });
+        app.UseSwagger(c => c.RouteTemplate = appPrefix + "/swagger/{documentname}/swagger.json");
         app.UseSwaggerUI(options =>
         {
 
@@ -67,7 +66,13 @@ try
         //app.UseSwagger();
         //app.UseSwaggerUI();
     }
-        
+    //app.UseCors(CorsPolicy.AllowAll);
+    app.UseCors(x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        //.WithOrigins("https://localhost:3000))
+        .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();
 }
