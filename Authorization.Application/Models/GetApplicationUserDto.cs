@@ -4,14 +4,23 @@ public class GetApplicationUserDto
 {
     public Guid ApplicationUserId { get; set; }
     
-    public int ApplicationUserRole { get; set; } = default!;
+    public ApplicationUserRole ApplicationUserRole { get; set; } = default!;
     public string Login { get; set; } = default!;
-    public GetApplicationUserDto(Guid applicationUserId, int role, string login)
+    public string PasswordHash { get; set; } = default!;
+    public GetApplicationUserDto(Guid applicationUserId, ApplicationUserRole role, string login, string passwordHash)
     {
         ApplicationUserId = applicationUserId;
         ApplicationUserRole = role;
         Login = login;
+        PasswordHash = passwordHash;
     }
 
     public GetApplicationUserDto() { }
+}
+public class ApplicationUserRole
+{
+    public int ApplicationUserRoleId { get; set; }
+
+    public string Name { get; set; } = default!;
+   
 }

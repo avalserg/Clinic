@@ -1,8 +1,9 @@
-﻿using Authorization.Domain;
+﻿using Authorization.Application.Models;
+using Authorization.Domain;
 
 namespace Authorization.Application.Services;
 
 public interface IJwtProvider
 {
-    string Generate(ApplicationUser user, DateTime dateExpires);
+    string Generate(GetApplicationUserDto user, DateTime dateExpires);
 }

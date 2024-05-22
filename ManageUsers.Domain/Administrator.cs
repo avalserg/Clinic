@@ -21,7 +21,7 @@ namespace ManageUsers.Domain
             
         }
         public FullName FullName { get; private set; }
-        [ForeignKey("ApplicationUserDomainErrors")]
+        [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
         public ApplicationUser? ApplicationUser { get; private set; }
         public static Administrator Create(

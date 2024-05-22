@@ -1,4 +1,5 @@
 using AutoMapper;
+using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Caches;
 using ManageUsers.Application.Caches.Patients;
@@ -21,6 +22,7 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
 {
     private readonly IBaseWriteRepository<Domain.Doctor> _doctors;
     private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
+    private readonly IBaseReadRepository<ApplicationUserRole> _userRole;
 
     private readonly IMapper _mapper;
     
@@ -36,7 +38,7 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
         IMapper mapper,
         PatientsListMemoryCache listCache,
         ILogger<CreateDoctorCommandHandler> logger,
-        PatientsCountMemoryCache countCache)
+        PatientsCountMemoryCache countCache, IBaseReadRepository<ApplicationUserRole> userRole)
     {
         _users=users;
         _doctors = doctors;
@@ -44,6 +46,7 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
         _listCache = listCache;
         _logger = logger;
         _countCache = countCache;
+        _userRole = userRole;
     }
     /// <summary>
     /// Create ApllicationUser and PatientDomainErrors
@@ -71,12 +74,13 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
             return Result.Failure<CreateApplicationUserDto>(phoneNumber.Error);
         }
         var newUserGuid = Guid.NewGuid();
-
+        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r => r.Name == "Doctor", cancellationToken);
+        // TODO check role if null
         var applicationUser = Domain.ApplicationUser.Create(
             newUserGuid,
             request.Login,
             PasswordHashUtil.Hash(request.Password),
-            ApplicationUserRolesEnum.Doctor);
+            userRole.ApplicationUserRoleId);
         applicationUser = await _users.AddAsync(applicationUser, cancellationToken);
         var doctor = Domain.Doctor.Create(
             newUserGuid,

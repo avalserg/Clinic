@@ -8,23 +8,42 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ManageUsers.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialValueObjects : Migration
+    public partial class AddRoles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ApplicationUserRoles",
+                columns: table => new
+                {
+                    ApplicationUserRoleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserRoles", x => x.ApplicationUserRoleId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ApplicationUsers",
                 columns: table => new
                 {
                     ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationUserRoleId = table.Column<int>(type: "int", nullable: false),
                     Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApplicationUserRole = table.Column<int>(type: "int", nullable: false)
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationUsers", x => x.ApplicationUserId);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUsers_ApplicationUserRoles_ApplicationUserRoleId",
+                        column: x => x.ApplicationUserRoleId,
+                        principalTable: "ApplicationUserRoles",
+                        principalColumn: "ApplicationUserRoleId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,45 +121,34 @@ namespace ManageUsers.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "ApplicationUsers",
-                columns: new[] { "ApplicationUserId", "ApplicationUserRoleEnum", "PasswordHash" , "Login" },
+                table: "ApplicationUserRoles",
+                columns: new[] { "ApplicationUserRoleId", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"), 1, "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv", "Admin" },
-                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"), 2, "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv", "Patient1" },
-                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"), 3, "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv", "Doctor1" }
+                    { 1, "Admin" },
+                    { 2, "Doctor" },
+                    { 3, "Patient" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Patients",
-                columns: new[] { "Id", "DateBirthday", "Address", "PhoneNumberDomainErrors", "Avatar", "ApplicationUserId", "FirstNameDomainErrors", "LastNameDomainErrors", "PatronymicDomainErrors" },
+                table: "ApplicationUsers",
+                columns: new[] { "ApplicationUserId", "ApplicationUserRoleId", "Login", "PasswordHash" },
                 values: new object[,]
                 {
-                    { Guid.NewGuid(),DateTime.Now, "Patient1Address", "+919367788755",null,new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"),"Patient1FirstName", "Patient1LastName", "Patient1Patronymic" },
-                    
-                });
-      
-            migrationBuilder.InsertData(
-                table: "Administrators",
-                columns: new[] { "Id", "ApplicationUserId", "FirstNameDomainErrors", "LastNameDomainErrors", "PatronymicDomainErrors" },
-                values: new object[,]
-                {
-                    { Guid.NewGuid(),new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"),"Admin", "Admin", "Admin" },
-                    
-                });
-            migrationBuilder.InsertData(
-                table: "Doctors",
-                columns: new[] { "Id", "DateBirthday", "Address", "PhoneNumberDomainErrors", "Photo", "Experience", "CabinetNumber", "Category", "ApplicationUserId", "FirstNameDomainErrors", "LastNameDomainErrors", "PatronymicDomainErrors" },
-                values: new object[,]
-                {
-                    { Guid.NewGuid(),DateTime.Now, "Doctor1Address", "+919367788756",null,1,1,"High",new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"),"Doctor1FirstName", "Doctor1LastName", "Doctor1Patronymic" },
-                    
+                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"), 1, "Admin", "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv" },
+                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"), 3, "Patient1", "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv" },
+                    { new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"), 2, "Doctor1", "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Administrators_ApplicationUserId",
                 table: "Administrators",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUsers_ApplicationUserRoleId",
+                table: "ApplicationUsers",
+                column: "ApplicationUserRoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_ApplicationUserId",
@@ -167,6 +175,9 @@ namespace ManageUsers.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "ApplicationUsers");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserRoles");
         }
     }
 }

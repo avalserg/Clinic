@@ -4,7 +4,7 @@ namespace Authorization.Application.Abstractions.ExternalProviders
 {
     public interface IApplicationUsersProviders
     {
-        Task<GetApplicationUserDto> GetApplicationUserAsync(Guid ownerId, CancellationToken cancellationToken);
+        Task<GetApplicationUserDto> GetApplicationUserAsync(string login,string password, CancellationToken cancellationToken);
 
     }
 }

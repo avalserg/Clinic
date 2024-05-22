@@ -8,6 +8,7 @@
 
         internal const string Administrators = nameof(Administrators);
         internal const string ApplicationUsers = nameof(ApplicationUsers);
+        internal const string ApplicationUserRoles = nameof(ApplicationUserRoles);
 
     }
 }

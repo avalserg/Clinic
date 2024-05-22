@@ -2,6 +2,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Authorization.Application.Models;
 using Authorization.Domain;
 using Authorization.Domain.Enums;
 using Microsoft.Extensions.Configuration;
@@ -49,13 +50,13 @@ public class JwtProvider : IJwtProvider
     }
 
     
-    public string Generate(ApplicationUser user, DateTime dateExpires)
+    public string Generate(GetApplicationUserDto user, DateTime dateExpires)
     {
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Login),
             new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString()),
-            new(ClaimTypes.Role, ((ApplicationUserRolesEnum)user.ApplicationUserRoleId).ToString())
+            new(ClaimTypes.Role, (user.ApplicationUserRole.ApplicationUserRoleId).ToString())
         };
 
         var signingCredentials = new SigningCredentials(

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.BaseRealizations;
 using ManageUsers.Application.Caches.ApplicationUserMemoryCache;
-using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.DTOs.ApplicationUser;
-using ManageUsers.Application.DTOs.Doctor;
-using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
-using ManageUsers.Domain.Exceptions;
+using ManageUsers.Application.Utils;
+using ManageUsers.Domain.Exceptions.Base;
 
 namespace ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicationUser
 {
@@ -31,12 +24,16 @@ namespace ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicatio
         public override async Task<GetApplicationUserDto> SentQueryAsync(GetApplicationUserQuery request, CancellationToken cancellationToken)
         {
 
-            var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.ApplicationUserId == request.ApplicationUserId, cancellationToken);
+            var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.Login == request.Login, cancellationToken);
             if (user is null)
             {
-                throw new DoctorNotFoundDomainException(request.ApplicationUserId);
+                // TODO exception 
+                //throw new DoctorNotFoundDomainException(request.Login);
             }
-
+            if (!PasswordHashUtil.Verify(request.Password, user.PasswordHash))
+            {
+                throw new ForbiddenException();
+            }
             return _mapper.Map<GetApplicationUserDto>(user);
         }
     }

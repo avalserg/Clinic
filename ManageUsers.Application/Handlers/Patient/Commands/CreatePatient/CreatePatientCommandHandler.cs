@@ -1,9 +1,12 @@
+using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using ManageUsers.Application.Abstractions.Messaging;
+using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Caches.Patients;
 using ManageUsers.Application.DTOs.ApplicationUser;
 using ManageUsers.Application.Utils;
+using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Shared;
@@ -15,6 +18,7 @@ namespace ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientCommand, CreateApplicationUserDto>
 {
     private readonly IBaseWriteRepository<Domain.Patient> _patients;
+    private readonly IBaseReadRepository<ApplicationUserRole> _userRole;
     private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
     private readonly IMapper _mapper;
     private readonly PatientsListMemoryCache _listCache;
@@ -29,7 +33,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         PatientsListMemoryCache listCache,
         ILogger<CreatePatientCommandHandler> logger,
         PatientsCountMemoryCache countCache,
-        PatientMemoryCache patientMemoryCache)
+        PatientMemoryCache patientMemoryCache, IBaseReadRepository<ApplicationUserRole> userRole)
     {
         _users = users;
         _patients = patients;
@@ -38,6 +42,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         _logger = logger;
         _countCache = countCache;
         _patientMemoryCache = patientMemoryCache;
+        _userRole = userRole;
     }
 
     public async Task<Result<CreateApplicationUserDto>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
@@ -63,12 +68,13 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         }
         var newUserGuid = Guid.NewGuid();
 
-
+        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Patient",cancellationToken);
+        // TODO check role if null
         var applicationUser = Domain.ApplicationUser.Create(
             newUserGuid,
             request.Login,
             PasswordHashUtil.Hash(request.Password),
-            ApplicationUserRolesEnum.Patient);
+            userRole.ApplicationUserRoleId);
 
         var patient = Domain.Patient.Create(
             newUserGuid,

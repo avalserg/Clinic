@@ -42,28 +42,28 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
     public async Task<JwtTokenDto> Handle(CreateJwtTokenCommand request, CancellationToken cancellationToken)
     {
 
-        var user = await _users.AsAsyncRead().SingleOrDefaultAsync(u => u.Login == request.Login.Trim(), cancellationToken);
-        var applicationUser = await _applicationUsersProviders.GetApplicationUserAsync(user.ApplicationUserId, cancellationToken);
-        if (user is null)
+        //var user = await _users.AsAsyncRead().SingleOrDefaultAsync(u => u.Login == request.Login.Trim(), cancellationToken);
+        var applicationUser = await _applicationUsersProviders.GetApplicationUserAsync(request.Login,request.Password, cancellationToken);
+        if (applicationUser is null)
         {
             throw new NotFoundException($"User with login {request.Login} don't exist");
         }
 
-        if (!PasswordHashUtil.Verify(request.Password, user.PasswordHash))
-        {
-            throw new ForbiddenException();
-        }
+        //if (!PasswordHashUtil.Verify(request.Password, applicationUser.PasswordHash))
+        //{
+        //    throw new ForbiddenException();
+        //}
 
         var jwtTokenDateExpires = DateTime.UtcNow.AddSeconds(int.Parse(_configuration["TokensLifeTime:JwtToken"]!));
         var refreshTokenDateExpires = DateTime.UtcNow.AddSeconds(int.Parse(_configuration["TokensLifeTime:RefreshToken"]!));
-        var token = _jwtProvider.Generate(user, jwtTokenDateExpires);
+        var token = _jwtProvider.Generate(applicationUser, jwtTokenDateExpires);
         //var token = _createJwtTokenService.CreateJwtToken(user, jwtTokenDateExpires);
-        var refreshToken = await _refreshTokens.AddAsync(new RefreshToken {RefreshTokenId = Guid.NewGuid(), ApplicationUserId = user.ApplicationUserId, Expired = refreshTokenDateExpires}, cancellationToken);
+        var refreshToken = await _refreshTokens.AddAsync(new RefreshToken {RefreshTokenId = Guid.NewGuid(), ApplicationUserId = applicationUser.ApplicationUserId, Expired = refreshTokenDateExpires}, cancellationToken);
         GetUserDto application = new GetUserDto()
         {
-            Login = user.Login,
-            ApplicationUserId = user.ApplicationUserId,
-            ApplicationUserRole = user.ApplicationUserRole.Name.ToUpper(),
+            Login = applicationUser.Login,
+            ApplicationUserId = applicationUser.ApplicationUserId,
+            ApplicationUserRole = applicationUser.ApplicationUserRole.Name.ToUpper(),
 
         };
         return new JwtTokenDto

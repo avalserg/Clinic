@@ -7,6 +7,6 @@ namespace ManageUsers.Application.DTOs.ApplicationUser
     {
         public Guid ApplicationUserId { get; set; } = default!;
         public string Login { get; set; } = default!;
-        public ApplicationUserRolesEnum ApplicationUserRoleEnum { get; set; } = default!;
+        public int ApplicationUserRoleId { get; set; } = default!;
     }
 }

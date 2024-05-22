@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManageUsers.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240503090242_InitialValueObjects")]
-    partial class InitialValueObjects
+    [Migration("20240522162130_AddRoles")]
+    partial class AddRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,20 +39,20 @@ namespace ManageUsers.Persistence.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("FirstNameDomainErrors")
+                            b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstNameDomainErrors");
+                                .HasColumnName("FirstName");
 
-                            b1.Property<string>("LastNameDomainErrors")
+                            b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastNameDomainErrors");
+                                .HasColumnName("LastName");
 
-                            b1.Property<string>("PatronymicDomainErrors")
+                            b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PatronymicDomainErrors");
+                                .HasColumnName("Patronymic");
                         });
 
                     b.HasKey("Id");
@@ -62,13 +62,13 @@ namespace ManageUsers.Persistence.Migrations
                     b.ToTable("Administrators", (string)null);
                 });
 
-            modelBuilder.Entity("ManageUsers.Domain.ApplicationUserDomainErrors", b =>
+            modelBuilder.Entity("ManageUsers.Domain.ApplicationUser", b =>
                 {
                     b.Property<Guid>("ApplicationUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ApplicationUserRoleEnum")
+                    b.Property<int>("ApplicationUserRoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Login")
@@ -82,33 +82,69 @@ namespace ManageUsers.Persistence.Migrations
 
                     b.HasKey("ApplicationUserId");
 
+                    b.HasIndex("ApplicationUserRoleId");
+
                     b.ToTable("ApplicationUsers");
 
                     b.HasData(
                         new
                         {
                             ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"),
-                            ApplicationUserRole = 1,
-                            Login = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
-                            PasswordHash = "Admin"
+                            ApplicationUserRoleId = 1,
+                            Login = "Admin",
+                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
                         },
                         new
                         {
                             ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"),
-                            ApplicationUserRole = 3,
-                            Login = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
-                            PasswordHash = "Doctor1"
+                            ApplicationUserRoleId = 2,
+                            Login = "Doctor1",
+                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
                         },
                         new
                         {
                             ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"),
-                            ApplicationUserRole = 2,
-                            Login = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv",
-                            PasswordHash = "Patient1"
+                            ApplicationUserRoleId = 3,
+                            Login = "Patient1",
+                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
                         });
                 });
 
-            modelBuilder.Entity("ManageUsers.Domain.DoctorDomainErrors", b =>
+            modelBuilder.Entity("ManageUsers.Domain.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("ApplicationUserRoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationUserRoleId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicationUserRoleId");
+
+                    b.ToTable("ApplicationUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            ApplicationUserRoleId = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            ApplicationUserRoleId = 2,
+                            Name = "Doctor"
+                        },
+                        new
+                        {
+                            ApplicationUserRoleId = 3,
+                            Name = "Patient"
+                        });
+                });
+
+            modelBuilder.Entity("ManageUsers.Domain.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,31 +170,31 @@ namespace ManageUsers.Persistence.Migrations
                     b.Property<int>("Experience")
                         .HasColumnType("int");
 
-                    b.Property<string>("PhoneNumberDomainErrors")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "ManageUsers.Domain.DoctorDomainErrors.FullName#FullName", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("FullName", "ManageUsers.Domain.Doctor.FullName#FullName", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("FirstNameDomainErrors")
+                            b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstNameDomainErrors");
+                                .HasColumnName("FirstName");
 
-                            b1.Property<string>("LastNameDomainErrors")
+                            b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastNameDomainErrors");
+                                .HasColumnName("LastName");
 
-                            b1.Property<string>("PatronymicDomainErrors")
+                            b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PatronymicDomainErrors");
+                                .HasColumnName("Patronymic");
                         });
 
                     b.HasKey("Id");
@@ -168,7 +204,7 @@ namespace ManageUsers.Persistence.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("ManageUsers.Domain.PatientDomainErrors", b =>
+            modelBuilder.Entity("ManageUsers.Domain.Patient", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,28 +223,28 @@ namespace ManageUsers.Persistence.Migrations
                     b.Property<DateTime>("DateBirthday")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PhoneNumberDomainErrors")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "ManageUsers.Domain.PatientDomainErrors.FullName#FullName", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("FullName", "ManageUsers.Domain.Patient.FullName#FullName", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("FirstNameDomainErrors")
+                            b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstNameDomainErrors");
+                                .HasColumnName("FirstName");
 
-                            b1.Property<string>("LastNameDomainErrors")
+                            b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastNameDomainErrors");
+                                .HasColumnName("LastName");
 
-                            b1.Property<string>("PatronymicDomainErrors")
+                            b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PatronymicDomainErrors");
+                                .HasColumnName("Patronymic");
                         });
 
                     b.HasKey("Id");
@@ -220,35 +256,51 @@ namespace ManageUsers.Persistence.Migrations
 
             modelBuilder.Entity("ManageUsers.Domain.Administrator", b =>
                 {
-                    b.HasOne("ManageUsers.Domain.ApplicationUserDomainErrors", "ApplicationUserDomainErrors")
+                    b.HasOne("ManageUsers.Domain.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUserDomainErrors");
+                    b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("ManageUsers.Domain.DoctorDomainErrors", b =>
+            modelBuilder.Entity("ManageUsers.Domain.ApplicationUser", b =>
                 {
-                    b.HasOne("ManageUsers.Domain.ApplicationUserDomainErrors", "ApplicationUserDomainErrors")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
+                    b.HasOne("ManageUsers.Domain.ApplicationUserRole", "ApplicationUserRole")
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("ApplicationUserRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUserDomainErrors");
+                    b.Navigation("ApplicationUserRole");
                 });
 
-            modelBuilder.Entity("ManageUsers.Domain.PatientDomainErrors", b =>
+            modelBuilder.Entity("ManageUsers.Domain.Doctor", b =>
                 {
-                    b.HasOne("ManageUsers.Domain.ApplicationUserDomainErrors", "ApplicationUserDomainErrors")
+                    b.HasOne("ManageUsers.Domain.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUserDomainErrors");
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ManageUsers.Domain.Patient", b =>
+                {
+                    b.HasOne("ManageUsers.Domain.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ManageUsers.Domain.ApplicationUserRole", b =>
+                {
+                    b.Navigation("ApplicationUsers");
                 });
 #pragma warning restore 612, 618
         }

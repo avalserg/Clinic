@@ -1,9 +1,9 @@
-﻿using Authorization.Application.Handlers.Queries.GetCurrentUser;
+﻿using ManageUsers.Application.Handlers.ApplicationUser.Queries.GetCurrentUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Authorization.Api.Controllers
+namespace ManageUsers.Api.Controllers
 {
     [Authorize]
     public class UsersController :ControllerBase
@@ -20,7 +20,7 @@ namespace Authorization.Api.Controllers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet("Users/CurrentUser")]
-        public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetCurrentUser( CancellationToken cancellationToken)
         {
             var curentUser = await _mediator.Send(new GetCurrentUserQuery(), cancellationToken);
             return Ok(curentUser);

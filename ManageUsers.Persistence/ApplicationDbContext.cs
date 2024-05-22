@@ -15,6 +15,8 @@ public  class ApplicationDbContext : DbContext
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+
 
     
 

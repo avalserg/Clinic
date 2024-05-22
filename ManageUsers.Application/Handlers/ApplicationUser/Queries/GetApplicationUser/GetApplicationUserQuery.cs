@@ -11,6 +11,7 @@ namespace ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicatio
 {
     public class GetApplicationUserQuery : IRequest<GetApplicationUserDto>
     {
-        public Guid ApplicationUserId { get; init; } = default!;
+        public string Login { get; init; } = default!;
+        public string Password { get; init; } = default!;
     }
 }
