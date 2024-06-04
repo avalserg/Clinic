@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.FileProviders;
 
 try
 {
@@ -50,6 +51,19 @@ try
         .UseAuthentication()
         .UseAuthorization()
         .UseHttpsRedirection();
+    app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"Avatars")),
+        RequestPath = new PathString("/avatars")
+    });
+    app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"Images")),
+        RequestPath = new PathString("/images")
+    });
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger(c => { c.RouteTemplate =  "swagger/{documentname}/swagger.json"; });

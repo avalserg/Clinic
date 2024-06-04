@@ -6,4 +6,5 @@ namespace Authorization.Application.Handlers.Commands.CreateJwtTokenByRefreshTok
 public class CreateJwtTokenByRefreshTokenCommand : IRequest<JwtTokenDto>
 {
     public string RefreshToken { get; init; } = default!;
+    public Guid ApplicationUserId { get; init; } = default!;
 }

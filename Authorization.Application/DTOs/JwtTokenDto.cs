@@ -1,3 +1,4 @@
+using Authorization.Application.Models;
 using Authorization.Domain;
 using AutoMapper;
 
@@ -10,6 +11,6 @@ public class JwtTokenDto
     public string RefreshToken { get; set; } = default!;
     
     public DateTime Expires { get; set; }
-    public GetUserDto ApplicationUser { get; set; }
+     public GetApplicationUserDto ApplicationUser { get; set; }
    
 }

@@ -21,8 +21,9 @@ namespace ManageUsers.Persistence.EntityTypeConfigurations.Users
                 b.Property(f => f.FirstName).HasColumnName("FirstName");
                 b.Property(f => f.LastName).HasColumnName("LastName");
                 b.Property(f => f.Patronymic).HasColumnName("Patronymic");
-            }); 
-           
+            });
+            builder.HasIndex(p => p.PassportNumber).IsUnique();
+            builder.Property(p => p.PassportNumber).IsRequired().HasMaxLength(9);
             builder
                 .Property(x => x.PhoneNumber)
                 .HasConversion(x => x.Value, v => PhoneNumber.Create(v).Value);

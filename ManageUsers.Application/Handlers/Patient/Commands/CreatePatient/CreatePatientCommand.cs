@@ -21,13 +21,17 @@ namespace ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 //    public string? Avatar { get; set; }
 //}
 public sealed record CreatePatientCommand(
-    string Login,
-    string Password,
-    //FullName FullName,
+   
+    string Address,
+    DateTime DateBirthday,
     string FirstName,
     string LastName,
+    string Login,
+    string Password,
+ 
+    
     string Patronymic,
-    DateTime DateBirthday,
-    string Address,
+    
     string PhoneNumber,
-    string Avatar) : ICommand<CreateApplicationUserDto>;
+    string PassportNumber,
+    string? Avatar) : ICommand<CreateApplicationUserDto>;

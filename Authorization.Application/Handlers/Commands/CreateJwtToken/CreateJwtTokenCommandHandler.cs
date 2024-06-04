@@ -4,6 +4,7 @@ using Authorization.Application.Abstractions.Persistence.Repository.Writing;
 using Authorization.Application.Abstractions.Service;
 using Authorization.Application.DTOs;
 using Authorization.Application.Exceptions;
+using Authorization.Application.Models;
 using Authorization.Application.Services;
 using Authorization.Application.Utils;
 using Authorization.Domain;
@@ -14,7 +15,7 @@ namespace Authorization.Application.Handlers.Commands.CreateJwtToken;
 
 internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenCommand, JwtTokenDto>
 {
-    private readonly IBaseReadRepository<ApplicationUser> _users;
+    
     private readonly IBaseWriteRepository<RefreshToken> _refreshTokens;
     private readonly ICreateJwtTokenService _createJwtTokenService;
     private readonly IJwtProvider _jwtProvider;
@@ -24,14 +25,14 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
 
 
     public CreateJwtTokenCommandHandler(
-        IBaseReadRepository<ApplicationUser> users, 
+        
         IBaseWriteRepository<RefreshToken> refreshTokens,
         ICreateJwtTokenService createJwtTokenService,
         IConfiguration configuration, IJwtProvider jwtProvider, 
         ICurrentUserService currentUserService,
         IApplicationUsersProviders applicationUsersProviders)
     {
-        _users = users;
+        
         _refreshTokens = refreshTokens;
         _createJwtTokenService = createJwtTokenService;
         _configuration = configuration;
@@ -46,6 +47,8 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
         var applicationUser = await _applicationUsersProviders.GetApplicationUserAsync(request.Login,request.Password, cancellationToken);
         if (applicationUser is null)
         {
+            return null;
+            throw new ForbiddenException();
             throw new NotFoundException($"User with login {request.Login} don't exist");
         }
 
@@ -59,11 +62,11 @@ internal class CreateJwtTokenCommandHandler : IRequestHandler<CreateJwtTokenComm
         var token = _jwtProvider.Generate(applicationUser, jwtTokenDateExpires);
         //var token = _createJwtTokenService.CreateJwtToken(user, jwtTokenDateExpires);
         var refreshToken = await _refreshTokens.AddAsync(new RefreshToken {RefreshTokenId = Guid.NewGuid(), ApplicationUserId = applicationUser.ApplicationUserId, Expired = refreshTokenDateExpires}, cancellationToken);
-        GetUserDto application = new GetUserDto()
+        GetApplicationUserDto application = new GetApplicationUserDto()
         {
             Login = applicationUser.Login,
             ApplicationUserId = applicationUser.ApplicationUserId,
-            ApplicationUserRole = applicationUser.ApplicationUserRole.Name.ToUpper(),
+            ApplicationUserRole = applicationUser.ApplicationUserRole,
 
         };
         return new JwtTokenDto

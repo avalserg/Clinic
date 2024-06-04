@@ -6,15 +6,7 @@ namespace Authorization.Persistence;
 
 public  class ApplicationDbContext : DbContext
 {
-    #region Users
-
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-    public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-
-
-
-    #endregion
+    
 
     #region Auth
 

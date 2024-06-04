@@ -10,6 +10,19 @@ public static class DomainErrors
         public static readonly Func<Guid, Error> NotFound = id => new Error(
             $"PatientDomainErrors.NotFound",
             $"The PatientDomainErrors with the identifier {id} was not found.");
+        public static readonly Func<string, Error> NotFoundStringId = id => new Error(
+            $"PatientDomainErrors.NotFound",
+            $"The PatientDomainErrors with the identifier {id} was not found.");
+        public static readonly Func<string, Error> PassportNumberAlreadyInUse = passportNumber => new(
+            "PatientDomainErrors.PassportNumberAlreadyInUse",
+            $"The password number {passportNumber} is already in use");
+    }   
+    public static class AdministratorDomainErrors 
+    {
+        public static readonly Func<Guid, Error> NotFound = id => new Error(
+            $"AdministratorDomainErrors.NotFound",
+            $"The AdministratorDomainErrors with the identifier {id} was not found.");
+       
     }
     public static class DoctorDomainErrors 
     {

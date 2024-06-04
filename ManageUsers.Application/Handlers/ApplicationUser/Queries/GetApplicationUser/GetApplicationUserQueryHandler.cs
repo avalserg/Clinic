@@ -8,14 +8,14 @@ using ManageUsers.Domain.Exceptions.Base;
 
 namespace ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicationUser
 {
-    public class GetApplicationUserQueryHandler : BaseCashedQuery<GetApplicationUserQuery, GetApplicationUserDto>
+    public class GetApplicationUserByIdQueryHandler : BaseCashedQuery<GetApplicationUserQuery, GetApplicationUserDto>
     {
         private readonly IBaseReadRepository<Domain.ApplicationUser> _users;
 
         private readonly IMapper _mapper;
 
 
-        public GetApplicationUserQueryHandler(IBaseReadRepository<Domain.ApplicationUser> users, IMapper mapper, ApplicationUserMemoryCache cache) : base(cache)
+        public GetApplicationUserByIdQueryHandler(IBaseReadRepository<Domain.ApplicationUser> users, IMapper mapper, ApplicationUserMemoryCache cache) : base(cache)
         {
             _users = users;
             _mapper = mapper;

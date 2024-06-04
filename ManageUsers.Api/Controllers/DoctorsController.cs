@@ -1,15 +1,14 @@
 ﻿using ManageUsers.Api.Abstractions;
-using ManageUsers.Application.DTOs;
+using ManageUsers.Api.Contracts.Doctor;
 using ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
+using ManageUsers.Application.Handlers.Doctor.Commands.UpdateDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetCountDoctors;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctors;
-using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatients;
-using ManageUsers.Application.Handlers.Patient.Queries.GetPatients;
-using ManageUsers.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ManageUsers.Api.Controllers
 {
@@ -72,6 +71,40 @@ namespace ManageUsers.Api.Controllers
             var user = await Sender.Send(new GetDoctorQuery() { Id = id }, cancellationToken);
 
             return Ok(user);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateDoctorRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPut("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateDoctorAsync(
+            [FromRoute] Guid id,
+            [FromBody] UpdateDoctorRequest updateDoctorRequest,
+            CancellationToken cancellationToken)
+        {
+            // CultureInfo provider = CultureInfo.CurrentCulture;
+            var command = new UpdateDoctorCommand(
+                id,
+                updateDoctorRequest.FirstName,
+                updateDoctorRequest.LastName,
+                updateDoctorRequest.Patronymic,
+                DateTime.Parse(updateDoctorRequest.DateBirthday, null, DateTimeStyles.RoundtripKind),
+                updateDoctorRequest.Address,
+                updateDoctorRequest.PhoneNumber.Value,
+                updateDoctorRequest.Experience,
+                updateDoctorRequest.CabinetNumber,
+                updateDoctorRequest.Category
+            );
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return HandleFailure(result);
+            }
+            return Ok(result.Value);
         }
     }
 }

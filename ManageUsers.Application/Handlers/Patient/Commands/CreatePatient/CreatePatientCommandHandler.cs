@@ -66,6 +66,14 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
                 DomainErrors.ApplicationUserDomainErrors.LoginAlreadyInUse(request.Login));
             //throw new BadOperationException($"User with login {request.Login} already exists.");
         }
+
+        var passwordNumberUse = await _patients.AsAsyncRead()
+            .AnyAsync(e => e.PassportNumber == request.PassportNumber, cancellationToken);
+        if (passwordNumberUse)
+        {
+            return Result.Failure<CreateApplicationUserDto>(
+                DomainErrors.PatientDomainErrors.PassportNumberAlreadyInUse(request.PassportNumber));
+        }
         var newUserGuid = Guid.NewGuid();
 
         var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Patient",cancellationToken);
@@ -82,6 +90,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
             request.DateBirthday,
             request.Address,
             phoneNumber.Value,
+            request.PassportNumber,
             request.Avatar,
             newUserGuid);
 

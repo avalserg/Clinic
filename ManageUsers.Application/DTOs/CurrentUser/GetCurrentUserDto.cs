@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ManageUsers.Application.Abstractions.Mappings;
+using ManageUsers.Domain;
 
 namespace ManageUsers.Application.DTOs.CurrentUser
 {
@@ -13,14 +14,14 @@ namespace ManageUsers.Application.DTOs.CurrentUser
         public Guid ApplicationUserId { get; set; }
 
         public string Login { get; set; } = default!;
-        public string ApplicationUserRole { get; set; } = default!;
+        public ApplicationUserRole ApplicationUserRole { get; set; } = default!;
 
 
-        public void CreateMap(Profile profile)
-        {
-            profile.CreateMap<Domain.ApplicationUser, GetCurrentUserDto>()
-                .ForMember(e => e.ApplicationUserRole, r => r.MapFrom(u => u.ApplicationUserRole.Name.ToUpper()));
+        //public void CreateMap(Profile profile)
+        //{
+        //    profile.CreateMap<Domain.ApplicationUser, GetCurrentUserDto>()
+        //        .ForMember(e => e.ApplicationUserRole, r => r.MapFrom(u => u.ApplicationUserRole.Name.ToUpper()));
 
-        }
+        //}
     }
 }

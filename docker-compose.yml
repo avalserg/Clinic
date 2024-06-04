@@ -31,6 +31,12 @@ services:
     restart: unless-stopped
     ports:
       - "8081:8080"
+  
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    ports:
+      - 15672:15672
+      - 5672:5672
 
 volumes:
   my-volume:

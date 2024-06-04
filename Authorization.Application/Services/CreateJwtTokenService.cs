@@ -20,13 +20,13 @@ public class CreateJwtTokenService : ICreateJwtTokenService
         _configuration = configuration;
     }
     
-    public string CreateJwtToken(ApplicationUser user, DateTime dateExpires)
+    public string CreateJwtToken(GetApplicationUserDto user, DateTime dateExpires)
     {
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Login),
             new(ClaimTypes.NameIdentifier, user.ApplicationUserId.ToString()),
-            new(ClaimTypes.Role, ((ApplicationUserRolesEnum)user.ApplicationUserRoleId).ToString())
+            new(ClaimTypes.Role, (user.ApplicationUserRole.ApplicationUserRoleId).ToString())
         };
 
         

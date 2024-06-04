@@ -1,13 +1,16 @@
 using AutoMapper;
+using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.DTOs.ApplicationUser;
 using ManageUsers.Application.DTOs.CurrentUser;
+using ManageUsers.Domain.Errors;
+using ManageUsers.Domain.Shared;
 using MediatR;
 
 namespace ManageUsers.Application.Handlers.ApplicationUser.Queries.GetCurrentUser;
 
-internal class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, GetCurrentUserDto>
+internal class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, GetCurrentUserDto>
 {
     private readonly IBaseReadRepository<Domain.ApplicationUser> _users;
     
@@ -25,14 +28,15 @@ internal class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery,
         _mapper = mapper;
     }
     
-    public async Task<GetCurrentUserDto> Handle(GetCurrentUserQuery request,  CancellationToken cancellationToken)
+    public async Task<Result<GetCurrentUserDto>> Handle(GetCurrentUserQuery request,  CancellationToken cancellationToken)
     {
         var user = await _users.AsAsyncRead()
             .SingleOrDefaultAsync(e => e.ApplicationUserId == _currentUserService.CurrentUserId, cancellationToken);
 
         if (user is null)
         {
-            // throw new NotFoundException($"User with id {_currentUserService.CurrentUserId}");
+            return Result.Failure<GetCurrentUserDto>(
+                DomainErrors.ApplicationUserDomainErrors.NotFound(user.ApplicationUserId));
         }
 
         return _mapper.Map<GetCurrentUserDto>(user);

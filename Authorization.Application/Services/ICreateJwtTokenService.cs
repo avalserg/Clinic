@@ -1,8 +1,9 @@
+using Authorization.Application.Models;
 using Authorization.Domain;
 
 namespace Authorization.Application.Services;
 
 public interface ICreateJwtTokenService
 {
-    string CreateJwtToken(ApplicationUser user, DateTime dateExpires);
+    string CreateJwtToken(GetApplicationUserDto user, DateTime dateExpires);
 }

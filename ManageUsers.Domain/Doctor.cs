@@ -17,7 +17,7 @@ namespace ManageUsers.Domain
             PhoneNumber phoneNumber,
             string? photo,
             int experience ,
-            int? cabinetNumber, 
+            string cabinetNumber, 
             string category , 
             Guid applicationUserId
         ) : base(id)
@@ -46,7 +46,7 @@ namespace ManageUsers.Domain
         public PhoneNumber PhoneNumber { get; private set; }
         public string? Photo { get; private set; }
         public int Experience { get; private set; }
-        public int? CabinetNumber { get; private set; }
+        public string CabinetNumber { get; private set; }
         public string Category { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
@@ -60,7 +60,7 @@ namespace ManageUsers.Domain
             PhoneNumber phoneNumber,
             string? photo,
             int experience,
-            int? cabinetNumber,
+            string cabinetNumber,
             string category,
             Guid applicationUserId
         )
@@ -80,6 +80,36 @@ namespace ManageUsers.Domain
 
             //some  logic to create entity
             return doctor;
+        }
+        public void Update(
+            FullName fullName,
+            DateTime dateBirthday,
+            string address,
+            PhoneNumber phoneNumber,
+            int experience,
+            string cabinetNumber,
+            string category
+
+        )
+        {
+            FullName = fullName;
+            DateBirthday = dateBirthday;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            Experience = experience;
+            CabinetNumber = cabinetNumber;
+            Category = category;
+
+        }
+        public void UpdatePhoto(
+
+            string? photo
+
+        )
+        {
+
+            Photo = photo;
+
         }
     }
 }

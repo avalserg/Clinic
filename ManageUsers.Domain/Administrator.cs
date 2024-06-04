@@ -39,5 +39,16 @@ namespace ManageUsers.Domain
             //some  logic to create entity
             return administrator;
         }
+
+        public void Update(
+            FullName fullName
+           
+
+        )
+        {
+            FullName = fullName;
+           
+
+        }
     }
 }

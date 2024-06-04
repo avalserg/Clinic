@@ -1,49 +1,70 @@
-﻿using ManageUsers.Api.Model;
+﻿using System.Drawing;
+using System.Drawing.Drawing2D;
+using ManageUsers.Api.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using ManageUsers.Api.Abstractions;
+using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
+using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
+using ManageUsers.Application.Handlers.UploadImages.Commands.UploadPatientAvatar;
+using ManageUsers.Domain;
+using MediatR;
+
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System.Threading;
+using ManageUsers.Application.Handlers.UploadImages.Commands.UploadDoctorImage;
+
 
 namespace ManageUsers.Api.Controllers
 {
-    [ApiController]
+    
     [Route("[controller]")]
-    public class UploaderImagesController : ControllerBase
+    public class UploaderImagesController : ApiController
     {
+        
+       
+
+        public UploaderImagesController(
+            ISender sender
+           
+            ):base(sender)
+        {
+            
+            
+        }   
         /// <summary>
         /// Upload image for doctor profile
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("UploadDoctorImageFile")]
+        [Route("UploadDoctorImageFile/{id}")]
         
-        public async Task<IActionResult> UploadDoctorImageFile( [FromForm] FileModel file)
+        public async Task<IActionResult> UploadDoctorImageFile( [FromForm] FileModel file, string id, CancellationToken cancellationToken)
         {
-            Regex rgRegex = new Regex("(image/(gif|jpe?g|tiff?|png|svg|webp|bmp))");
+            var command = new UploadDoctorImageCommand(id, file.FileName, file.File);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return HandleFailure(result);
+            }
+            return Ok(result.IsSuccess);
+
            
-            if (rgRegex.Matches(file.file.ContentType).Count == 0)
+        }
+        [HttpPost]
+        [Route("UploadPatientAvatarFile/{id}")]
+        
+        public async Task<IActionResult> UploadPatientAvatarFile( [FromForm] FileModel file, string id, CancellationToken cancellationToken)
+        {
+            var command = new UploadPatientAvatarCommand(id, file.FileName, file.File);
+            var result =await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
             {
-                return BadRequest("File not image");
+                return HandleFailure(result);
             }
-
-            
-            try
-            {
-                string path = Path.Combine(@"G:\ClinicApp\Clinic\ManageUsers.Api\Images",file.FileName);
-                if (System.IO.File.Exists(path))
-                {
-                    return BadRequest("Rename file file with this name already exist");
-                }
-                await using Stream stream = new FileStream(path, FileMode.Create);
-                await file.file.CopyToAsync(stream);
-                // TODO add doctor image path to table
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-            return Ok(file);
+            return Ok(result.IsSuccess);
         }
 
        

@@ -22,89 +22,6 @@ namespace Authorization.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Authorization.Domain.ApplicationUser", b =>
-                {
-                    b.Property<Guid>("ApplicationUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ApplicationUserRoleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserRoleId");
-
-                    b.ToTable("ApplicationUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950a"),
-                            ApplicationUserRoleId = 1,
-                            Login = "Admin",
-                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
-                        },
-                        new
-                        {
-                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950b"),
-                            ApplicationUserRoleId = 2,
-                            Login = "Patient1",
-                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
-                        },
-                        new
-                        {
-                            ApplicationUserId = new Guid("0f8fad5b-d9cb-469f-a165-70867728950d"),
-                            ApplicationUserRoleId = 3,
-                            Login = "Doctor1",
-                            PasswordHash = "$MYHASH$V1$10000$+X4Aw24Ud2+zdOsZVfe7S8tvhB2v4gKHMSrUFhWWVO8yZoSv"
-                        });
-                });
-
-            modelBuilder.Entity("Authorization.Domain.ApplicationUserRole", b =>
-                {
-                    b.Property<int>("ApplicationUserRoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationUserRoleId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("ApplicationUserRoleId");
-
-                    b.ToTable("ApplicationUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            ApplicationUserRoleId = 1,
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            ApplicationUserRoleId = 2,
-                            Name = "Patient"
-                        },
-                        new
-                        {
-                            ApplicationUserRoleId = 3,
-                            Name = "Doctor"
-                        });
-                });
-
             modelBuilder.Entity("Authorization.Domain.RefreshToken", b =>
                 {
                     b.Property<Guid>("RefreshTokenId")
@@ -119,41 +36,7 @@ namespace Authorization.Persistence.Migrations
 
                     b.HasKey("RefreshTokenId");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.ToTable("RefreshTokens");
-                });
-
-            modelBuilder.Entity("Authorization.Domain.ApplicationUser", b =>
-                {
-                    b.HasOne("Authorization.Domain.ApplicationUserRole", "ApplicationUserRole")
-                        .WithMany("ApplicationUsers")
-                        .HasForeignKey("ApplicationUserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUserRole");
-                });
-
-            modelBuilder.Entity("Authorization.Domain.RefreshToken", b =>
-                {
-                    b.HasOne("Authorization.Domain.ApplicationUser", "ApplicationUser")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("Authorization.Domain.ApplicationUser", b =>
-                {
-                    b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("Authorization.Domain.ApplicationUserRole", b =>
-                {
-                    b.Navigation("ApplicationUsers");
                 });
 #pragma warning restore 612, 618
         }

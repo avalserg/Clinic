@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Reviews.Persistence\Reviews.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

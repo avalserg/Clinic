@@ -1,4 +1,5 @@
-﻿using ManageUsers.Application.Handlers.ApplicationUser.Queries.GetCurrentUser;
+﻿using ManageUsers.Api.Abstractions;
+using ManageUsers.Application.Handlers.ApplicationUser.Queries.GetCurrentUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManageUsers.Api.Controllers
 {
     [Authorize]
-    public class UsersController :ControllerBase
+    public class UsersController : ApiController
     {
-        private readonly IMediator _mediator;
+        
 
-        public UsersController(IMediator mediator)
+        public UsersController(ISender sender) : base(sender)
         {
-            _mediator = mediator;
+            
         }
         /// <summary>
         /// Get info about current login ApplicationUser 
@@ -22,8 +23,12 @@ namespace ManageUsers.Api.Controllers
         [HttpGet("Users/CurrentUser")]
         public async Task<IActionResult> GetCurrentUser( CancellationToken cancellationToken)
         {
-            var curentUser = await _mediator.Send(new GetCurrentUserQuery(), cancellationToken);
-            return Ok(curentUser);
+            var curentUser = await Sender.Send(new GetCurrentUserQuery(), cancellationToken);
+            if (curentUser.IsFailure)
+            {
+                return HandleFailure(curentUser);
+            }
+            return Ok(curentUser.Value);
 
         }
     }

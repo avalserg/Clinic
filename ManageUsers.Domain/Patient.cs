@@ -15,6 +15,7 @@ namespace ManageUsers.Domain
             DateTime dateBirthday,
             string address,
             PhoneNumber phoneNumber,
+            string passportNumber,
             string? avatar,
             Guid applicationUserId
             ):base(id)
@@ -25,6 +26,7 @@ namespace ManageUsers.Domain
             Address = address;
             PhoneNumber = phoneNumber;
             Avatar = avatar;
+            PassportNumber = passportNumber;
             ApplicationUserId = applicationUserId;
         }
 
@@ -39,6 +41,7 @@ namespace ManageUsers.Domain
         public DateTime DateBirthday { get; private set; }
         public string Address { get; private set; }
         public PhoneNumber PhoneNumber { get; private set; }
+        public string PassportNumber { get; private set; }
         public string? Avatar { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
@@ -50,8 +53,10 @@ namespace ManageUsers.Domain
             DateTime dateBirthday,
             string address,
             PhoneNumber phoneNumber,
+            string passportNumber,
             string? avatar,
             Guid applicationUserId
+            
         )
         {
             var patient = new Patient(
@@ -61,12 +66,42 @@ namespace ManageUsers.Domain
                 dateBirthday,
                 address,
                 phoneNumber,
+                passportNumber,
                 avatar,
                 applicationUserId
             );
             
             //some  logic to create entity
             return patient;
+        } 
+        public void Update(
+            FullName fullName,
+            DateTime dateBirthday,
+            string address,
+            PhoneNumber phoneNumber,
+            string passportNumber,
+            string? avatar
+           
+        )
+        {
+
+            FullName=fullName;
+            DateBirthday=dateBirthday;
+            Address=address;
+            PhoneNumber=phoneNumber;
+            PassportNumber=passportNumber;
+            Avatar=avatar;
+            
+        } 
+        public void UpdateAvatar(
+          
+            string? avatar
+           
+        )
+        {
+
+            Avatar=avatar;
+            
         }
 
     }

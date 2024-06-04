@@ -1,18 +1,12 @@
 using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
-using ManageUsers.Application.Caches;
 using ManageUsers.Application.Caches.Patients;
-using ManageUsers.Application.DTOs;
-using ManageUsers.Application.Exceptions;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
-using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
-using ManageUsers.Domain.Exceptions;
 using ManageUsers.Domain.Exceptions.Base;
 using ManageUsers.Domain.Shared;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;

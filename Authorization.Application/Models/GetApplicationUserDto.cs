@@ -11,8 +11,10 @@ public class GetApplicationUserDto
     {
         ApplicationUserId = applicationUserId;
         ApplicationUserRole = role;
+        //TODO upper variant other ways
+        ApplicationUserRole.Name = role.Name.ToUpper();
         Login = login;
-        PasswordHash = passwordHash;
+         PasswordHash = passwordHash;
     }
 
     public GetApplicationUserDto() { }

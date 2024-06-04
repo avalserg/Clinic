@@ -12,9 +12,9 @@ using Authorization.ExternalProviders;
 
 try
 {
-    const string appPrefix = "Authorization";
+    const string appPrefix = "authorization";
     const string version = "v1";
-    const string appName = "Authorization API v1";
+    const string appName = "authorization API v1";
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -50,13 +50,14 @@ try
 
     app.RunDbMigrations();
     //.RegisterApis(Assembly.GetExecutingAssembly(), $"{appPrefix}/api/{version}");
-   
+
 
     app.UseCoreExceptionHandler()
         .UseAuthExceptionHandler()
         .UseAuthentication()
         .UseAuthorization()
         .UseHttpsRedirection();
+        
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger(c => c.RouteTemplate = appPrefix + "/swagger/{documentname}/swagger.json");

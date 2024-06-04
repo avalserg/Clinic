@@ -1,5 +1,7 @@
+using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ManageUsers.Api.JsonSerializer;
 
@@ -36,4 +38,6 @@ public class TrimmingConverter : JsonConverter<string>
     {
         writer.WriteStringValue(value?.Trim());
     }
+
+   
 }

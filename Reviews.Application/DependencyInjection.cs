@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Reviews.Application.Behavior;
+using Reviews.Application.Caches;
 
 namespace Reviews.Application;
 
@@ -20,9 +21,9 @@ public static class DependencyInjection
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true)
-            //.AddSingleton<PatientMemoryCache>()
-            //.AddSingleton<PatientsCountMemoryCache>()
-            //.AddSingleton<PatientsListMemoryCache>()
+            .AddSingleton<ReviewMemoryCache>()
+            .AddSingleton<ReviewsCountMemoryCache>()
+            .AddSingleton<ReviewsListMemoryCache>()
             //.AddSingleton<DoctorsListMemoryCache>()
             //.AddSingleton<DoctorsCountMemoryCache>()
             //.AddSingleton<DoctorMemoryCache>()
@@ -30,8 +31,8 @@ public static class DependencyInjection
             //.AddSingleton<AdministratorsListMemoryCache>()
             //.AddSingleton<AdministratorsCountMemoryCache>()
             //.AddSingleton<ApplicationUserMemoryCache>()
-            
-            
+
+
             ; 
 
     }

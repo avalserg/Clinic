@@ -1,12 +1,16 @@
 using ManageUsers.Api.Abstractions;
+using ManageUsers.Api.Contracts.Patient;
 using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 using ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
+using ManageUsers.Application.Handlers.Patient.Commands.UpdatePatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatients;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatients;
+using ManageUsers.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ManageUsers.Api.Controllers
 {
@@ -14,24 +18,37 @@ namespace ManageUsers.Api.Controllers
     [Route("[controller]")]
     public class PatientsController : ApiController
     {
-      
-        public PatientsController(ISender sender):base(sender)
+        
+        public PatientsController(ISender sender ):base(sender)
         {
             
         }
         /// <summary>
         /// Add patient
         /// </summary>
-        /// <param name="createUserCommand"></param>
+        /// <param name="createPatientRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddPatientAsync(
-            CreatePatientCommand createUserCommand,
+            CreatePatientRequest createPatientRequest,
             CancellationToken cancellationToken)
         {
-            var result = await Sender.Send(createUserCommand, cancellationToken);
+            var command = new CreatePatientCommand(
+                createPatientRequest.Address,
+                DateTime.Parse(createPatientRequest.DateBirthday, null, DateTimeStyles.RoundtripKind),
+                createPatientRequest.FirstName,
+                createPatientRequest.LastName,
+                createPatientRequest.Login,
+                createPatientRequest.Password,
+                createPatientRequest.Patronymic,
+                createPatientRequest.PhoneNumber,
+                createPatientRequest.PassportNumber,
+                 createPatientRequest.Avatar
+
+            );
+            var result = await Sender.Send(command, cancellationToken);
             if (result.IsFailure)
             {
                 return HandleFailure(result);
@@ -51,7 +68,7 @@ namespace ManageUsers.Api.Controllers
             CancellationToken cancellationToken)
         {
             var user = await Sender.Send(new GetPatientQuery(){Id =id}, cancellationToken);
-
+            
             return Ok(user);
         }
         /// <summary>
@@ -90,7 +107,40 @@ namespace ManageUsers.Api.Controllers
             return Ok(users);
         }
         /// <summary>
-        /// Delete patient
+        /// Update patient
+        /// </summary>
+        /// <param name="id">Patient id</param>
+        /// <param name="updatePatientRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPut("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePatientAsync(
+            [FromRoute] Guid id,
+            [FromBody] UpdatePatientRequest updatePatientRequest,
+            CancellationToken cancellationToken)
+        {
+            // CultureInfo provider = CultureInfo.CurrentCulture;
+            var command = new UpdatePatientCommand(
+                id,
+                updatePatientRequest.FirstName,
+                updatePatientRequest.LastName,
+                updatePatientRequest.Patronymic,
+                DateTime.Parse(updatePatientRequest.DateBirthday, null, DateTimeStyles.RoundtripKind),
+                updatePatientRequest.Address,
+                updatePatientRequest.PhoneNumber.Value,
+                updatePatientRequest.PassportNumber,
+                updatePatientRequest.Avatar
+            );
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return HandleFailure(result);
+            }
+            return Ok(result.Value);
+        } 
+        /// <summary>
+        /// 
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
