@@ -59,7 +59,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		nginx.conf = nginx.conf
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.ExternalProviders", "Authorization.ExternalProviders\Authorization.ExternalProviders.csproj", "{C36FEC23-224B-4954-811F-C3D542AD4CB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.ExternalProviders", "Authorization.ExternalProviders\Authorization.ExternalProviders.csproj", "{C36FEC23-224B-4954-811F-C3D542AD4CB3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientTickets.ExternalProviders", "PatientTickets.ExternalProviders\PatientTickets.ExternalProviders.csproj", "{5A43009E-26FD-4043-8BB8-F8EC57003EE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalCards.ExternalProviders", "MedicalCards.ExternalProviders\MedicalCards.ExternalProviders.csproj", "{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reviews.ExternalProviders", "Reviews.ExternalProviders\Reviews.ExternalProviders.csproj", "{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +157,18 @@ Global
 		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36FEC23-224B-4954-811F-C3D542AD4CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A43009E-26FD-4043-8BB8-F8EC57003EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A43009E-26FD-4043-8BB8-F8EC57003EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A43009E-26FD-4043-8BB8-F8EC57003EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A43009E-26FD-4043-8BB8-F8EC57003EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +195,9 @@ Global
 		{2EA6D6C2-9BBC-4524-B100-CBE5279E8B4F} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
 		{FDF8C7D3-F760-446D-8682-7D9C5BF2DE55} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
 		{C36FEC23-224B-4954-811F-C3D542AD4CB3} = {79E294A1-CAFB-4F32-B099-5EC638507E19}
+		{5A43009E-26FD-4043-8BB8-F8EC57003EE3} = {CA1D271E-CF0F-4DB8-8C0A-56ADE198CCC5}
+		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
+		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE} = {F67BBBBF-513D-4623-8888-42EBA79B1516}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E99E4150-DDB4-4F6B-A0FD-B3623AC405C5}

@@ -1,8 +1,9 @@
-using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using PatientTickets.Application.Behavior;
+using PatientTickets.Application.Caches;
+using System.Reflection;
 
 namespace PatientTickets.Application;
 
@@ -20,9 +21,9 @@ public static class DependencyInjection
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true)
-            //.AddSingleton<PatientMemoryCache>()
-            //.AddSingleton<PatientsCountMemoryCache>()
-            //.AddSingleton<PatientsListMemoryCache>()
+            .AddSingleton<PatientTicketMemoryCache>()
+            .AddSingleton<PatientTicketsCountMemoryCache>()
+            .AddSingleton<PatientTicketsListMemoryCache>()
             //.AddSingleton<DoctorsListMemoryCache>()
             //.AddSingleton<DoctorsCountMemoryCache>()
             //.AddSingleton<DoctorMemoryCache>()
@@ -30,9 +31,9 @@ public static class DependencyInjection
             //.AddSingleton<AdministratorsListMemoryCache>()
             //.AddSingleton<AdministratorsCountMemoryCache>()
             //.AddSingleton<ApplicationUserMemoryCache>()
-            
-            
-            ; 
+
+
+            ;
 
     }
 }

@@ -16,7 +16,13 @@ namespace MedicalCards.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateBirthday = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,7 +39,7 @@ namespace MedicalCards.Persistence.Migrations
                     DescriptionEpicrisis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionAnamnesis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssuingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PrescriptionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PrescriptionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MedicalCardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

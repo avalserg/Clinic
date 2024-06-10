@@ -19,7 +19,8 @@ namespace ManageUsers.Domain
             int experience ,
             string cabinetNumber, 
             string category , 
-            Guid applicationUserId
+            Guid applicationUserId,
+            string speciality
         ) : base(id)
         {
 
@@ -33,6 +34,7 @@ namespace ManageUsers.Domain
             CabinetNumber = cabinetNumber;
             Category = category;
             ApplicationUserId = applicationUserId;
+            Speciality = speciality;
         }
 
         public Doctor()
@@ -46,7 +48,10 @@ namespace ManageUsers.Domain
         public PhoneNumber PhoneNumber { get; private set; }
         public string? Photo { get; private set; }
         public int Experience { get; private set; }
+        public string Speciality { get; private set; }
         public string CabinetNumber { get; private set; }
+        // Mark doctor as deleted entity
+        // public bool IsDeleted { get; private set; }
         public string Category { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
@@ -62,7 +67,8 @@ namespace ManageUsers.Domain
             int experience,
             string cabinetNumber,
             string category,
-            Guid applicationUserId
+            Guid applicationUserId,
+            string speciality
         )
         {
             var doctor = new Doctor(
@@ -75,7 +81,8 @@ namespace ManageUsers.Domain
                 experience,
                 cabinetNumber,
                 category,
-                applicationUserId
+                applicationUserId,
+                speciality
             );
 
             //some  logic to create entity
@@ -88,8 +95,8 @@ namespace ManageUsers.Domain
             PhoneNumber phoneNumber,
             int experience,
             string cabinetNumber,
-            string category
-
+            string category,
+            string speciality
         )
         {
             FullName = fullName;
@@ -99,17 +106,14 @@ namespace ManageUsers.Domain
             Experience = experience;
             CabinetNumber = cabinetNumber;
             Category = category;
+            Speciality = speciality;
 
         }
         public void UpdatePhoto(
-
             string? photo
-
         )
         {
-
             Photo = photo;
-
         }
     }
 }

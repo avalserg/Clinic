@@ -1,13 +1,15 @@
 using ManageUsers.Api;
+using ManageUsers.Api.GrpcServer.Doctors;
+using ManageUsers.Api.GrpcServer.Patients;
 using ManageUsers.Api.Middlewares;
 using ManageUsers.Application;
 using ManageUsers.Application.Middlewares;
 using ManageUsers.Persistence;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.FileProviders;
 
 try
 {
@@ -27,7 +29,7 @@ try
             rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, buffered: true)
         .WriteTo.File($"{builder.Configuration["Logging:LogsFolder"]}/Error-.txt", LogEventLevel.Error,
             rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30, buffered: true));
-    
+
 
     builder.Services
         .AddSwaggerWidthJwtAuth(Assembly.GetExecutingAssembly(), appName, version, appName)
@@ -36,16 +38,22 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
+
         //.AddAllCors()
         .AddAuthApplication()
-        .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        .AddControllers()
+        .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
+    builder.Services.AddGrpc().AddJsonTranscoding();
+    builder.Services.AddGrpcSwagger().AddSwaggerGen();
 
     builder.Services.AddEndpointsApiExplorer();
     var app = builder.Build();
-    
+
     app.RunDbMigrations();
-    
-    
+
+
     app.UseCoreExceptionHandler()
         .UseAuthExceptionHandler()
         .UseAuthentication()
@@ -66,12 +74,14 @@ try
 
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger(c => { c.RouteTemplate =  "swagger/{documentname}/swagger.json"; });
+        app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentname}/swagger.json"; });
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint( $"/swagger/{version}/swagger.json", version);
-            options.RoutePrefix =  "swagger";
+            options.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
+
+            options.RoutePrefix = "swagger";
         });
+
     }
     app.UseCors(x => x
         .AllowAnyMethod()
@@ -80,6 +90,8 @@ try
         //.WithOrigins("https://localhost:3000))
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
+    app.MapGrpcService<GrpcDoctorService>();
+    app.MapGrpcService<GrpcPatientsService>();
     app.Run();
 }
 catch (Exception ex)

@@ -2,38 +2,87 @@
 
 namespace MedicalCards.Domain
 {
-    public class MedicalCard:Entity
+    public class MedicalCard : Entity
     {
-        
+
         private MedicalCard(
             Guid id,
-            Guid patientId
-            ):base(id)
+            Guid patientId,
+            string firstName,
+            string lastName,
+            string patronymic,
+            DateTime dateBirthDay,
+            string phoneNumber,
+            string address
+
+            ) : base(id)
         {
-            
+
             PatientId = patientId;
+            FirstName = firstName;
+            LastName = lastName;
+            Patronymic = patronymic;
+            DateBirthday = dateBirthDay;
+            PhoneNumber = phoneNumber;
+            Address = address;
         }
 
-        private MedicalCard(){ }
-        
-        public Guid PatientId { get;private set; }
-        
-        // public List<Prescription> Prescriptions { get; private set; }
+        private MedicalCard() { }
+
+        public Guid PatientId { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Patronymic { get; private set; }
+        public DateTime DateBirthday { get; private set; }
+        public string Address { get; private set; }
+        public string PhoneNumber { get; private set; }
+
         public List<Appointment> Appointments { get; private set; }
         public static MedicalCard Create(
             Guid id,
-            Guid patientId
+            Guid patientId,
+            string firstName,
+            string lastName,
+            string patronymic,
+            DateTime dateBirthDay,
+            string phoneNumber,
+            string address
         )
         {
             //TODO check what card with patientId not exist 
-            
+
             var medicalCard = new MedicalCard(
                 id,
-                patientId
+                patientId,
+                firstName,
+                lastName,
+                patronymic,
+                dateBirthDay,
+                phoneNumber,
+                address
             );
-            
+
             //some  logic to create entity
             return medicalCard;
+        }
+        public void UpdateOwnerMedicalCardInfo(
+            string firstName,
+            string lastName,
+            string patronymic,
+            DateTime dateBirthDay,
+            string phoneNumber,
+            string address
+        )
+        {
+            //TODO check what card with patientId not exist 
+
+            FirstName = firstName;
+            LastName = lastName;
+            Patronymic = patronymic;
+            DateBirthday = dateBirthDay;
+            PhoneNumber = phoneNumber;
+            Address = address;
+
         }
 
     }

@@ -2,6 +2,7 @@ using Reviews.Api;
 using Reviews.Api.Middlewares;
 using Reviews.Application;
 using Reviews.Application.Middlewares;
+using Reviews.ExternalProviders;
 using Reviews.Persistence;
 using Serilog;
 using Serilog.Events;
@@ -35,6 +36,7 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
+        .AddExternalProviders()
         //.AddAllCors()
         .AddAuthApplication()
         .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -48,8 +50,8 @@ try
     app.UseCoreExceptionHandler()
         .UseAuthExceptionHandler()
         .UseAuthentication()
-        .UseAuthorization()
-        .UseHttpsRedirection();
+        .UseAuthorization();
+    // .UseHttpsRedirection();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentname}/swagger.json"; });

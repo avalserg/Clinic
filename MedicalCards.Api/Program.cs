@@ -2,6 +2,7 @@ using MedicalCards.Api;
 using MedicalCards.Api.Middlewares;
 using MedicalCards.Application;
 using MedicalCards.Application.Middlewares;
+using MedicalCards.ExternalProviders;
 using MedicalCards.Persistence;
 using Serilog;
 using Serilog.Events;
@@ -37,6 +38,7 @@ try
         .AddCoreAuthServices()
         //.AddAllCors()
         .AddAuthApplication()
+        .AddExternalProviders()
         .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
     builder.Services.AddEndpointsApiExplorer();

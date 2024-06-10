@@ -34,14 +34,14 @@ namespace ManageUsers.Domain
         {
             
         }
-        //public FirstNameDomainErrors FirstNameDomainErrors { get; }
-        //public LastNameDomainErrors LastNameDomainErrors { get; }
-        //public string PatronymicDomainErrors { get; }
+       
         public FullName FullName { get; private set; }
         public DateTime DateBirthday { get; private set; }
         public string Address { get; private set; }
         public PhoneNumber PhoneNumber { get; private set; }
         public string PassportNumber { get; private set; }
+        // Mark patient as deleted entity
+        // public bool IsDeleted { get; private set; }
         public string? Avatar { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }

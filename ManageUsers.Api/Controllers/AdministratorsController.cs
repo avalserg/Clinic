@@ -1,15 +1,12 @@
 ﻿using ManageUsers.Api.Abstractions;
-using ManageUsers.Api.Contracts.Doctor;
+using ManageUsers.Api.Contracts.Admin;
+using ManageUsers.Application.Handlers.Admin.Commands.UpdateAdmin;
 using ManageUsers.Application.Handlers.Admin.Queries.GetAdmin;
 using ManageUsers.Application.Handlers.Admin.Queries.GetAdmins;
 using ManageUsers.Application.Handlers.Admin.Queries.GetCountAdministrators;
-using ManageUsers.Application.Handlers.Doctor.Commands.UpdateDoctor;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
-using ManageUsers.Api.Contracts.Admin;
-using ManageUsers.Application.Handlers.Admin.Commands.UpdateAdmin;
 
 namespace ManageUsers.Api.Controllers
 {
@@ -54,13 +51,13 @@ namespace ManageUsers.Api.Controllers
             HttpContext.Response.Headers.Append("X-Total-Count", countPatients.ToString());
             return Ok(users);
         }
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="id"></param>
-       /// <param name="updateDoctorRequest"></param>
-       /// <param name="cancellationToken"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// Update info about Admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateDoctorRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPut("{id:guid}")]
         [Authorize]
         public async Task<IActionResult> UpdateAdministratorAsync(
@@ -74,7 +71,7 @@ namespace ManageUsers.Api.Controllers
                 updateDoctorRequest.FirstName,
                 updateDoctorRequest.LastName,
                 updateDoctorRequest.Patronymic
-               
+
             );
             var result = await Sender.Send(command, cancellationToken);
             if (result.IsFailure)

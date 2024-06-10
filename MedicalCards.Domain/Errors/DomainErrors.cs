@@ -4,65 +4,19 @@ namespace MedicalCards.Domain.Errors;
 
 public static class DomainErrors
 {
-    
-    public static class Patient 
-    {
-        public static readonly Func<string, Error> LoginAlreadyInUse =login=> new(
-              "Patient.LoginAlreadyInUse",
-              $"The login {login} is already in use");
 
-        public static readonly Func<Guid, Error> NotFound = id => new Error(
-            $"Patient.NotFound",
+    public static class MedicalCard
+    {
+        public static readonly Func<Guid, Error> MedicalCardAlreadyExist = id => new Error(
+              "MedicalCard.MedicalCardAlreadyExist",
+              $"The MedicalCard Patient with {id} is already exist");
+
+        public static readonly Func<Guid, Error> MedicalCardPatientNotFound = id => new Error(
+            $"MedicalCard.MedicalCardPatientNotFound",
             $"The Patient with the identifier {id} was not found.");
-    }
-     public static class ApplicationUser
-    {
-        public static readonly Func<Guid, Error> NotFound = id => new Error(
-            "ApplicationUser.NotFound",
-            $"The ApplicationUser with the identifier {id} was not found.");
+        public static readonly Func<Guid, Error> MedicalCardNotFound = id => new Error(
+            $"MedicalCard.MedicalCardNotFound",
+            $"The MedicalCard with the identifier {id} was not found.");
     }
 
-    public static class PhoneNumber
-    {
-        public static readonly Error Empty = new(
-            "PhoneNumber.Empty",
-            "PhoneNumber is empty");
-
-      
-        public static readonly Error InvalidFormat = new(
-            "PhoneNumber.InvalidFormat",
-            "PhoneNumber format is invalid");
-    }
-
-    public static class FirstName
-    {
-        public static readonly Error Empty = new(
-            "FirstName.Empty",
-            "First name is empty");
-
-        public static readonly Error TooLong = new(
-            "LastName.TooLong",
-            "FirstName name is too long");
-    }
-
-    public static class LastName
-    {
-        public static readonly Error Empty = new(
-            "LastName.Empty",
-            "Last name is empty");
-
-        public static readonly Error TooLong = new(
-            "LastName.TooLong",
-            "Last name is too long");
-    }
-    public static class Patronymic
-    {
-        public static readonly Error Empty = new(
-            "Patronymic.Empty",
-            "Patronymic name is empty");
-
-        public static readonly Error TooLong = new(
-            "Patronymic.TooLong",
-            "Patronymic name is too long");
-    }
 }

@@ -5,10 +5,12 @@ using ManageUsers.Application.Handlers.Doctor.Commands.UpdateDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetCountDoctors;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctors;
+using ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using ManageUsers.Application.Handlers.Doctor.Commands.DeleteDoctor;
 
 namespace ManageUsers.Api.Controllers
 {
@@ -28,10 +30,10 @@ namespace ManageUsers.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddDoctorAsync(
-            CreateDoctorCommand createUserCommand,
+            CreateDoctorCommand createDoctorCommand,
             CancellationToken cancellationToken)
         {
-            var user = await Sender.Send(createUserCommand, cancellationToken);
+            var user = await Sender.Send(createDoctorCommand, cancellationToken);
             if (user.IsFailure)
             {
                 return HandleFailure(user);
@@ -82,22 +84,23 @@ namespace ManageUsers.Api.Controllers
         [HttpPut("{id:guid}")]
         [Authorize]
         public async Task<IActionResult> UpdateDoctorAsync(
-            [FromRoute] Guid id,
+            [FromRoute] DeleteDoctorRequest request,
             [FromBody] UpdateDoctorRequest updateDoctorRequest,
             CancellationToken cancellationToken)
         {
             // CultureInfo provider = CultureInfo.CurrentCulture;
             var command = new UpdateDoctorCommand(
-                id,
+                Guid.Parse(request.Id),
                 updateDoctorRequest.FirstName,
                 updateDoctorRequest.LastName,
                 updateDoctorRequest.Patronymic,
                 DateTime.Parse(updateDoctorRequest.DateBirthday, null, DateTimeStyles.RoundtripKind),
                 updateDoctorRequest.Address,
-                updateDoctorRequest.PhoneNumber.Value,
+                updateDoctorRequest.PhoneNumber,
                 updateDoctorRequest.Experience,
                 updateDoctorRequest.CabinetNumber,
-                updateDoctorRequest.Category
+                updateDoctorRequest.Category,
+                updateDoctorRequest.Speciality
             );
             var result = await Sender.Send(command, cancellationToken);
             if (result.IsFailure)
@@ -106,5 +109,15 @@ namespace ManageUsers.Api.Controllers
             }
             return Ok(result.Value);
         }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteDoctorAsync([FromBody] DeleteDoctorRequest request, CancellationToken cancellationToken)
+        {
+            await Sender.Send(new DeleteDoctorCommand() { Id = Guid.Parse(request.Id) }, cancellationToken);
+
+            return Ok($"User with ID = {request.Id} was deleted");
+        }
+
     }
 }

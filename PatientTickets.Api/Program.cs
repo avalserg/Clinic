@@ -2,6 +2,7 @@ using PatientTickets.Api;
 using PatientTickets.Api.Middlewares;
 using PatientTickets.Application;
 using PatientTickets.Application.Middlewares;
+using PatientTickets.ExternalProviders;
 using PatientTickets.Persistence;
 using Serilog;
 using Serilog.Events;
@@ -35,6 +36,8 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
+        .AddExternalProviders()
+        .AddHttpClient()
         //.AddAllCors()
         .AddAuthApplication()
         .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

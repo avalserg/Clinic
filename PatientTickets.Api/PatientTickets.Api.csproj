@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PatientTickets.Application\PatientTickets.Application.csproj" />
+    <ProjectReference Include="..\PatientTickets.ExternalProviders\PatientTickets.ExternalProviders.csproj" />
     <ProjectReference Include="..\PatientTickets.Persistence\PatientTickets.Persistence.csproj" />
   </ItemGroup>
 

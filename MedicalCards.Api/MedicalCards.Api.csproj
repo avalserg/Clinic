@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MedicalCards.Application\MedicalCards.Application.csproj" />
+    <ProjectReference Include="..\MedicalCards.ExternalProviders\MedicalCards.ExternalProviders.csproj" />
     <ProjectReference Include="..\MedicalCards.Persistence\MedicalCards.Persistence.csproj" />
   </ItemGroup>
 

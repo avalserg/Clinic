@@ -23,7 +23,7 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
     private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
     private readonly IMapper _mapper;
     private readonly DoctorsListMemoryCache _listCache;
-    private readonly ILogger<CreateDoctorCommandHandler> _logger;
+    private readonly ILogger<UpdateDoctorCommandHandler> _logger;
     private readonly DoctorsCountMemoryCache _countCache;
     private readonly DoctorMemoryCache _doctorMemoryCache;
     private readonly ICurrentUserService _currentUserService;
@@ -33,7 +33,7 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
         IBaseWriteRepository<Domain.ApplicationUser> users,
         IMapper mapper,
         DoctorsListMemoryCache listCache,
-        ILogger<CreateDoctorCommandHandler> logger,
+        ILogger<UpdateDoctorCommandHandler> logger,
         DoctorsCountMemoryCache countCache,
         DoctorMemoryCache doctorMemoryCache, IBaseReadRepository<ApplicationUserRole> userRole, ICurrentUserService currentUserService)
     {
@@ -57,8 +57,7 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
             return Result.Failure<GetDoctorDto>(DomainErrors.DoctorDomainErrors.NotFound(request.Id));
         }
        
-        if (request.Id != _currentUserService.CurrentUserId &&
-            !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
+        if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
             throw new ForbiddenException();
         }
@@ -87,7 +86,8 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
             phoneNumber.Value,
             request.Experience,
             request.CabinetNumber,
-             request.Category
+             request.Category,
+             request.Speciality
             );
 
         

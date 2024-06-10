@@ -1,0 +1,27 @@
+syntax = "proto3";
+option csharp_namespace = "PatientsGrpc";
+package patients;
+
+// PatientsService
+service PatientsService {
+  // GetPatient
+  rpc GetPatient (GetPatientRequest) returns (PatientReply);
+  
+}
+
+
+
+message GetPatientRequest{
+  string id = 1;
+  
+}
+
+message PatientReply {
+  string firstName = 1;
+  string lastName = 2;
+  string patronymic = 3;
+  string dateBirthday = 4;
+  string phoneNumber = 5;
+  string address = 6;
+  
+}

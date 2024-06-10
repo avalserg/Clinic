@@ -2,6 +2,7 @@ using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Caches;
+using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.Caches.Patients;
 using ManageUsers.Application.DTOs;
 using ManageUsers.Application.DTOs.ApplicationUser;
@@ -26,19 +27,20 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
 
     private readonly IMapper _mapper;
     
-    private readonly PatientsListMemoryCache _listCache;
+    private readonly DoctorsListMemoryCache _listCache;
     
     private readonly ILogger<CreateDoctorCommandHandler> _logger;
 
-    private readonly PatientsCountMemoryCache _countCache;
+    private readonly DoctorsCountMemoryCache _countCache;
 
     public CreateDoctorCommandHandler(
         IBaseWriteRepository<Domain.Doctor> doctors,
         IBaseWriteRepository<Domain.ApplicationUser> users,
         IMapper mapper,
-        PatientsListMemoryCache listCache,
+        DoctorsListMemoryCache listCache,
         ILogger<CreateDoctorCommandHandler> logger,
-        PatientsCountMemoryCache countCache, IBaseReadRepository<ApplicationUserRole> userRole)
+        DoctorsCountMemoryCache countCache,
+        IBaseReadRepository<ApplicationUserRole> userRole)
     {
         _users=users;
         _doctors = doctors;
@@ -92,7 +94,8 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand,
             request.Experience,
             request.CabinetNumber,
             request.Category,
-            newUserGuid);
+            newUserGuid,
+            request.Speciality);
        
         doctor = await _doctors.AddAsync(doctor, cancellationToken);
 

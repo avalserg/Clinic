@@ -7,9 +7,14 @@ namespace PatientTickets.Domain.Entities
 
         private PatientTicket(
             Guid id,
+            Guid patientId,
             DateTime dateAppointment,
             Guid doctorId,
-            Guid patientId
+            string doctorFirstName,
+            string doctorLastName,
+            string doctorPatronymic,
+            string cabinetNumber,
+            string doctorSpeciality
         ) : base(id)
         {
             DateAppointment = dateAppointment;
@@ -17,6 +22,11 @@ namespace PatientTickets.Domain.Entities
             PatientId = patientId;
             // initial state while creating always false
             HasDoctorVisit = false;
+            DoctorFirstName = doctorFirstName;
+            DoctorLastName = doctorLastName;
+            DoctorPatronymic = doctorPatronymic;
+            CabinetNumber = cabinetNumber;
+            DoctorSpeciality = doctorSpeciality;
         }
 
         private PatientTicket() { }
@@ -25,21 +35,38 @@ namespace PatientTickets.Domain.Entities
         public Guid DoctorId { get; private set; }
         public Guid PatientId { get; private set; }
         public bool HasDoctorVisit { get; private set; }
+        public string DoctorFirstName { get; private set; }
+        public string DoctorLastName { get; private set; }
+        public string DoctorPatronymic { get; private set; }
+
+        public string CabinetNumber { get; private set; }
+        public string DoctorSpeciality { get; private set; }
 
         public static PatientTicket Create(
             Guid id,
-            DateTime dateAppointment,
             Guid patientId,
-            Guid doctorId
+            DateTime dateAppointment,
+            Guid doctorId,
+            string doctorFirstName,
+            string doctorLastName,
+            string doctorPatronymic,
+            string cabinetNumber,
+            string doctorSpeciality
         )
         {
-           
-            
+
+
             var patientTicket = new PatientTicket(
                 id,
-                dateAppointment,
                 patientId,
-                doctorId
+                dateAppointment,
+                doctorId,
+                 doctorFirstName,
+
+                doctorLastName,
+                doctorPatronymic,
+                cabinetNumber,
+                doctorSpeciality
                 );
 
             //some  logic to create entity

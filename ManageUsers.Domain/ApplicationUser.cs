@@ -26,7 +26,10 @@ public class ApplicationUser
 
     public string Login { get; private set; }
 
-    public string PasswordHash { get; private set; } 
+    public string PasswordHash { get; private set; }
+
+    // Mark app user as deleted entity
+    // public bool IsDeleted { get; private set; }
     // public ApplicationUserRolesEnum ApplicationUserRole { get; private set; } 
     public ApplicationUserRole ApplicationUserRole { get; private set; } = default!;
 

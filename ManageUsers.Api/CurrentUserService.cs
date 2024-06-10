@@ -30,8 +30,8 @@ public class CurrentUserService : ICurrentUserService
 
     public bool UserInRole(ApplicationUserRolesEnum roleEnum)
     {
-        
-        return CurrentUserRoleEnum.Equals(roleEnum.ToString());
+        int role = (int)roleEnum;
+        return CurrentUserRoleEnum.Equals(role.ToString());
     }
 
     //public ApplicationUserRolesEnum CurrentUserRoleEnum =>

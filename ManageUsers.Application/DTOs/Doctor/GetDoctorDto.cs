@@ -20,6 +20,7 @@ namespace ManageUsers.Application.DTOs.Doctor
         public string CabinetNumber { get; set; }
         public string Category { get; set; } = string.Empty;
         public Guid ApplicationUserId { get; set; }
+        public string Speciality { get; set; }
         public void CreateMap(Profile profile)
         {
             profile.CreateMap<Domain.Doctor, GetDoctorDto>()

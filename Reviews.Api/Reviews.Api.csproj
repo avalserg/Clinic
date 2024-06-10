@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reviews.Application\Reviews.Application.csproj" />
+    <ProjectReference Include="..\Reviews.ExternalProviders\Reviews.ExternalProviders.csproj" />
     <ProjectReference Include="..\Reviews.Persistence\Reviews.Persistence.csproj" />
   </ItemGroup>
 

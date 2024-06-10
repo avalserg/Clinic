@@ -10,10 +10,11 @@ namespace ManageUsers.Api.Contracts.Doctor
         string FirstName,
         string LastName,
         string Patronymic,
-        PhoneNumber PhoneNumber,
+        string PhoneNumber,
         string CabinetNumber,
         int Experience,
-        string Category
+        string Category,
+        string Speciality
         );
      
   

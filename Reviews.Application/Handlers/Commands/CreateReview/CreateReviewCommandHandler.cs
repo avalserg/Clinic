@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Reviews.Application.Abstractions.ExternalProviders;
 using Reviews.Application.Abstractions.Messaging;
 using Reviews.Application.Abstractions.Persistence.Repository.Writing;
 using Reviews.Application.Caches;
 using Reviews.Application.DTOs;
 using Reviews.Domain.Entities;
-using Reviews.Domain.Errors;
 using Reviews.Domain.Shared;
 
 namespace Reviews.Application.Handlers.Commands.CreateReview;
@@ -18,39 +18,45 @@ public class CreateReviewCommandHandler : ICommandHandler<CreateReviewCommand, C
     private readonly ILogger<CreateReviewCommandHandler> _logger;
     private readonly ReviewsCountMemoryCache _countCache;
     private readonly ReviewMemoryCache _reviewMemoryCache;
+    private readonly IManageUsersProviders _applicationUsersProviders;
 
     public CreateReviewCommandHandler(
         IBaseWriteRepository<Review> reviews,
-        
+
         IMapper mapper,
         ReviewsListMemoryCache listCache,
         ILogger<CreateReviewCommandHandler> logger,
         ReviewsCountMemoryCache countCache,
-        ReviewMemoryCache reviewMemoryCache)
+        ReviewMemoryCache reviewMemoryCache, IManageUsersProviders applicationUsersProviders)
     {
-       
+
         _reviews = reviews;
         _mapper = mapper;
         _listCache = listCache;
         _logger = logger;
         _countCache = countCache;
         _reviewMemoryCache = reviewMemoryCache;
-        
+        _applicationUsersProviders = applicationUsersProviders;
     }
 
     public async Task<Result<CreateReviewDto>> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
-      
+        var patient = await _applicationUsersProviders.GetPatientByIdAsync(request.PatientId, cancellationToken);
+        if (patient is null)
+        {
+            // TODO Result
+            throw new ArgumentException();
+        }
         var newReviewGuid = Guid.NewGuid();
-
-        // var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Patient",cancellationToken);
-     
 
         var review = Review.Create(
             newReviewGuid,
             request.PatientId,
+            patient.FirstName,
+            patient.LastName,
+            patient.Patronymic,
             request.Description);
-        
+
         review = await _reviews.AddAsync(review.Value, cancellationToken);
 
 

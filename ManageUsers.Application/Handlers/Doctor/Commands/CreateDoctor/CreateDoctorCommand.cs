@@ -20,6 +20,7 @@ public class CreateDoctorCommand : IRequest<Result<CreateApplicationUserDto>>
     public string? Photo { get; set; }
     public int Experience { get; set; }
     public string CabinetNumber { get; set; }
+    public string Speciality { get; set; }
     public string Category { get; set; } = string.Empty;
    
 }

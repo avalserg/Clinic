@@ -14,4 +14,5 @@ public sealed record UpdateDoctorCommand(
     string PhoneNumber,
     int Experience,
     string CabinetNumber,
-    string Category) : ICommand<GetDoctorDto>;
+    string Category,
+    string Speciality) : ICommand<GetDoctorDto>;

@@ -24,7 +24,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
     
     private readonly ILogger<DeletePatientCommandHandler> _logger;
 
-    private readonly PatientMemoryCache _userCase;
+    private readonly PatientMemoryCache _userCache;
 
     public DeletePatientCommandHandler(
         IBaseWriteRepository<Domain.ApplicationUser> users, 
@@ -33,7 +33,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
         PatientsListMemoryCache listCache,
         PatientsCountMemoryCache countCache,
         ILogger<DeletePatientCommandHandler> logger,
-        PatientMemoryCache userCase)
+        PatientMemoryCache userCache)
     {
         _users = users;
         _patient = patient;
@@ -41,7 +41,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
         _listCache = listCache;
         _countCache = countCache;
         _logger = logger;
-        _userCase = userCase;
+        _userCache = userCache;
     }
     // TODO check as removed
     public async Task<Result> Handle(DeletePatientCommand request, CancellationToken cancellationToken)
@@ -74,7 +74,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
         _countCache.Clear();
         _logger.LogWarning(
             $"User {user.ApplicationUserId} deleted by {_currentUserService.CurrentUserId}");
-        _userCase.DeleteItem(new GetPatientQuery{Id = user.ApplicationUserId});
+        _userCache.DeleteItem(new GetPatientQuery{Id = user.ApplicationUserId});
         return Result.Success();
     }
 
