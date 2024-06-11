@@ -1,7 +1,4 @@
 ﻿namespace MedicalCards.Api.Contracts
 {
-    public sealed record DeleteMedicalCardRequest(
-        string Id
-
-    );
+    public sealed record DeleteMedicalCardRequest(string Id);
 }

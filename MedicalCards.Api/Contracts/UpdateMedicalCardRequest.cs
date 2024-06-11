@@ -9,7 +9,4 @@
         string Address
         );
 
-
-
-
 }

@@ -1,6 +1,6 @@
 ﻿using MedicalCards.Application.Abstractions.Persistence.Repository.Read;
 using MedicalCards.Application.BaseRealizations;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.MedicalCard;
 
 namespace MedicalCards.Application.Handlers.MedicalCard.Queries.GetCountMedicalCards
 {

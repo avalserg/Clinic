@@ -1,7 +1,7 @@
 using MedicalCards.Application.Abstractions.Messaging;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Writing;
 using MedicalCards.Application.Abstractions.Service;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.MedicalCard;
 using MedicalCards.Application.Handlers.MedicalCard.Queries.GetMedicalCard;
 using MedicalCards.Domain.Enums;
 using MedicalCards.Domain.Errors;
@@ -43,7 +43,7 @@ internal class DeleteMedicalCardCommandHandler : ICommandHandler<DeleteMedicalCa
     // TODO check as removed
     public async Task<Result> Handle(DeleteMedicalCardCommand request, CancellationToken cancellationToken)
     {
-        var medicalCardId = request.Id;
+
         if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
             throw new ForbiddenException();

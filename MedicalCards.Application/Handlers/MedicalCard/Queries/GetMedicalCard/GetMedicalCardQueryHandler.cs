@@ -2,7 +2,7 @@
 using MedicalCards.Application.Abstractions.ExternalProviders;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Read;
 using MedicalCards.Application.BaseRealizations;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.MedicalCard;
 using MedicalCards.Application.DTOs.MedicalCard;
 using MedicalCards.Domain.Errors;
 using MedicalCards.Domain.Shared;

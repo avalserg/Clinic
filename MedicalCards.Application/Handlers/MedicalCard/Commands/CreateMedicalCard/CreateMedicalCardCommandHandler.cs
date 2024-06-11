@@ -3,7 +3,7 @@ using MedicalCards.Application.Abstractions.ExternalProviders;
 using MedicalCards.Application.Abstractions.Messaging;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Read;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Writing;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.MedicalCard;
 using MedicalCards.Application.DTOs.MedicalCard;
 using MedicalCards.Domain.Errors;
 using MedicalCards.Domain.Shared;
@@ -54,9 +54,9 @@ internal class CreateMedicalCardCommandHandler : ICommandHandler<CreateMedicalCa
         var patient = await _applicationUsersProviders.GetPatientByIdAsync(request.PatientId, cancellationToken);
         if (patient is null)
         {
-            // TODO Result
-            throw new ArgumentException();
+            return Result.Failure<CreateMedicalCardDto>(DomainErrors.MedicalCard.MedicalCardPatientNotFound(request.PatientId));
         }
+
 
 
         var newMedicalCardGuid = Guid.NewGuid();

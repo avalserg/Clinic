@@ -1,7 +1,9 @@
 using FluentValidation;
 using MediatR;
 using MedicalCards.Application.Behavior;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.Appointment;
+using MedicalCards.Application.Caches.MedicalCard;
+using MedicalCards.Application.Caches.Prescription;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -24,16 +26,12 @@ public static class DependencyInjection
             .AddSingleton<MedicalCardMemoryCache>()
             .AddSingleton<MedicalCardsCountMemoryCache>()
             .AddSingleton<MedicalCardsListMemoryCache>()
-            //.AddSingleton<DoctorsListMemoryCache>()
-            //.AddSingleton<DoctorsCountMemoryCache>()
-            //.AddSingleton<DoctorMemoryCache>()
-            //.AddSingleton<AdministratorMemoryCache>()
-            //.AddSingleton<AdministratorsListMemoryCache>()
-            //.AddSingleton<AdministratorsCountMemoryCache>()
-            //.AddSingleton<ApplicationUserMemoryCache>()
-
-
-            ;
+            .AddSingleton<AppointmentsListMemoryCache>()
+            .AddSingleton<AppointmentsCountMemoryCache>()
+            .AddSingleton<AppointmentMemoryCache>()
+            .AddSingleton<PrescriptionMemoryCache>()
+            .AddSingleton<PrescriptionsListMemoryCache>()
+            .AddSingleton<PrescriptionsCountMemoryCache>();
 
     }
 }

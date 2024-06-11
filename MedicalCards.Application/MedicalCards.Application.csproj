@@ -24,9 +24,4 @@
     <ProjectReference Include="..\MedicalCards.Domain\MedicalCards.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\Appointment\" />
-    <Folder Include="Handlers\Prescripton\" />
-  </ItemGroup>
-
 </Project>

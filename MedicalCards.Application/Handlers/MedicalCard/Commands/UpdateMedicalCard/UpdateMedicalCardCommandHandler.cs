@@ -3,7 +3,7 @@ using MedicalCards.Application.Abstractions.ExternalProviders;
 using MedicalCards.Application.Abstractions.Messaging;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Writing;
 using MedicalCards.Application.Abstractions.Service;
-using MedicalCards.Application.Caches;
+using MedicalCards.Application.Caches.MedicalCard;
 using MedicalCards.Application.DTOs.MedicalCard;
 using MedicalCards.Application.Handlers.MedicalCard.Commands.CreateMedicalCard;
 using MedicalCards.Domain.Enums;

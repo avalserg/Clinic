@@ -19,7 +19,7 @@ namespace MedicalCards.Domain
             ReleaseForm = releaseForm;
             Amount = amount;
             IssuingTime = issuingTime;
-            AppointmentId= appointmentId;
+            AppointmentId = appointmentId;
             DoctorId = doctorId;
             PatientId = patientId;
 
@@ -28,11 +28,10 @@ namespace MedicalCards.Domain
 
         private Prescription() { }
         public string MedicineName { get; private set; }
-        public string ReleaseForm { get;private set; }
+        public string ReleaseForm { get; private set; }
         public string Amount { get; private set; }
         public DateTime IssuingTime { get; private set; }
-        //public Guid MedicalCardId { get; private set; }
-        //public MedicalCard MedicalCard { get; private set; }
+
         public Guid DoctorId { get; private set; }
         public Guid PatientId { get; private set; }
         public Guid AppointmentId { get; private set; }
@@ -47,12 +46,12 @@ namespace MedicalCards.Domain
             Guid patientId
         )
         {
-            
+
             var prescription = new Prescription(
                 id,
-                medicineName, 
-                releaseForm, 
-                amount, 
+                medicineName,
+                releaseForm,
+                amount,
                 issuingTime,
                 appointmentId,
                 doctorId,

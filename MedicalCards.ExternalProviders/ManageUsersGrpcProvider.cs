@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using DotorsGrpc;
+using Grpc.Core;
 using Grpc.Net.Client;
 using MedicalCards.Application.Abstractions.ExternalProviders;
 using MedicalCards.Application.DTOs.ExternalProviders;
@@ -23,7 +24,7 @@ namespace MedicalCards.ExternalProviders
             _configuration = configuration;
 
         }
-        public async Task<GetPatientDto> GetPatientByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<GetPatientDto?> GetPatientByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             using var channel = GrpcChannel.ForAddress(_configuration["ManageUsersServiceGrpcUrl"]!);
             var client = new PatientsService.PatientsServiceClient(channel);
@@ -54,6 +55,35 @@ namespace MedicalCards.ExternalProviders
 
             }
 
+        }
+
+        public async Task<GetDoctorDto?> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            using var channel = GrpcChannel.ForAddress(_configuration["ManageUsersServiceGrpcUrl"]!);
+            var client = new DoctorsService.DoctorsServiceClient(channel);
+            try
+            {
+
+                var doctorReply = client.GetDoctor(new GetDoctorRequest()
+                {
+                    Id = id.ToString(),
+                }, cancellationToken: cancellationToken);
+                var dto = new GetDoctorDto();
+                await foreach (var reply in doctorReply.ResponseStream.ReadAllAsync(cancellationToken))
+                {
+                    dto.DoctorFirstName = reply.FirstName;
+                    dto.DoctorLastName = reply.LastName;
+                    dto.DoctorPatronymic = reply.Patronymic;
+                    dto.Speciality = reply.Speciality;
+                }
+
+                return dto;
+            }
+            catch (Exception)
+            {
+                return null;
+
+            }
         }
     }
 }
