@@ -18,8 +18,6 @@ namespace ManageUsers.Application.Handlers.Admin.Commands.UpdateAdmin;
 internal class UpdateAdminCommandHandler : ICommandHandler<UpdateAdminCommand, GetAdminDto>
 {
     private readonly IBaseWriteRepository<Administrator> _administrators;
-    private readonly IBaseReadRepository<ApplicationUserRole> _userRole;
-    private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
     private readonly IMapper _mapper;
     private readonly AdministratorsListMemoryCache _listCache;
     private readonly ILogger<UpdateAdminCommandHandler> _logger;
@@ -38,26 +36,24 @@ internal class UpdateAdminCommandHandler : ICommandHandler<UpdateAdminCommand, G
         IBaseReadRepository<ApplicationUserRole> userRole,
         ICurrentUserService currentUserService)
     {
-        _users = users;
         _administrators = administrators;
         _mapper = mapper;
         _listCache = listCache;
         _logger = logger;
         _countCache = countCache;
         _administratorMemoryCache = administratorMemoryCache;
-        _userRole = userRole;
         _currentUserService = currentUserService;
     }
 
     public async Task<Result<GetAdminDto>> Handle(UpdateAdminCommand request, CancellationToken cancellationToken)
     {
-       
+
         var administrator = await _administrators.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (administrator is null)
         {
             return Result.Failure<GetAdminDto>(DomainErrors.AdministratorDomainErrors.NotFound(request.Id));
         }
-       
+
         if (request.Id != _currentUserService.CurrentUserId &&
             !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
@@ -70,15 +66,9 @@ internal class UpdateAdminCommandHandler : ICommandHandler<UpdateAdminCommand, G
             // log error
             return Result.Failure<GetAdminDto>(fullName.Error);
         }
-        
-       
 
-        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Admin",cancellationToken);
-        // TODO check role if null
-       
-
-         administrator.Update(fullName.Value);
-         administrator = await _administrators.UpdateAsync(administrator, cancellationToken);
+        administrator.Update(fullName.Value);
+        administrator = await _administrators.UpdateAsync(administrator, cancellationToken);
 
 
         _listCache.Clear();

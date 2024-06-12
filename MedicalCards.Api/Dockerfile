@@ -12,6 +12,7 @@ WORKDIR /src
 COPY ["MedicalCards.Api/MedicalCards.Api.csproj", "MedicalCards.Api/"]
 COPY ["MedicalCards.Application/MedicalCards.Application.csproj", "MedicalCards.Application/"]
 COPY ["MedicalCards.Domain/MedicalCards.Domain.csproj", "MedicalCards.Domain/"]
+COPY ["MedicalCards.ExternalProviders/MedicalCards.ExternalProviders.csproj", "MedicalCards.ExternalProviders/"]
 COPY ["MedicalCards.Persistence/MedicalCards.Persistence.csproj", "MedicalCards.Persistence/"]
 RUN dotnet restore "./MedicalCards.Api/./MedicalCards.Api.csproj"
 COPY . .

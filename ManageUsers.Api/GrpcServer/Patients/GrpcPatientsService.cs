@@ -15,8 +15,6 @@ namespace ManageUsers.Api.GrpcServer.Patients
             _mediator = mediator;
         }
 
-
-
         public override async Task<PatientReply> GetPatient(GetPatientRequest request, ServerCallContext context)
         {
             var query = new GetPatientQuery()

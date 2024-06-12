@@ -1,13 +1,11 @@
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Authorization.Application.Abstractions.Service;
 using Authorization.Application.Models;
-using Authorization.Domain;
-using Authorization.Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Authorization.Application.Services;
 
@@ -19,7 +17,7 @@ public class CreateJwtTokenService : ICreateJwtTokenService
     {
         _configuration = configuration;
     }
-    
+
     public string CreateJwtToken(GetApplicationUserDto user, DateTime dateExpires)
     {
         var claims = new List<Claim>
@@ -29,7 +27,7 @@ public class CreateJwtTokenService : ICreateJwtTokenService
             new(ClaimTypes.Role, (user.ApplicationUserRole.ApplicationUserRoleId).ToString())
         };
 
-        
+
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var credentials = new SigningCredentials(securityKey,
@@ -49,7 +47,7 @@ public class JwtProvider : IJwtProvider
         _options = options.Value;
     }
 
-    
+
     public string Generate(GetApplicationUserDto user, DateTime dateExpires)
     {
         var claims = new List<Claim>

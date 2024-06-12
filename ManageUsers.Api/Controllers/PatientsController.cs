@@ -6,7 +6,6 @@ using ManageUsers.Application.Handlers.Patient.Commands.UpdatePatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatients;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatients;
-using ManageUsers.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +17,9 @@ namespace ManageUsers.Api.Controllers
     [Route("[controller]")]
     public class PatientsController : ApiController
     {
-        
-        public PatientsController(ISender sender ):base(sender)
-        {
-            
-        }
+
+        public PatientsController(ISender sender) : base(sender) { }
+
         /// <summary>
         /// Add patient
         /// </summary>
@@ -45,7 +42,7 @@ namespace ManageUsers.Api.Controllers
                 createPatientRequest.Patronymic,
                 createPatientRequest.PhoneNumber,
                 createPatientRequest.PassportNumber,
-                 createPatientRequest.Avatar
+                createPatientRequest.Avatar
 
             );
             var result = await Sender.Send(command, cancellationToken);
@@ -55,6 +52,7 @@ namespace ManageUsers.Api.Controllers
             }
             return Created($"users/{result.Value.ApplicationUserId}", result.Value);
         }
+
         /// <summary>
         /// Get certain patient by id
         /// </summary>
@@ -67,10 +65,11 @@ namespace ManageUsers.Api.Controllers
             Guid id,
             CancellationToken cancellationToken)
         {
-            var user = await Sender.Send(new GetPatientQuery(){Id =id}, cancellationToken);
-            
+            var user = await Sender.Send(new GetPatientQuery() { Id = id }, cancellationToken);
+
             return Ok(user);
         }
+
         /// <summary>
         /// Get all patients with search, sorting and limit
         /// </summary>
@@ -90,6 +89,7 @@ namespace ManageUsers.Api.Controllers
             HttpContext.Response.Headers.Append("X-Total-Count", countPatients.ToString());
             return Ok(users);
         }
+
         /// <summary>
         /// Get count all patients
         /// </summary>
@@ -106,6 +106,7 @@ namespace ManageUsers.Api.Controllers
 
             return Ok(users);
         }
+
         /// <summary>
         /// Update patient
         /// </summary>
@@ -138,9 +139,10 @@ namespace ManageUsers.Api.Controllers
                 return HandleFailure(result);
             }
             return Ok(result.Value);
-        } 
+        }
+
         /// <summary>
-        /// 
+        /// Delete patient
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
@@ -154,6 +156,6 @@ namespace ManageUsers.Api.Controllers
             return Ok($"User with ID = {id} was deleted");
         }
 
-       
+
     }
 }

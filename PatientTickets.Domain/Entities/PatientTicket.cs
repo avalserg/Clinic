@@ -73,5 +73,12 @@ namespace PatientTickets.Domain.Entities
             return patientTicket;
         }
 
+        public void UpdatePatientTicketHasVisit(
+           bool hasVisit
+        )
+        {
+            HasDoctorVisit = hasVisit;
+        }
+
     }
 }

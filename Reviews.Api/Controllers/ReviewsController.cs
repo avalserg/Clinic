@@ -10,19 +10,26 @@ using Reviews.Application.Handlers.Queries.GetReviews;
 
 namespace Reviews.Api.Controllers
 {
-    
+    /// <summary>
+    /// ReviewsController
+    /// </summary>
     [Route("[controller]")]
     public class ReviewsController : ApiController
     {
-       
+
 
         private readonly ILogger<ReviewsController> _logger;
 
-        public ReviewsController(ILogger<ReviewsController> logger, ISender sender):base(sender)
+        public ReviewsController(ILogger<ReviewsController> logger, ISender sender) : base(sender)
         {
             _logger = logger;
         }
-
+        /// <summary>
+        /// Get all reviews
+        /// </summary>
+        /// <param name="getListPatientsQuery"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllReviewsAsync(
@@ -35,11 +42,17 @@ namespace Reviews.Api.Controllers
                 return HandleFailure(review);
             }
             var countReviews = await Sender.Send(
-                new GetCountReviewsQuery() {},
+                new GetCountReviewsQuery() { },
                 cancellationToken);
             HttpContext.Response.Headers.Append("X-Total-Count", countReviews.ToString());
             return Ok(review.Value);
         }
+        /// <summary>
+        /// Get certain review by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReviewByIdAsync(
@@ -53,6 +66,12 @@ namespace Reviews.Api.Controllers
             }
             return Ok(review.Value);
         }
+        /// <summary>
+        /// Create review 
+        /// </summary>
+        /// <param name="createReviewRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateReviewAsync(

@@ -1,6 +1,3 @@
-using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
 using ManageUsers.Api.JsonSerializer;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Behavior;
@@ -10,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ManageUsers.Api;
 
@@ -94,7 +94,7 @@ public static class DependencyInjection
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
     }
-    
+
     public static IServiceCollection AddSwaggerForControllersWidthJwtAuth(this IServiceCollection services)
     {
         return services.AddSwaggerGen(option =>
@@ -164,8 +164,8 @@ public static class DependencyInjection
         return services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(DatabaseTransactionBehavior<,>));
     }
-   
-    
+
+
     public static IServiceCollection AddSwagger(
         this IServiceCollection services,
         Assembly apiAssembly,
@@ -182,7 +182,7 @@ public static class DependencyInjection
                     Title = appName,
                     Description = description
                 });
-                
+
                 // using System.Reflection;
                 var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));

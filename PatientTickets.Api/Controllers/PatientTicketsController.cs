@@ -5,6 +5,7 @@ using PatientTickets.Api.Abstractions;
 using PatientTickets.Api.Contracts;
 using PatientTickets.Application.Handlers.Commands.CreatePatientTicket;
 using PatientTickets.Application.Handlers.Commands.DeletePatientTicket;
+using PatientTickets.Application.Handlers.Commands.UpdatePatientTicketHasVisit;
 using PatientTickets.Application.Handlers.Queries.GetCountPatientTickets;
 using PatientTickets.Application.Handlers.Queries.GetPatientTicket;
 using PatientTickets.Application.Handlers.Queries.GetPatientTickets;
@@ -57,7 +58,7 @@ namespace PatientTickets.Api.Controllers
             return Ok(result.Value);
         }
         /// <summary>
-        /// 
+        /// Add patient ticket
         /// </summary>
         /// <param name="createPatientTicketRequest"></param>
         /// <param name="cancellationToken"></param>
@@ -98,6 +99,15 @@ namespace PatientTickets.Api.Controllers
                 cancellationToken);
 
             return Ok(users);
+        }
+
+
+        [HttpPatch("{id}/IsDone")]
+        public async Task<IActionResult> UpdateToDoIsDoneAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var patientTicket = await Sender.Send(new UpdatePatientTicketHasVisitCommand() { Id = id }, cancellationToken);
+            return Ok(patientTicket);
+
         }
         /// <summary>
         /// 

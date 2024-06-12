@@ -1,8 +1,8 @@
-﻿using ManageUsers.Domain.Shared;
+﻿using Authorization.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManageUsers.Api.Abstractions
+namespace Authorization.Api.Abstractions
 {
     [ApiController]
     public abstract class ApiController : ControllerBase
@@ -18,8 +18,7 @@ namespace ManageUsers.Api.Abstractions
                 IValidationResult validationResult =>
                     BadRequest(
                         CreateProblemDetails(
-                            "Validation Error",
-                            StatusCodes.Status400BadRequest,
+                            "Validation Error", StatusCodes.Status400BadRequest,
                             result.Error,
                             validationResult.Errors)),
                 _ =>

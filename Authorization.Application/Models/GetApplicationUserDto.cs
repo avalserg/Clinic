@@ -3,7 +3,7 @@ namespace Authorization.Application.Models;
 public class GetApplicationUserDto
 {
     public Guid ApplicationUserId { get; set; }
-    
+
     public ApplicationUserRole ApplicationUserRole { get; set; } = default!;
     public string Login { get; set; } = default!;
     public string PasswordHash { get; set; } = default!;
@@ -11,10 +11,9 @@ public class GetApplicationUserDto
     {
         ApplicationUserId = applicationUserId;
         ApplicationUserRole = role;
-        //TODO upper variant other ways
         ApplicationUserRole.Name = role.Name.ToUpper();
         Login = login;
-         PasswordHash = passwordHash;
+        PasswordHash = passwordHash;
     }
 
     public GetApplicationUserDto() { }
@@ -24,5 +23,5 @@ public class ApplicationUserRole
     public int ApplicationUserRoleId { get; set; }
 
     public string Name { get; set; } = default!;
-   
+
 }

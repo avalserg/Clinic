@@ -37,9 +37,9 @@ try
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
         .AddExternalProviders()
-        //.AddAllCors()
         .AddAuthApplication()
-        .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        .AddControllers()
+        .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
     builder.Services.AddEndpointsApiExplorer();
     var app = builder.Build();
@@ -51,7 +51,8 @@ try
         .UseAuthExceptionHandler()
         .UseAuthentication()
         .UseAuthorization();
-    // .UseHttpsRedirection();
+
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentname}/swagger.json"; });
@@ -65,7 +66,6 @@ try
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        //.WithOrigins("https://localhost:3000))
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();

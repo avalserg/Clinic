@@ -12,6 +12,7 @@ WORKDIR /src
 COPY ["Reviews.Api/Reviews.Api.csproj", "Reviews.Api/"]
 COPY ["Reviews.Application/Reviews.Application.csproj", "Reviews.Application/"]
 COPY ["Reviews.Domain/Reviews.Domain.csproj", "Reviews.Domain/"]
+COPY ["Reviews.ExternalProviders/Reviews.ExternalProviders.csproj", "Reviews.ExternalProviders/"]
 COPY ["Reviews.Persistence/Reviews.Persistence.csproj", "Reviews.Persistence/"]
 RUN dotnet restore "./Reviews.Api/./Reviews.Api.csproj"
 COPY . .

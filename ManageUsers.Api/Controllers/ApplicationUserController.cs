@@ -1,6 +1,5 @@
 ﻿using ManageUsers.Api.Abstractions;
 using ManageUsers.Api.Contracts.ApplicationUser;
-using ManageUsers.Application.Handlers.Admin.Queries.GetAdmin;
 using ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicationUser;
 using ManageUsers.Application.Handlers.ApplicationUser.Queries.GetApplicationUserById;
 using MediatR;
@@ -25,18 +24,18 @@ namespace ManageUsers.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> GetApplicationUserAsync(
             [FromBody] GetApplicationUserRequest getApplicationUserRequest,
-            
+
             CancellationToken cancellationToken)
         {
-            var user = await Sender.Send(new GetApplicationUserQuery() { Login = getApplicationUserRequest.Login, Password =getApplicationUserRequest.Password }, cancellationToken);
+            var user = await Sender.Send(new GetApplicationUserQuery() { Login = getApplicationUserRequest.Login, Password = getApplicationUserRequest.Password }, cancellationToken);
 
             return Ok(user);
-        } 
-        
+        }
+
         /// <summary>
         /// Get certain user
         /// </summary>
-        /// <param name="getApplicationUserRequest"></param>
+        /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [AllowAnonymous]

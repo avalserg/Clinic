@@ -12,6 +12,7 @@ WORKDIR /src
 COPY ["Authorization.Api/Authorization.Api.csproj", "Authorization.Api/"]
 COPY ["Authorization.Application/Authorization.Application.csproj", "Authorization.Application/"]
 COPY ["Authorization.Domain/Authorization.Domain.csproj", "Authorization.Domain/"]
+COPY ["Authorization.ExternalProviders/Authorization.ExternalProviders.csproj", "Authorization.ExternalProviders/"]
 COPY ["Authorization.Persistence/Authorization.Persistence.csproj", "Authorization.Persistence/"]
 RUN dotnet restore "./Authorization.Api/./Authorization.Api.csproj"
 COPY . .

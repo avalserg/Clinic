@@ -12,6 +12,7 @@ WORKDIR /src
 COPY ["PatientTickets.Api/PatientTickets.Api.csproj", "PatientTickets.Api/"]
 COPY ["PatientTickets.Application/PatientTickets.Application.csproj", "PatientTickets.Application/"]
 COPY ["PatientTickets.Domain/PatientTickets.Domain.csproj", "PatientTickets.Domain/"]
+COPY ["PatientTickets.ExternalProviders/PatientTickets.ExternalProviders.csproj", "PatientTickets.ExternalProviders/"]
 COPY ["PatientTickets.Persistence/PatientTickets.Persistence.csproj", "PatientTickets.Persistence/"]
 RUN dotnet restore "./PatientTickets.Api/./PatientTickets.Api.csproj"
 COPY . .
