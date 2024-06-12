@@ -28,23 +28,23 @@ public static class DependencyInjection
             .AddResponseCompression(options => { options.EnableForHttps = true; });
     }
 
-    public static IServiceCollection AddAllCors(this IServiceCollection services)
-    {
-        return services
-            .AddCors(options =>
-            {
-                options.AddPolicy(CorsPolicy.AllowAll, policy =>
-                {
-                    policy.WithOrigins("https://localhost:3000", "https://localhost:3000/doctorRegister");
-                    policy.AllowAnyHeader();
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyOrigin();
-                    policy.AllowCredentials();
-                    policy.WithExposedHeaders("*");
-                    policy.SetIsOriginAllowed(origin => true);
-                });
-            });
-    }
+    //public static IServiceCollection AddAllCors(this IServiceCollection services)
+    //{
+    //    return services
+    //        .AddCors(options =>
+    //        {
+    //            options.AddPolicy(CorsPolicy.AllowAll, policy =>
+    //            {
+    //                policy.WithOrigins("https://localhost:3000", "https://localhost:3000/doctorRegister");
+    //                policy.AllowAnyHeader();
+    //                policy.AllowAnyMethod();
+    //                policy.AllowAnyOrigin();
+    //                policy.AllowCredentials();
+    //                policy.WithExposedHeaders("*");
+    //                policy.SetIsOriginAllowed(origin => true);
+    //            });
+    //        });
+    //}
     public static IServiceCollection AddSwaggerWidthJwtAuth(
        this IServiceCollection services,
        Assembly apiAssembly,
@@ -95,40 +95,40 @@ public static class DependencyInjection
             });
     }
 
-    public static IServiceCollection AddSwaggerForControllersWidthJwtAuth(this IServiceCollection services)
-    {
-        return services.AddSwaggerGen(option =>
-        {
-            option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
-            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-            option.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        },
-                        Scheme = "oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header,
-                    },
+    //public static IServiceCollection AddSwaggerForControllersWidthJwtAuth(this IServiceCollection services)
+    //{
+    //    return services.AddSwaggerGen(option =>
+    //    {
+    //        option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+    //        option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    //        {
+    //            In = ParameterLocation.Header,
+    //            Description = "Please enter a valid token",
+    //            Name = "Authorization",
+    //            Type = SecuritySchemeType.ApiKey,
+    //            BearerFormat = "JWT",
+    //            Scheme = "Bearer"
+    //        });
+    //        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    //        {
+    //            {
+    //                new OpenApiSecurityScheme
+    //                {
+    //                    Reference = new OpenApiReference
+    //                    {
+    //                        Type=ReferenceType.SecurityScheme,
+    //                        Id="Bearer"
+    //                    },
+    //                    Scheme = "oauth2",
+    //                    Name = "Bearer",
+    //                    In = ParameterLocation.Header,
+    //                },
 
-                    new List<string>{}
-                }
-            });
-        });
-    }
+    //                new List<string>{}
+    //            }
+    //        });
+    //    });
+    //}
     public static IServiceCollection AddCoreAuthApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthorization()
@@ -166,26 +166,26 @@ public static class DependencyInjection
     }
 
 
-    public static IServiceCollection AddSwagger(
-        this IServiceCollection services,
-        Assembly apiAssembly,
-        string appName,
-        string version,
-        string description)
-    {
-        return services.AddEndpointsApiExplorer()
-            .AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(version, new OpenApiInfo
-                {
-                    Version = version,
-                    Title = appName,
-                    Description = description
-                });
+    //public static IServiceCollection AddSwagger(
+    //    this IServiceCollection services,
+    //    Assembly apiAssembly,
+    //    string appName,
+    //    string version,
+    //    string description)
+    //{
+    //    return services.AddEndpointsApiExplorer()
+    //        .AddSwaggerGen(options =>
+    //        {
+    //            options.SwaggerDoc(version, new OpenApiInfo
+    //            {
+    //                Version = version,
+    //                Title = appName,
+    //                Description = description
+    //            });
 
-                // using System.Reflection;
-                var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-            });
-    }
+    //            // using System.Reflection;
+    //            var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
+    //            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    //        });
+    //}
 }

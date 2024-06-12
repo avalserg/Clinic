@@ -1,7 +1,4 @@
-﻿
-using ManageUsers.Api.Contracts.Shared;
-
-namespace ManageUsers.Api.Contracts.Doctor
+﻿namespace ManageUsers.Api.Contracts.Doctor
 {
     public sealed record UpdateDoctorRequest(
         string Address,
@@ -16,8 +13,8 @@ namespace ManageUsers.Api.Contracts.Doctor
         string Category,
         string Speciality
         );
-     
-  
- 
+
+
+
 
 }

@@ -5,9 +5,9 @@ namespace ManageUsers.Application.Utils;
 public static class PasswordHashUtil
 {
     private const int SaltSize = 16;
-    
+
     private const int HashSize = 20;
-    
+
     public static string Hash(string password, int iterations)
     {
         byte[] salt;
@@ -24,17 +24,17 @@ public static class PasswordHashUtil
 
         return string.Format("$MYHASH$V1${0}${1}", iterations, base64Hash);
     }
-    
+
     public static string Hash(string password)
     {
         return Hash(password, 10000);
     }
-    
+
     public static bool IsHashSupported(string hashString)
     {
         return hashString.Contains("$MYHASH$V1$");
     }
-    
+
     public static bool Verify(string password, string hashedPassword)
     {
         if (!IsHashSupported(hashedPassword))

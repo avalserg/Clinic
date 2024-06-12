@@ -2,7 +2,7 @@
 {
     public class FileModel
     {
-        public string FileName { get; set; }
-        public IFormFile File { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public IFormFile File { get; set; } = default!;
     }
 }

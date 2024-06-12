@@ -1,5 +1,4 @@
 using FluentValidation;
-using ManageUsers.Application.Handlers.Patient;
 
 namespace ManageUsers.Application.Handlers.Admin;
 

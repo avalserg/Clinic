@@ -4,8 +4,8 @@ namespace ManageUsers.Domain.Errors;
 
 public static class DomainErrors
 {
-    
-    public static class PatientDomainErrors 
+
+    public static class PatientDomainErrors
     {
         public static readonly Func<Guid, Error> NotFound = id => new Error(
             $"PatientDomainErrors.NotFound",
@@ -16,29 +16,29 @@ public static class DomainErrors
         public static readonly Func<string, Error> PassportNumberAlreadyInUse = passportNumber => new(
             "PatientDomainErrors.PassportNumberAlreadyInUse",
             $"The password number {passportNumber} is already in use");
-    }   
-    public static class AdministratorDomainErrors 
+    }
+    public static class AdministratorDomainErrors
     {
         public static readonly Func<Guid, Error> NotFound = id => new Error(
             $"AdministratorDomainErrors.NotFound",
             $"The AdministratorDomainErrors with the identifier {id} was not found.");
-       
+
     }
-    public static class DoctorDomainErrors 
+    public static class DoctorDomainErrors
     {
         public static readonly Func<Guid, Error> NotFound = id => new Error(
-            $"PatientDomainErrors.NotFound",
-            $"The PatientDomainErrors with the identifier {id} was not found.");
+            $"DoctorDomainErrors.NotFound",
+            $"The Doctor with the identifier {id} was not found.");
     }
-     public static class ApplicationUserDomainErrors
+    public static class ApplicationUserDomainErrors
     {
         public static readonly Func<string, Error> LoginAlreadyInUse = login => new(
-            "PatientDomainErrors.LoginAlreadyInUse",
-            $"The patient login {login} is already in use");
+            "ApplicationUserDomainErrors.LoginAlreadyInUse",
+            $"The user with login {login} is already in use");
 
         public static readonly Func<Guid, Error> NotFound = id => new Error(
             "ApplicationUserDomainErrors.NotFound",
-            $"The ApplicationUserDomainErrors with the identifier {id} was not found.");
+            $"The user with the identifier {id} was not found.");
     }
 
     public static class PhoneNumberDomainErrors
@@ -47,7 +47,7 @@ public static class DomainErrors
             "PhoneNumberDomainErrors.Empty",
             "PhoneNumberDomainErrors is empty");
 
-      
+
         public static readonly Error InvalidFormat = new(
             "PhoneNumberDomainErrors.InvalidFormat",
             "PhoneNumberDomainErrors format is invalid");

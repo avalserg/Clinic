@@ -1,5 +1,4 @@
 using FluentValidation;
-using ManageUsers.Application.ValidatorsExtensions;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 
@@ -7,6 +6,6 @@ internal class DeletePatientCommandValidator : AbstractValidator<DeletePatientCo
 {
     public DeletePatientCommandValidator()
     {
-       // RuleFor(e => e.Id).NotEmpty().IsGuid();
+        RuleFor(e => e.Id).NotEmpty();
     }
 }

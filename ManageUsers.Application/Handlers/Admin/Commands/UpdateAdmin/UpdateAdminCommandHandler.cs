@@ -63,7 +63,7 @@ internal class UpdateAdminCommandHandler : ICommandHandler<UpdateAdminCommand, G
 
         if (fullName.IsFailure)
         {
-            // log error
+
             return Result.Failure<GetAdminDto>(fullName.Error);
         }
 

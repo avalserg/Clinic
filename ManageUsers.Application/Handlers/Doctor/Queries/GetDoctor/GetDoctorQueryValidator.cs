@@ -6,6 +6,6 @@ public class GetDoctorQueryValidator : AbstractValidator<GetDoctorQuery>
 {
     public GetDoctorQueryValidator()
     {
-        //RuleFor(e => e.Id).NotEmpty().IsGuid();
+        RuleFor(e => e.Id).NotEmpty();
     }
 }

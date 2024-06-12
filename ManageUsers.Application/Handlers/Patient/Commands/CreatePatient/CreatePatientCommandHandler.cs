@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
@@ -7,7 +6,6 @@ using ManageUsers.Application.Caches.Patients;
 using ManageUsers.Application.DTOs.ApplicationUser;
 using ManageUsers.Application.Utils;
 using ManageUsers.Domain;
-using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Shared;
 using ManageUsers.Domain.ValueObjects;
@@ -51,7 +49,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
 
         if (fullName.IsFailure)
         {
-            // log error
+
             return Result.Failure<CreateApplicationUserDto>(fullName.Error);
         }
         var phoneNumber = PhoneNumber.Create(request.PhoneNumber);
@@ -64,7 +62,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         {
             return Result.Failure<CreateApplicationUserDto>(
                 DomainErrors.ApplicationUserDomainErrors.LoginAlreadyInUse(request.Login));
-            //throw new BadOperationException($"User with login {request.Login} already exists.");
+
         }
 
         var passwordNumberUse = await _patients.AsAsyncRead()
@@ -76,7 +74,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         }
         var newUserGuid = Guid.NewGuid();
 
-        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Patient",cancellationToken);
+        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
         // TODO check role if null
         var applicationUser = Domain.ApplicationUser.Create(
             newUserGuid,

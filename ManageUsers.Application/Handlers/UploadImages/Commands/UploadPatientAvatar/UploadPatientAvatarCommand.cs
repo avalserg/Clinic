@@ -1,6 +1,4 @@
-using System.Security.AccessControl;
 using ManageUsers.Application.Abstractions.Messaging;
-using ManageUsers.Application.DTOs.ApplicationUser;
 using Microsoft.AspNetCore.Http;
 
 namespace ManageUsers.Application.Handlers.UploadImages.Commands.UploadPatientAvatar;
@@ -17,5 +15,5 @@ public class UploadPatientAvatarCommand : ICommand
     public string Id { get; set; }
     public string FileName { get; set; }
     public IFormFile File { get; set; }
-   
+
 };

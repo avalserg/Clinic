@@ -1,14 +1,12 @@
 ﻿using ManageUsers.Domain.Primitives;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.ValueObjects;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ManageUsers.Domain
 {
-    public class Patient:Entity
+    public class Patient : Entity
     {
-        
+
         private Patient(
             Guid id,
             FullName fullName,
@@ -18,9 +16,9 @@ namespace ManageUsers.Domain
             string passportNumber,
             string? avatar,
             Guid applicationUserId
-            ):base(id)
+            ) : base(id)
         {
-            
+
             FullName = fullName;
             DateBirthday = dateBirthday;
             Address = address;
@@ -32,9 +30,9 @@ namespace ManageUsers.Domain
 
         private Patient()
         {
-            
+
         }
-       
+
         public FullName FullName { get; private set; }
         public DateTime DateBirthday { get; private set; }
         public string Address { get; private set; }
@@ -56,12 +54,12 @@ namespace ManageUsers.Domain
             string passportNumber,
             string? avatar,
             Guid applicationUserId
-            
+
         )
         {
             var patient = new Patient(
                 id,
-              
+
                 fullName,
                 dateBirthday,
                 address,
@@ -70,10 +68,10 @@ namespace ManageUsers.Domain
                 avatar,
                 applicationUserId
             );
-            
+
             //some  logic to create entity
             return patient;
-        } 
+        }
         public void Update(
             FullName fullName,
             DateTime dateBirthday,
@@ -81,27 +79,23 @@ namespace ManageUsers.Domain
             PhoneNumber phoneNumber,
             string passportNumber,
             string? avatar
-           
+
         )
         {
 
-            FullName=fullName;
-            DateBirthday=dateBirthday;
-            Address=address;
-            PhoneNumber=phoneNumber;
-            PassportNumber=passportNumber;
-            Avatar=avatar;
-            
-        } 
+            FullName = fullName;
+            DateBirthday = dateBirthday;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            PassportNumber = passportNumber;
+            Avatar = avatar;
+
+        }
         public void UpdateAvatar(
-          
             string? avatar
-           
         )
         {
-
-            Avatar=avatar;
-            
+            Avatar = avatar;
         }
 
     }

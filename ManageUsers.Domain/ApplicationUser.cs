@@ -1,6 +1,4 @@
-using ManageUsers.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
 
 namespace ManageUsers.Domain;
 
@@ -30,14 +28,9 @@ public class ApplicationUser
 
     // Mark app user as deleted entity
     // public bool IsDeleted { get; private set; }
-    // public ApplicationUserRolesEnum ApplicationUserRole { get; private set; } 
+
     public ApplicationUserRole ApplicationUserRole { get; private set; } = default!;
 
-    //public DateTime CreatedDate { get; set; }
-
-    //public DateTime? UpdatedDate { get; set; }
-
-    //public DateTime? LastSingInDate { get; set; }
 
     public static ApplicationUser Create(
         Guid applicationUserId,

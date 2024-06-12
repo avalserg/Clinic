@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ManageUsers.Domain
 {
-    public class Administrator:Entity
+    public class Administrator : Entity
     {
         private Administrator(
             Guid id,
@@ -16,10 +16,7 @@ namespace ManageUsers.Domain
             ApplicationUserId = applicationUserId;
         }
 
-        private Administrator()
-        {
-            
-        }
+        private Administrator() { }
         public FullName FullName { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
@@ -42,13 +39,9 @@ namespace ManageUsers.Domain
 
         public void Update(
             FullName fullName
-           
-
         )
         {
             FullName = fullName;
-           
-
         }
     }
 }

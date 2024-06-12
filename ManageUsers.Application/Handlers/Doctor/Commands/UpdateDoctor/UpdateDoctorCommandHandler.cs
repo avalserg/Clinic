@@ -5,7 +5,6 @@ using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.DTOs.Doctor;
-using ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
@@ -50,13 +49,13 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
 
     public async Task<Result<GetDoctorDto>> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-       
+
         var doctor = await _doctors.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (doctor is null)
         {
             return Result.Failure<GetDoctorDto>(DomainErrors.DoctorDomainErrors.NotFound(request.Id));
         }
-       
+
         if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
             throw new ForbiddenException();
@@ -73,24 +72,24 @@ internal class UpdateDoctorCommandHandler : ICommandHandler<UpdateDoctorCommand,
         {
             return Result.Failure<GetDoctorDto>(phoneNumber.Error);
         }
-       
 
-        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Doctor",cancellationToken);
+
+        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r => r.Name == "Doctor", cancellationToken);
         // TODO check role if null
-       
 
-         doctor.Update(
-             fullName.Value,
-            request.DateBirthday,
-            request.Address,
-            phoneNumber.Value,
-            request.Experience,
-            request.CabinetNumber,
-             request.Category,
-             request.Speciality
-            );
 
-        
+        doctor.Update(
+            fullName.Value,
+           request.DateBirthday,
+           request.Address,
+           phoneNumber.Value,
+           request.Experience,
+           request.CabinetNumber,
+            request.Category,
+            request.Speciality
+           );
+
+
 
         doctor = await _doctors.UpdateAsync(doctor, cancellationToken);
 

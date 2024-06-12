@@ -51,7 +51,7 @@ namespace Authorization.Api.Controllers
 
         }
         /// <summary>
-        /// Delete refresh token from db
+        /// Delete refresh token from db for authorize users
         /// </summary>
         /// <param name="applicationUserId"></param>
         /// <param name="cancellationToken"></param>

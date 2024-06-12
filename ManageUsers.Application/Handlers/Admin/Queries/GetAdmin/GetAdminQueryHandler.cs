@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.BaseRealizations;
-using ManageUsers.Application.Caches;
 using ManageUsers.Application.Caches.Administrator;
 using ManageUsers.Application.DTOs.Admin;
 using ManageUsers.Domain;

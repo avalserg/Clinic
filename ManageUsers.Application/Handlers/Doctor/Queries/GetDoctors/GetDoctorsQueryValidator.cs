@@ -3,12 +3,12 @@ using ManageUsers.Application.ValidatorsExtensions;
 
 namespace ManageUsers.Application.Handlers.Doctor.Queries.GetDoctors;
 
-internal class GetDoctorssQueryValidator : AbstractValidator<GetDoctorsQuery>
+internal class GetDoctorsQueryValidator : AbstractValidator<GetDoctorsQuery>
 {
-    public GetDoctorssQueryValidator()
+    public GetDoctorsQueryValidator()
     {
         RuleFor(e => e).IsValidListUserFilter();
         RuleFor(e => e).IsValidPaginationFilter();
     }
-    
+
 }

@@ -1,9 +1,8 @@
-using System.Net;
-using System.Text.Json;
-using ManageUsers.Application.Exceptions;
 using ManageUsers.Domain.Exceptions.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Text.Json;
 
 namespace ManageUsers.Application.Middlewares;
 

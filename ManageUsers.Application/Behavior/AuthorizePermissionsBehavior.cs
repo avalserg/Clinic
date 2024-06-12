@@ -1,9 +1,7 @@
-using System.Reflection;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Attributes;
-using ManageUsers.Application.Exceptions;
-using ManageUsers.Domain.Exceptions.Base;
 using MediatR;
+using System.Reflection;
 
 namespace ManageUsers.Application.Behavior;
 
@@ -19,28 +17,17 @@ public class AuthorizePermissionsBehavior<TRequest, TResponse>(ICurrentUserServi
             return next();
         }
 
-        //if (currentUserService.CurrentUserId is null) throw new UnauthorizedException();
 
         if (requestAuthorizeAttribute.Roles is null || requestAuthorizeAttribute.Roles.Length == 0)
         {
             return next();
         }
 
-        //if (currentUserService.CurrentUserRoleEnum is null)
-        //{
-        //    throw new ForbiddenException();
-        //}
-
         var requiredRoles = requestAuthorizeAttribute.Roles;
         if (requiredRoles == null || requiredRoles.Length == 0)
         {
             return next();
         }
-        
-        //if (requiredRoles.Any(rn => currentUserService.CurrentUserRoles.All(roleEnum => roleEnum != rn)))
-        //{
-        //    throw new ForbiddenException();
-        //}
 
         return next();
     }

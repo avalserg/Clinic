@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ManageUsers.Persistence.EntityTypeConfigurations.Users
 {
-    public class PatientTypeConfiguration:IEntityTypeConfiguration<Patient>
+    public class PatientTypeConfiguration : IEntityTypeConfiguration<Patient>
     {
         public void Configure(EntityTypeBuilder<Patient> builder)
         {
@@ -14,7 +14,7 @@ namespace ManageUsers.Persistence.EntityTypeConfigurations.Users
 
             builder.ToTable(TableNames.Patients);
             builder.HasKey(p => p.Id);
-            
+
             builder.ComplexProperty(c => c.FullName, b =>
             {
                 b.IsRequired();
@@ -27,17 +27,7 @@ namespace ManageUsers.Persistence.EntityTypeConfigurations.Users
             builder
                 .Property(x => x.PhoneNumber)
                 .HasConversion(x => x.Value, v => PhoneNumber.Create(v).Value);
-            //builder.HasIndex(x => x.PhoneNumberDomainErrors.Value);
-            //builder.HasData(PatientDomainErrors.Create(
-            //    Guid.NewGuid(),
-            //    FullName.Create("Patient1FirstName", "Patient1LastName", "Patient1Patronymic").Value,
-            //    DateTime.Now,
-            //    "Patient1Address",
-            //    PhoneNumberDomainErrors.Create("+919367788755").Value,
-            //    null,
-            //    new Guid("0f8fad5b-d9cb-469f-a165-70867728950b")
-            //));
-           
+
         }
     }
 }

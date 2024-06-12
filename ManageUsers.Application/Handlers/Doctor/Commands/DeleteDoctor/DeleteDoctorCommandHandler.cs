@@ -1,11 +1,8 @@
-using AutoMapper;
 using ManageUsers.Application.Abstractions.Messaging;
-using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
-using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Exceptions.Base;
@@ -18,9 +15,7 @@ internal class DeleteDoctorCommandHandler : ICommandHandler<DeleteDoctorCommand>
 {
     private readonly IBaseWriteRepository<Domain.Doctor> _doctors;
     private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
-    private readonly IBaseReadRepository<ApplicationUserRole> _userRole;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IMapper _mapper;
 
     private readonly DoctorsListMemoryCache _listCache;
 
@@ -32,19 +27,17 @@ internal class DeleteDoctorCommandHandler : ICommandHandler<DeleteDoctorCommand>
     public DeleteDoctorCommandHandler(
         IBaseWriteRepository<Domain.Doctor> doctors,
         IBaseWriteRepository<Domain.ApplicationUser> users,
-        IMapper mapper,
         DoctorsListMemoryCache listCache,
         ILogger<DeleteDoctorCommandHandler> logger,
         DoctorsCountMemoryCache countCache,
-        IBaseReadRepository<ApplicationUserRole> userRole, ICurrentUserService currentUserService, DoctorMemoryCache doctorCache)
+        ICurrentUserService currentUserService,
+        DoctorMemoryCache doctorCache)
     {
         _users = users;
         _doctors = doctors;
-        _mapper = mapper;
         _listCache = listCache;
         _logger = logger;
         _countCache = countCache;
-        _userRole = userRole;
         _currentUserService = currentUserService;
         _doctorCache = doctorCache;
     }
@@ -57,16 +50,13 @@ internal class DeleteDoctorCommandHandler : ICommandHandler<DeleteDoctorCommand>
     /// <exception cref="BadOperationException"></exception>
     public async Task<Result> Handle(DeleteDoctorCommand request, CancellationToken cancellationToken)
     {
-        var userId = request.Id;
-        //var u = _currentUserService.CurrentUserId;
-        //var role = _currentUserService.CurrentUserRoleEnum;
         if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
         {
             throw new ForbiddenException();
         }
 
 
-        var doctor = await _doctors.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == userId, cancellationToken);
+        var doctor = await _doctors.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (doctor is null)
         {
             return Result.Failure(

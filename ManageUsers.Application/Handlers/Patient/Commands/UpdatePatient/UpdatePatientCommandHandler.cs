@@ -4,10 +4,8 @@ using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
 using ManageUsers.Application.Caches.Patients;
-using ManageUsers.Application.DTOs.ApplicationUser;
 using ManageUsers.Application.DTOs.Patient;
 using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
-using ManageUsers.Application.Utils;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
@@ -52,7 +50,7 @@ internal class UpdatePatientCommandHandler : ICommandHandler<UpdatePatientComman
 
     public async Task<Result<GetPatientDto>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-       
+
         var patient = await _patients.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (patient is null)
         {
@@ -60,7 +58,7 @@ internal class UpdatePatientCommandHandler : ICommandHandler<UpdatePatientComman
         }
         var passwordNumberUse = await _patients.AsAsyncRead()
             .AnyAsync(e => e.PassportNumber == request.PassportNumber, cancellationToken);
-        if (passwordNumberUse&&patient.PassportNumber!=request.PassportNumber)
+        if (passwordNumberUse && patient.PassportNumber != request.PassportNumber)
         {
             return Result.Failure<GetPatientDto>(
                 DomainErrors.PatientDomainErrors.PassportNumberAlreadyInUse(request.PassportNumber));
@@ -82,25 +80,17 @@ internal class UpdatePatientCommandHandler : ICommandHandler<UpdatePatientComman
         {
             return Result.Failure<GetPatientDto>(phoneNumber.Error);
         }
-       
 
-        var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r=>r.Name=="Patient",cancellationToken);
-        // TODO check role if null
-       
-
-         patient.Update(
-             fullName.Value,
-            request.DateBirthday,
-            request.Address,
-            phoneNumber.Value,
-            request.PassportNumber,
-            request.Avatar
-            );
-
-        
+        patient.Update(
+            fullName.Value,
+           request.DateBirthday,
+           request.Address,
+           phoneNumber.Value,
+           request.PassportNumber,
+           request.Avatar
+           );
 
         patient = await _patients.UpdateAsync(patient, cancellationToken);
-
 
         _listCache.Clear();
         _countCache.Clear();

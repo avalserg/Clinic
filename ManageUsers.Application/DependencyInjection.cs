@@ -1,13 +1,12 @@
 using FluentValidation;
 using ManageUsers.Application.Behavior;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using ManageUsers.Application.Caches;
 using ManageUsers.Application.Caches.Administrator;
 using ManageUsers.Application.Caches.ApplicationUserMemoryCache;
 using ManageUsers.Application.Caches.Doctors;
 using ManageUsers.Application.Caches.Patients;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace ManageUsers.Application;
 
@@ -35,9 +34,9 @@ public static class DependencyInjection
             .AddSingleton<AdministratorsListMemoryCache>()
             .AddSingleton<AdministratorsCountMemoryCache>()
             .AddSingleton<ApplicationUserMemoryCache>()
-            
-            
-            ; 
+
+
+            ;
 
     }
 }

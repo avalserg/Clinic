@@ -1,5 +1,3 @@
-using ManageUsers.Domain.ValueObjects;
-
 namespace ManageUsers.Domain;
 
 public class ApplicationUserRole
@@ -10,15 +8,13 @@ public class ApplicationUserRole
     {
         ApplicationUserRoleId = applicationUserRoleId;
         Name = name;
-     
+
     }
 
     private ApplicationUserRole() { }
     public int ApplicationUserRoleId { get; set; }
 
     public string Name { get; set; } = default!;
-
-    // public List<ApplicationUser> ApplicationUsers { get; set; } = default!;
 
     public static ApplicationUserRole Create(
         int applicationUserRoleId,
@@ -28,7 +24,7 @@ public class ApplicationUserRole
         var applicationUserRole = new ApplicationUserRole(
             applicationUserRoleId,
             name
-           
+
         );
 
         //some  logic to create entity

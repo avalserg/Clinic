@@ -16,7 +16,7 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            string? userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId is null)
             {
                 return null;
@@ -27,7 +27,7 @@ public class CurrentUserService : ICurrentUserService
 
     public bool UserInRole(ApplicationUserRolesEnum roleEnum)
     {
-        int role = (int)roleEnum;
+        var role = (int)roleEnum;
         return CurrentUserRoleEnum.Equals(role.ToString());
     }
 
