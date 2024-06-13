@@ -7,7 +7,5 @@ public class CreateReviewCommandValidator : AbstractValidator<CreateReviewComman
     public CreateReviewCommandValidator()
     {
         RuleFor(e => e.Description).MinimumLength(10).MaximumLength(1000).NotEmpty();
-
-       
     }
 }

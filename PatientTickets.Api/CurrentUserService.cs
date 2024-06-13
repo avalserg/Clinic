@@ -34,10 +34,7 @@ public class CurrentUserService : ICurrentUserService
         return CurrentUserRoleEnum.Equals(role.ToString());
 
     }
-
-    //public ApplicationUserRolesEnum CurrentUserRoleEnum =>
-    //    _httpContextAccessor.HttpContext!.User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c=>c.Value).Select(Enum.Parse<ApplicationUserRolesEnum>);
-    public string CurrentUserRoleEnum => _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+    public string CurrentUserRoleEnum => _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
 
 
 }

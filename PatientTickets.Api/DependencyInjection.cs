@@ -1,6 +1,3 @@
-using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
@@ -10,6 +7,9 @@ using PatientTickets.Api.JsonSerializer;
 using PatientTickets.Application.Abstractions.Service;
 using PatientTickets.Application.Behavior;
 using PatientTickets.Domain.Enums;
+using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace PatientTickets.Api;
 
@@ -94,41 +94,8 @@ public static class DependencyInjection
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
     }
-    
-    public static IServiceCollection AddSwaggerForControllersWidthJwtAuth(this IServiceCollection services)
-    {
-        return services.AddSwaggerGen(option =>
-        {
-            option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
-            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-            option.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        },
-                        Scheme = "oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header,
-                    },
 
-                    new List<string>{}
-                }
-            });
-        });
-    }
+
     public static IServiceCollection AddCoreAuthApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthorization()
@@ -164,28 +131,28 @@ public static class DependencyInjection
         return services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(DatabaseTransactionBehavior<,>));
     }
-   
-    
-    public static IServiceCollection AddSwagger(
-        this IServiceCollection services,
-        Assembly apiAssembly,
-        string appName,
-        string version,
-        string description)
-    {
-        return services.AddEndpointsApiExplorer()
-            .AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(version, new OpenApiInfo
-                {
-                    Version = version,
-                    Title = appName,
-                    Description = description
-                });
-                
-                // using System.Reflection;
-                var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-            });
-    }
+
+
+    //public static IServiceCollection AddSwagger(
+    //    this IServiceCollection services,
+    //    Assembly apiAssembly,
+    //    string appName,
+    //    string version,
+    //    string description)
+    //{
+    //    return services.AddEndpointsApiExplorer()
+    //        .AddSwaggerGen(options =>
+    //        {
+    //            options.SwaggerDoc(version, new OpenApiInfo
+    //            {
+    //                Version = version,
+    //                Title = appName,
+    //                Description = description
+    //            });
+
+    //            // using System.Reflection;
+    //            var xmlFilename = $"{apiAssembly.GetName().Name}.xml";
+    //            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    //        });
+    //}
 }

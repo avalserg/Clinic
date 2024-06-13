@@ -4,13 +4,24 @@ using Reviews.Domain.Shared;
 
 namespace Reviews.Api.Abstractions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
         protected readonly ISender Sender;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
         protected ApiController(ISender sender) => Sender = sender;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         protected IActionResult HandleFailure(Result result) =>
             result switch
             {

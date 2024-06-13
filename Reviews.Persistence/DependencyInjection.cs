@@ -18,8 +18,6 @@ public static class DependencyInjection
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             })
             .AddScoped<IContextTransactionCreator, ContextTransactionCreator>()
-            //.AddScoped(typeof(IAsyncRead<>), typeof(AsyncRead<>))
-            //.AddScoped<IContextTransaction, ContextTransaction>()
             .AddTransient(typeof(IBaseReadRepository<>), typeof(BaseRepository<>))
             .AddTransient(typeof(IBaseWriteRepository<>), typeof(BaseRepository<>))
             .AddScoped<IDatabaseMigrator, DatabaseMigrator>();

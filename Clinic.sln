@@ -63,9 +63,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.ExternalProvi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientTickets.ExternalProviders", "PatientTickets.ExternalProviders\PatientTickets.ExternalProviders.csproj", "{5A43009E-26FD-4043-8BB8-F8EC57003EE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalCards.ExternalProviders", "MedicalCards.ExternalProviders\MedicalCards.ExternalProviders.csproj", "{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCards.ExternalProviders", "MedicalCards.ExternalProviders\MedicalCards.ExternalProviders.csproj", "{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reviews.ExternalProviders", "Reviews.ExternalProviders\Reviews.ExternalProviders.csproj", "{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reviews.ExternalProviders", "Reviews.ExternalProviders\Reviews.ExternalProviders.csproj", "{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reviews.Infrastructure", "Reviews.Infrastructure\Reviews.Infrastructure.csproj", "{0E5AD764-1901-46DB-9EB9-42F5AB940AB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ManageUsersTests", "ManageUsersTests", "{B441E33B-894A-4810-84F7-CCE9BD18EE12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManageUsers.Application.Tests", "ManageUsers.Aplication.Tests\ManageUsers.Application.Tests.csproj", "{2DD799E1-E999-4399-802C-4E14C48B78ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +175,14 @@ Global
 		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E5AD764-1901-46DB-9EB9-42F5AB940AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E5AD764-1901-46DB-9EB9-42F5AB940AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E5AD764-1901-46DB-9EB9-42F5AB940AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E5AD764-1901-46DB-9EB9-42F5AB940AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD799E1-E999-4399-802C-4E14C48B78ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD799E1-E999-4399-802C-4E14C48B78ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD799E1-E999-4399-802C-4E14C48B78ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD799E1-E999-4399-802C-4E14C48B78ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,6 +212,9 @@ Global
 		{5A43009E-26FD-4043-8BB8-F8EC57003EE3} = {CA1D271E-CF0F-4DB8-8C0A-56ADE198CCC5}
 		{95ECB6D5-D5F7-497B-9BC2-DD2FD77C1D67} = {FAD3BDA1-76CD-4A38-A8F1-5378905C7AB9}
 		{C81EC0E6-B3AA-4A66-A815-B3975E0FD1BE} = {F67BBBBF-513D-4623-8888-42EBA79B1516}
+		{0E5AD764-1901-46DB-9EB9-42F5AB940AB2} = {F67BBBBF-513D-4623-8888-42EBA79B1516}
+		{B441E33B-894A-4810-84F7-CCE9BD18EE12} = {8D26F97C-DF63-4788-99F8-70906D803E00}
+		{2DD799E1-E999-4399-802C-4E14C48B78ED} = {B441E33B-894A-4810-84F7-CCE9BD18EE12}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E99E4150-DDB4-4F6B-A0FD-B3623AC405C5}

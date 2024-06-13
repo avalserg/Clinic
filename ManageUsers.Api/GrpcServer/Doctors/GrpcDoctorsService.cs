@@ -22,11 +22,11 @@ namespace ManageUsers.Api.GrpcServer.Doctors
             var dto = await _mediator.Send(query, context.CancellationToken);
             return new DoctorReply()
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Patronymic = dto.Patronymic,
-                CabinetNumber = dto.CabinetNumber,
-                Speciality = dto.Speciality,
+                FirstName = dto.Value.FirstName,
+                LastName = dto.Value.LastName,
+                Patronymic = dto.Value.Patronymic,
+                CabinetNumber = dto.Value.CabinetNumber,
+                Speciality = dto.Value.Speciality,
 
             };
         }

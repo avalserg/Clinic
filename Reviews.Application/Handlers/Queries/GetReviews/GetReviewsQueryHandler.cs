@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Reviews.Application.Abstractions;
+using Reviews.Application.Abstractions.Caches;
 using Reviews.Application.Abstractions.Persistence.Repository.Read;
 using Reviews.Application.BaseRealizations;
-using Reviews.Application.Caches;
+
 using Reviews.Application.DTOs;
 using Reviews.Domain.Entities;
 using Reviews.Domain.Shared;
@@ -13,7 +13,7 @@ namespace Reviews.Application.Handlers.Queries.GetReviews
     {
         private readonly IBaseReadRepository<Review> _reviews;
         private readonly IMapper _mapper;
-        public GetReviewsQueryHandler(IBaseReadRepository<Review> reviews, IMapper mapper, ReviewsListMemoryCache cache) : base(cache)
+        public GetReviewsQueryHandler(IBaseReadRepository<Review> reviews, IMapper mapper, IReviewsListCache cache) : base(cache)
         {
             _mapper = mapper;
             _reviews = reviews;

@@ -1,5 +1,5 @@
-using System.Net;
 using Reviews.Domain.Exceptions.Base;
+using System.Net;
 using ValidationException = Reviews.Application.Exceptions.ValidationException;
 
 namespace Reviews.Api.Middlewares;
@@ -7,12 +7,12 @@ namespace Reviews.Api.Middlewares;
 internal class CoreExceptionsHandlerMiddleware
 {
     private readonly RequestDelegate _next;
-    
+
 
     public CoreExceptionsHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
-        
+
     }
     public async Task Invoke(HttpContext context, ILogger<CoreExceptionsHandlerMiddleware> logger)
     {
@@ -50,14 +50,16 @@ internal class CoreExceptionsHandlerMiddleware
         context.Response.StatusCode = (int)code;
 
         if (result == string.Empty)
-            result = System.Text.Json.JsonSerializer.Serialize(new {error = exception.Message, innerMessage = exception.InnerException?.Message, exception.StackTrace});
-        
+            result = System.Text.Json.JsonSerializer.Serialize(new { error = exception.Message, innerMessage = exception.InnerException?.Message, exception.StackTrace });
+
         logger.Log(code == HttpStatusCode.InternalServerError ? LogLevel.Error : LogLevel.Warning, exception, $"Response error {code}: {exception.Message}");
 
         return context.Response.WriteAsync(result);
     }
 }
-
+/// <summary>
+/// 
+/// </summary>
 public static class CoreExceptionsHandlerMiddlewareExtensions
 {
     public static IApplicationBuilder UseCoreExceptionHandler(this IApplicationBuilder builder)

@@ -1,9 +1,12 @@
-﻿namespace Reviews.Domain.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace Reviews.Domain.Shared;
 
 public class Result<TValue> : Result
 {
-    private readonly TValue? _value;
 
+    private readonly TValue? _value;
+    [JsonConstructor]
     protected internal Result(TValue? value, bool isSuccess, Error error)
         : base(isSuccess, error) =>
         _value = value;

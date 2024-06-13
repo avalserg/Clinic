@@ -3,11 +3,11 @@ using Reviews.Api.Middlewares;
 using Reviews.Application;
 using Reviews.Application.Middlewares;
 using Reviews.ExternalProviders;
+using Reviews.Infrastructure;
 using Reviews.Persistence;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 try
 {
@@ -38,8 +38,11 @@ try
         .AddCoreAuthServices()
         .AddExternalProviders()
         .AddAuthApplication()
+        .AddDistributedCachesServices(builder.Configuration)
         .AddControllers()
-        .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        .AddNewtonsoftJson();
+
+
 
     builder.Services.AddEndpointsApiExplorer();
     var app = builder.Build();

@@ -16,6 +16,9 @@ public static class DomainErrors
         public static readonly Func<string, Error> PassportNumberAlreadyInUse = passportNumber => new(
             "PatientDomainErrors.PassportNumberAlreadyInUse",
             $"The password number {passportNumber} is already in use");
+        public static readonly Error PatientRoleNotFound = new(
+            "PatientDomainErrors.PatientRoleNotFound",
+            $"The role Patient is already in use");
     }
     public static class AdministratorDomainErrors
     {

@@ -1,8 +1,8 @@
-using ManageUsers.Api.Contracts.Patient;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reviews.Api.Abstractions;
+using Reviews.Api.Contracts;
 using Reviews.Application.Handlers.Commands.CreateReview;
 using Reviews.Application.Handlers.Queries.GetCountReviews;
 using Reviews.Application.Handlers.Queries.GetReview;
@@ -16,13 +16,14 @@ namespace Reviews.Api.Controllers
     [Route("[controller]")]
     public class ReviewsController : ApiController
     {
-
-
-        private readonly ILogger<ReviewsController> _logger;
-
-        public ReviewsController(ILogger<ReviewsController> logger, ISender sender) : base(sender)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="sender"></param>
+        public ReviewsController(ISender sender) : base(sender)
         {
-            _logger = logger;
+
         }
         /// <summary>
         /// Get all reviews

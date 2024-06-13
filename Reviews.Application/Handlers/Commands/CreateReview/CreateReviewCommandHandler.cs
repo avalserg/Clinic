@@ -1,11 +1,12 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Reviews.Application.Abstractions.Caches;
 using Reviews.Application.Abstractions.ExternalProviders;
 using Reviews.Application.Abstractions.Messaging;
 using Reviews.Application.Abstractions.Persistence.Repository.Writing;
-using Reviews.Application.Caches;
 using Reviews.Application.DTOs;
 using Reviews.Domain.Entities;
+using Reviews.Domain.Errors;
 using Reviews.Domain.Shared;
 
 namespace Reviews.Application.Handlers.Commands.CreateReview;
@@ -14,20 +15,20 @@ public class CreateReviewCommandHandler : ICommandHandler<CreateReviewCommand, C
 {
     private readonly IBaseWriteRepository<Review> _reviews;
     private readonly IMapper _mapper;
-    private readonly ReviewsListMemoryCache _listCache;
+    private readonly IReviewsListCache _listCache;
     private readonly ILogger<CreateReviewCommandHandler> _logger;
-    private readonly ReviewsCountMemoryCache _countCache;
-    private readonly ReviewMemoryCache _reviewMemoryCache;
+    private readonly IReviewsCountCache _countCache;
+    private readonly IReviewCache _reviewMemoryCache;
     private readonly IManageUsersProviders _applicationUsersProviders;
 
     public CreateReviewCommandHandler(
         IBaseWriteRepository<Review> reviews,
 
         IMapper mapper,
-        ReviewsListMemoryCache listCache,
+        IReviewsListCache listCache,
         ILogger<CreateReviewCommandHandler> logger,
-        ReviewsCountMemoryCache countCache,
-        ReviewMemoryCache reviewMemoryCache, IManageUsersProviders applicationUsersProviders)
+        IReviewsCountCache countCache,
+        IReviewCache reviewMemoryCache, IManageUsersProviders applicationUsersProviders)
     {
 
         _reviews = reviews;
@@ -44,8 +45,7 @@ public class CreateReviewCommandHandler : ICommandHandler<CreateReviewCommand, C
         var patient = await _applicationUsersProviders.GetPatientByIdAsync(request.PatientId, cancellationToken);
         if (patient is null)
         {
-            // TODO Result
-            throw new ArgumentException();
+            return Result.Failure<CreateReviewDto>(DomainErrors.Review.CreatorReviewNotFound(request.PatientId));
         }
         var newReviewGuid = Guid.NewGuid();
 

@@ -31,7 +31,8 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         PatientsListMemoryCache listCache,
         ILogger<CreatePatientCommandHandler> logger,
         PatientsCountMemoryCache countCache,
-        PatientMemoryCache patientMemoryCache, IBaseReadRepository<ApplicationUserRole> userRole)
+        PatientMemoryCache patientMemoryCache,
+        IBaseReadRepository<ApplicationUserRole> userRole)
     {
         _users = users;
         _patients = patients;
@@ -76,6 +77,11 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
 
         var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
         // TODO check role if null
+        if (userRole == null)
+        {
+            return Result.Failure<CreateApplicationUserDto>(
+                DomainErrors.PatientDomainErrors.PatientRoleNotFound);
+        }
         var applicationUser = Domain.ApplicationUser.Create(
             newUserGuid,
             request.Login,
@@ -100,7 +106,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         _listCache.Clear();
         _countCache.Clear();
         _patientMemoryCache.Clear();
-        _logger.LogInformation($"New user {patient.Id} created.");
+        _logger.LogInformation($"New application user {newUserGuid} created.");
 
         return _mapper.Map<CreateApplicationUserDto>(applicationUser);
     }

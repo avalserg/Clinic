@@ -3,7 +3,7 @@ using Reviews.Application.Abstractions;
 
 namespace Reviews.Application.BaseRealizations;
 
-public abstract class BaseCashedForUserQuery<TRequest, TResult> : IRequestHandler<TRequest, TResult> where TRequest: IRequest<TResult>
+public abstract class BaseCashedForUserQuery<TRequest, TResult> : IRequestHandler<TRequest, TResult> where TRequest : IRequest<TResult>
 {
     private readonly IBaseCache<TResult> _cache;
 
@@ -23,7 +23,7 @@ public abstract class BaseCashedForUserQuery<TRequest, TResult> : IRequestHandle
         }
 
         result = await SentQueryAsync(request, cancellationToken);
-        
+
         _cache.Set(request, _applicationUserId.ToString(), result, 1);
         return result;
     }

@@ -1,7 +1,10 @@
-﻿namespace Reviews.Domain.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace Reviews.Domain.Shared;
 
 public class Result
 {
+    [JsonConstructor]
     protected internal Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None)
