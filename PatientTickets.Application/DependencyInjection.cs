@@ -24,14 +24,6 @@ public static class DependencyInjection
             .AddSingleton<PatientTicketMemoryCache>()
             .AddSingleton<PatientTicketsCountMemoryCache>()
             .AddSingleton<PatientTicketsListMemoryCache>()
-            //.AddSingleton<DoctorsListMemoryCache>()
-            //.AddSingleton<DoctorsCountMemoryCache>()
-            //.AddSingleton<DoctorMemoryCache>()
-            //.AddSingleton<AdministratorMemoryCache>()
-            //.AddSingleton<AdministratorsListMemoryCache>()
-            //.AddSingleton<AdministratorsCountMemoryCache>()
-            //.AddSingleton<ApplicationUserMemoryCache>()
-
 
             ;
 

@@ -2,6 +2,5 @@
 {
     public sealed record DeletePatientTicketRequest(
         string Id
-
     );
 }

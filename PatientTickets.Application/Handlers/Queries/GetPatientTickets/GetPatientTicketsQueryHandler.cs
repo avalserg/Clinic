@@ -35,6 +35,7 @@ namespace PatientTickets.Application.Handlers.Queries.GetPatientTickets
                 query = query.Take(request.Limit.Value);
             }
             query = query.OrderBy(e => e.PatientId);
+
             var entitiesResult = await _patientTickets.AsAsyncRead().ToArrayAsync(query, cancellationToken);
             var entitiesCount = await _patientTickets.AsAsyncRead().CountAsync(query, cancellationToken);
             var items = _mapper.Map<GetPatientTicketDto[]>(entitiesResult);

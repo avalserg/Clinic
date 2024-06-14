@@ -20,7 +20,7 @@ namespace PatientTickets.Domain.Entities
             DateAppointment = dateAppointment;
             DoctorId = doctorId;
             PatientId = patientId;
-            // initial state while creating always false
+            // initial state when it was creating always false
             HasDoctorVisit = false;
             DoctorFirstName = doctorFirstName;
             DoctorLastName = doctorLastName;

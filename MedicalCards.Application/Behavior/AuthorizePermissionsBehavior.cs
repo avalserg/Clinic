@@ -1,7 +1,7 @@
-using System.Reflection;
 using MediatR;
 using MedicalCards.Application.Abstractions.Service;
 using MedicalCards.Application.Attributes;
+using System.Reflection;
 
 namespace MedicalCards.Application.Behavior;
 
@@ -17,28 +17,16 @@ public class AuthorizePermissionsBehavior<TRequest, TResponse>(ICurrentUserServi
             return next();
         }
 
-        //if (currentUserService.CurrentUserId is null) throw new UnauthorizedException();
-
         if (requestAuthorizeAttribute.Roles is null || requestAuthorizeAttribute.Roles.Length == 0)
         {
             return next();
         }
-
-        //if (currentUserService.CurrentUserRoleEnum is null)
-        //{
-        //    throw new ForbiddenException();
-        //}
 
         var requiredRoles = requestAuthorizeAttribute.Roles;
         if (requiredRoles == null || requiredRoles.Length == 0)
         {
             return next();
         }
-        
-        //if (requiredRoles.Any(rn => currentUserService.CurrentUserRoles.All(roleEnum => roleEnum != rn)))
-        //{
-        //    throw new ForbiddenException();
-        //}
 
         return next();
     }

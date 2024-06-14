@@ -16,7 +16,7 @@ namespace MedicalCards.Api.Controllers
         {
         }
         /// <summary>
-        /// 
+        /// Get concrete appointment by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
@@ -37,7 +37,7 @@ namespace MedicalCards.Api.Controllers
         }
 
         /// <summary>
-        /// GetAllMedicalCardsAsync
+        /// Get all MedicalCards 
         /// </summary>
         /// <param name="getListAppointmentsQuery"></param>
         /// <param name="cancellationToken"></param>

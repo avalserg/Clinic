@@ -14,7 +14,6 @@ namespace PatientTickets.Application.Handlers.Queries.GetCountPatientTickets
         public GetCountPatientTicketsQueryHandler(IBaseReadRepository<PatientTicket> userRepository, PatientTicketsCountMemoryCache cache) : base(cache)
         {
             _patientTicketRepository = userRepository;
-
         }
 
 

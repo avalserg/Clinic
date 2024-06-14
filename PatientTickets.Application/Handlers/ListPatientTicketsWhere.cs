@@ -10,9 +10,14 @@ internal static class ListPatientTicketsWhere
 
         if (filter.DoctorId != Guid.Empty)
         {
-            return review => review.DoctorId.Equals(filter.DoctorId);
+            if (filter.DateAppointment == default)
+            {
+                return patientTickets => patientTickets.DoctorId.Equals(filter.DoctorId);
+
+            }
+            return patientTickets => patientTickets.DoctorId.Equals(filter.DoctorId) && patientTickets.DateAppointment.Equals(filter.DateAppointment);
         }
 
-        return review => filter.PatientId == Guid.Empty || review.PatientId.Equals(filter.PatientId);
+        return patientTickets => filter.PatientId == Guid.Empty || patientTickets.PatientId.Equals(filter.PatientId);
     }
 }

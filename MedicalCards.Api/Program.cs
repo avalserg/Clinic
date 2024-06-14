@@ -29,6 +29,7 @@ try
             rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30, buffered: true));
 
 
+
     builder.Services
         .AddSwaggerWidthJwtAuth(Assembly.GetExecutingAssembly(), appName, version, appName)
         .AddCoreApiServices()
@@ -36,12 +37,15 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
-        //.AddAllCors()
-        .AddAuthApplication()
+        .AddAuthApplication(builder.Configuration)
         .AddExternalProviders()
         .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
     builder.Services.AddEndpointsApiExplorer();
+
+
+
+
     var app = builder.Build();
 
     app.RunDbMigrations();
@@ -65,7 +69,6 @@ try
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        //.WithOrigins("https://localhost:3000))
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();

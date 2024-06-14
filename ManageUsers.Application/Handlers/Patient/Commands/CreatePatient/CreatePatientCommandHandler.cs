@@ -1,4 +1,5 @@
 using AutoMapper;
+using Contracts;
 using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Read;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
@@ -9,12 +10,14 @@ using ManageUsers.Domain;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Shared;
 using ManageUsers.Domain.ValueObjects;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 
 internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientCommand, CreateApplicationUserDto>
 {
+    private readonly IPublishEndpoint _publishEndpoint;
     private readonly IBaseWriteRepository<Domain.Patient> _patients;
     private readonly IBaseReadRepository<ApplicationUserRole> _userRole;
     private readonly IBaseWriteRepository<Domain.ApplicationUser> _users;
@@ -32,7 +35,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         ILogger<CreatePatientCommandHandler> logger,
         PatientsCountMemoryCache countCache,
         PatientMemoryCache patientMemoryCache,
-        IBaseReadRepository<ApplicationUserRole> userRole)
+        IBaseReadRepository<ApplicationUserRole> userRole, IPublishEndpoint publishEndpoint)
     {
         _users = users;
         _patients = patients;
@@ -42,6 +45,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         _countCache = countCache;
         _patientMemoryCache = patientMemoryCache;
         _userRole = userRole;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Result<CreateApplicationUserDto>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
@@ -76,7 +80,7 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
         var newUserGuid = Guid.NewGuid();
 
         var userRole = await _userRole.AsAsyncRead().FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
-        // TODO check role if null
+
         if (userRole == null)
         {
             return Result.Failure<CreateApplicationUserDto>(
@@ -102,6 +106,17 @@ internal class CreatePatientCommandHandler : ICommandHandler<CreatePatientComman
 
         patient = await _patients.AddAsync(patient, cancellationToken);
 
+
+        await _publishEndpoint.Publish(new UserCreatedEvent
+        {
+            Id = patient.Id,
+            FirstName = patient.FullName.FirstName,
+            LastName = patient.FullName.LastName,
+            Patronymic = patient.FullName.Patronymic,
+            DateBirthday = patient.DateBirthday,
+            Address = patient.Address,
+            PhoneNumber = patient.PhoneNumber.Value,
+        }, cancellationToken);
 
         _listCache.Clear();
         _countCache.Clear();

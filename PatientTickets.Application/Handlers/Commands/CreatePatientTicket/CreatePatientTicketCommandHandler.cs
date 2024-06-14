@@ -2,13 +2,16 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using PatientTickets.Application.Abstractions.ExternalProviders;
 using PatientTickets.Application.Abstractions.Messaging;
+using PatientTickets.Application.Abstractions.Persistence.Repository.Read;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Writing;
 using PatientTickets.Application.Abstractions.Service;
 using PatientTickets.Application.Caches;
 using PatientTickets.Application.DTOs;
 using PatientTickets.Domain.Entities;
-using PatientTickets.Domain.Exceptions.Base;
+using PatientTickets.Domain.Enums;
+using PatientTickets.Domain.Errors;
 using PatientTickets.Domain.Shared;
+using System.Globalization;
 
 namespace PatientTickets.Application.Handlers.Commands.CreatePatientTicket;
 
@@ -16,6 +19,7 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
 {
 
     private readonly IBaseWriteRepository<PatientTicket> _patientTicketRepository;
+    private readonly IBaseReadRepository<PatientTicket> _patientTicketReadRepository;
     private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
     private readonly PatientTicketsListMemoryCache _listCache;
@@ -29,7 +33,7 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
         IBaseWriteRepository<PatientTicket> patientTicketRepository,
         PatientTicketMemoryCache patientTicketMemoryCache,
         PatientTicketsCountMemoryCache countCache,
-        PatientTicketsListMemoryCache listCache, ICurrentUserService currentUserService, IManageUsersProviders applicationUsersProviders)
+        PatientTicketsListMemoryCache listCache, ICurrentUserService currentUserService, IManageUsersProviders applicationUsersProviders, IBaseReadRepository<PatientTicket> patientTicketReadRepository)
     {
         _mapper = mapper;
         _logger = logger;
@@ -39,6 +43,7 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
         _listCache = listCache;
         _currentUserService = currentUserService;
         _applicationUsersProviders = applicationUsersProviders;
+        _patientTicketReadRepository = patientTicketReadRepository;
     }
 
     public async Task<Result<CreatePatientTicketDto>> Handle(CreatePatientTicketCommand request, CancellationToken cancellationToken)
@@ -46,15 +51,15 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
         var doctor = await _applicationUsersProviders.GetDoctorByIdAsync(request.DoctorId, cancellationToken);
         if (doctor is null)
         {
-            // TODO Result
-            throw new ArgumentException();
+            return Result.Failure<CreatePatientTicketDto>(DomainErrors.PatientTicket.DoctorForPatientTicketNotFound(request.DoctorId));
         }
         var newPatientTicketGuid = Guid.NewGuid();
-        // TODO check if user Patient role have
 
-        if (request.PatientId != _currentUserService.CurrentUserId)
+        var isUserRolePatient = _currentUserService.UserInRole(ApplicationUserRolesEnum.Patient);
+        // only patient can create ticket
+        if (request.PatientId != _currentUserService.CurrentUserId && !isUserRolePatient)
         {
-            throw new ForbiddenException();
+            return Result.Failure<CreatePatientTicketDto>(DomainErrors.PatientTicket.CreatorIsNotInRolePatient(request.DoctorId));
         }
 
         if (!int.TryParse(request.HoursAppointment, out var hoursAppointment))
@@ -68,13 +73,20 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
         }
 
 
-        var date = request.DateAppointment.AddHours(hoursAppointment);
-        var newDate = date.AddMinutes(minutesAppointment);
 
+        var dateWitHours = request.DateAppointment.AddHours(hoursAppointment);
+
+        var completeDate = dateWitHours.AddMinutes(minutesAppointment);
+        var timeAppointmentIsBusy = await _patientTicketReadRepository.AsAsyncRead().AnyAsync(t =>
+            t.DateAppointment == completeDate && t.DoctorId == request.DoctorId, cancellationToken);
+        if (timeAppointmentIsBusy)
+        {
+            return Result.Failure<CreatePatientTicketDto>(DomainErrors.PatientTicket.PatientTicketTimeIsBusy(completeDate.ToString(CultureInfo.CurrentCulture)));
+        }
         var patientTicket = PatientTicket.Create(
             newPatientTicketGuid,
             request.PatientId,
-            newDate,
+            completeDate,
             request.DoctorId,
             doctor.FirstName,
             doctor.LastName,

@@ -39,7 +39,7 @@ namespace MedicalCards.Api.Controllers
             return Ok(result.Value);
         }
         /// <summary>
-        /// 
+        /// Get concrete prescription by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>

@@ -38,7 +38,6 @@ try
         .AddCoreAuthServices()
         .AddExternalProviders()
         .AddHttpClient()
-        //.AddAllCors()
         .AddAuthApplication()
         .AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
@@ -66,7 +65,6 @@ try
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        //.WithOrigins("https://localhost:3000))
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();

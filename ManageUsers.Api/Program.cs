@@ -38,7 +38,7 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
-        .AddAuthApplication()
+        .AddAuthApplication(builder.Configuration)
         .AddControllers()
         .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

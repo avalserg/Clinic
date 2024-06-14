@@ -95,13 +95,6 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
             _logger.LogInformation($"New Prescription {newPrescriptionGuid} created.");
             var prescriptionDto = _mapper.Map<CreatePrescriptionDto>(prescription);
 
-            //prescriptionDto.PatientFirstName = appointment.PatientFirstName;
-            //prescriptionDto.PatientLastName = appointment.PatientLastName;
-            //prescriptionDto.PatientPatronymic = appointment.PatientPatronymic;
-            //prescriptionDto.DoctorFirstName = appointment.DoctorFirstName;
-            //prescriptionDto.DoctorLastName = appointment.DoctorLastName;
-            //prescriptionDto.DoctorPatronymic = appointment.DoctorPatronymic;
-            //prescriptionDto.Speciality = appointment.Speciality;
 
 
             return prescriptionDto;

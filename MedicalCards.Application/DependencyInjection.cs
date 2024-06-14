@@ -1,9 +1,12 @@
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using MedicalCards.Application.Behavior;
 using MedicalCards.Application.Caches.Appointment;
 using MedicalCards.Application.Caches.MedicalCard;
 using MedicalCards.Application.Caches.Prescription;
+using MedicalCards.Application.Features;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -17,7 +20,7 @@ public static class DependencyInjection
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(DatabaseTransactionBehavior<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizePermissionsBehavior<,>));
     }
-    public static IServiceCollection AddAuthApplication(this IServiceCollection services)
+    public static IServiceCollection AddAuthApplication(this IServiceCollection services, IConfiguration configuration)
     {
         return services
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
@@ -31,7 +34,23 @@ public static class DependencyInjection
             .AddSingleton<AppointmentMemoryCache>()
             .AddSingleton<PrescriptionMemoryCache>()
             .AddSingleton<PrescriptionsListMemoryCache>()
-            .AddSingleton<PrescriptionsCountMemoryCache>();
+            .AddSingleton<PrescriptionsCountMemoryCache>()
+        .AddMassTransit(busConfigurator =>
+        {
+            busConfigurator.SetKebabCaseEndpointNameFormatter();
+            busConfigurator.AddConsumer<MedicalCardOwnerUpdatedConsumer>();
+            busConfigurator.AddConsumer<MedicalCardCreateConsumer>();
+            busConfigurator.UsingRabbitMq((context, configurator) =>
+            {
+                configurator.Host("localhost", "/", h =>
+                {
+
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+                configurator.ConfigureEndpoints(context);
+            });
+        }); ;
 
     }
 }

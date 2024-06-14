@@ -12,13 +12,6 @@ namespace MedicalCards.Application.DTOs.Prescription
         public string ReleaseForm { get; set; }
         public string Amount { get; set; }
         public DateTime IssuingTime { get; set; }
-        //public string DoctorFirstName { get; set; }
-        //public string DoctorLastName { get; set; }
-        //public string DoctorPatronymic { get; set; }
 
-        //public string PatientFirstName { get; set; }
-        //public string PatientLastName { get; set; }
-        //public string PatientPatronymic { get; set; }
-        //public string Speciality { get; set; }
     }
 }

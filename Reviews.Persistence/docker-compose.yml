@@ -13,6 +13,16 @@ services:
       - "1433:1433"
           
   
+
+  proxy:
+    container_name: clinic_proxy_container
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    ports:
+      - "80:80"
+
   authorization.api:
     image: authorization.api
     build:
@@ -20,44 +30,8 @@ services:
       dockerfile: Authorization.Api/Dockerfile
     restart: unless-stopped
     ports:
-      - "10001:10001"
-    
-  manageUsers.api:
-    image: manageUsers.api
-    build:
-      context: .
-      dockerfile: ManageUsers.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10002:10002"
-    
-  medicalCards.api:
-    image: medicalCards.api
-    build:
-      context: .
-      dockerfile: MedicalCards.Api/Dockerfile
-    restart: unless-stopped 
-    ports:
-      - "10003:10003"
-    
-  patientTickets.api:
-    image: patientTickets.api
-    build:
-      context: .
-      dockerfile: PatientTickets.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10004:10004"
-    
-  reviews.api:
-    image: reviews.api
-    build:
-      context: .
-      dockerfile: Reviews.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10005:10005"
-    
+      - "8081:8080"
+  
  
   redis:
     image: redis
@@ -70,7 +44,7 @@ services:
     hostname: clinic-mq
     ports:
       - 15672:15672
-      - 5672:5672
+      - 5671:5671
     volumes:
         - ~/.container/queue/data/:/var/lib/rabbitmq/
         - ~/.container/queue/log/:/var/log/rabbitmq

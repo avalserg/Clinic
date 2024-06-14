@@ -20,7 +20,7 @@ internal class CreateMedicalCardCommandHandler : ICommandHandler<CreateMedicalCa
     private readonly ILogger<CreateMedicalCardCommandHandler> _logger;
     private readonly MedicalCardsListMemoryCache _listCache;
     private readonly MedicalCardsCountMemoryCache _countCache;
-    private readonly MedicalCardMemoryCache _patientMemoryCache;
+    private readonly MedicalCardMemoryCache _medicalCardMemoryCache;
 
     public CreateMedicalCardCommandHandler(
         IBaseWriteRepository<Domain.MedicalCard> writeMedicalCardRepository,
@@ -29,7 +29,7 @@ internal class CreateMedicalCardCommandHandler : ICommandHandler<CreateMedicalCa
         ILogger<CreateMedicalCardCommandHandler> logger, IManageUsersProviders applicationUsersProviders,
         MedicalCardsListMemoryCache listCache,
         MedicalCardsCountMemoryCache countCache,
-        MedicalCardMemoryCache patientMemoryCache)
+        MedicalCardMemoryCache medicalCardMemoryCache)
 
     {
 
@@ -39,7 +39,7 @@ internal class CreateMedicalCardCommandHandler : ICommandHandler<CreateMedicalCa
         _readMedicalCardsRepository = readMedicalCardsRepository;
         _listCache = listCache;
         _countCache = countCache;
-        _patientMemoryCache = patientMemoryCache;
+        _medicalCardMemoryCache = medicalCardMemoryCache;
         _applicationUsersProviders = applicationUsersProviders;
 
     }
@@ -80,7 +80,7 @@ internal class CreateMedicalCardCommandHandler : ICommandHandler<CreateMedicalCa
 
         _listCache.Clear();
         _countCache.Clear();
-        _patientMemoryCache.Clear();
+        _medicalCardMemoryCache.Clear();
         _logger.LogInformation($"New user {newMedicalCardGuid} created.");
 
         return _mapper.Map<CreateMedicalCardDto>(medicalCard);

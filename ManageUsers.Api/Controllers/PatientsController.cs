@@ -18,7 +18,10 @@ namespace ManageUsers.Api.Controllers
     public class PatientsController : ApiController
     {
 
-        public PatientsController(ISender sender) : base(sender) { }
+        public PatientsController(ISender sender) : base(sender)
+        {
+
+        }
 
         /// <summary>
         /// Add patient
@@ -138,6 +141,7 @@ namespace ManageUsers.Api.Controllers
             {
                 return HandleFailure(result);
             }
+
             return Ok(result.Value);
         }
 

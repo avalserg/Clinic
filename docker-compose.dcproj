@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>09d0897d-0fac-40da-8e83-9b81c4397b1a</ProjectGuid>
+    <ProjectGuid>94b39c9c-ee1f-4f64-a227-21ac0e231e4f</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/authorization/swagger</DockerServiceUrl>
     <DockerServiceName>authorization.api</DockerServiceName>

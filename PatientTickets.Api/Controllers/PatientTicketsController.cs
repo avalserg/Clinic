@@ -6,6 +6,7 @@ using PatientTickets.Api.Contracts;
 using PatientTickets.Application.Handlers.Commands.CreatePatientTicket;
 using PatientTickets.Application.Handlers.Commands.DeletePatientTicket;
 using PatientTickets.Application.Handlers.Commands.UpdatePatientTicketHasVisit;
+using PatientTickets.Application.Handlers.Queries.GetBusyTimeWithTheDoctor;
 using PatientTickets.Application.Handlers.Queries.GetCountPatientTickets;
 using PatientTickets.Application.Handlers.Queries.GetPatientTicket;
 using PatientTickets.Application.Handlers.Queries.GetPatientTickets;
@@ -43,7 +44,12 @@ namespace PatientTickets.Api.Controllers
             HttpContext.Response.Headers.Append("X-Total-Count", countReviews.ToString());
             return Ok(result.Value);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientTicketByIdAsync(
@@ -101,7 +107,29 @@ namespace PatientTickets.Api.Controllers
             return Ok(users);
         }
 
+        /// <summary>
+        ///  Get busy time patient tickets by date to concrete doctor
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("{doctorId}/time")]
+        public async Task<IActionResult> GetPatientTicketsTimeWithTheDoctorByDateAsync(Guid doctorId, [FromQuery] GetDateRequest request, CancellationToken cancellationToken)
+        {
 
+            var time = await Sender.Send(new GetBusyTimeWithTheDoctorQuery() { DateAppointment = request.DateAppointment, DoctorId = doctorId },
+                cancellationToken);
+
+            return Ok(time.Value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPatch("{id}/IsDone")]
         public async Task<IActionResult> UpdateToDoIsDoneAsync(Guid id, CancellationToken cancellationToken)
         {

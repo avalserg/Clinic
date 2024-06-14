@@ -38,6 +38,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
 		<PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.6" />
@@ -56,6 +57,7 @@
   
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\ManageUsers.Application\ManageUsers.Application.csproj" />
     <ProjectReference Include="..\ManageUsers.Persistence\ManageUsers.Persistence.csproj" />
   </ItemGroup>

@@ -13,6 +13,12 @@ public static class DomainErrors
         public static readonly Func<Guid, Error> PatientTicketNotFound = id => new(
               "PatientTicket.PatientTicketNotFound",
               $"The PatientTicket {id} not found");
+        public static readonly Func<Guid, Error> DoctorForPatientTicketNotFound = id => new(
+              "PatientTicket.DoctorForPatientTicketNotFound",
+              $"The Doctor with {id} not found");
+        public static readonly Func<Guid, Error> CreatorIsNotInRolePatient = id => new(
+              "PatientTicket.CreatorIsNotInRolePatient",
+              $"The user with {id} not have patient role");
 
 
     }

@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
@@ -25,9 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\MedicalCards.Application\MedicalCards.Application.csproj" />
     <ProjectReference Include="..\MedicalCards.ExternalProviders\MedicalCards.ExternalProviders.csproj" />
     <ProjectReference Include="..\MedicalCards.Persistence\MedicalCards.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>
