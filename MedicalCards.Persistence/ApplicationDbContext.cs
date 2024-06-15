@@ -3,26 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCards.Persistence;
 
-public  class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
-    #region Users
 
-    
-   
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<MedicalCard> MedicalCards { get; set; }
     public DbSet<Prescription> Prescriptions { get; set; }
 
-    
-
-    #endregion
-
-
-
-
-
     #region Ef
-
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -31,9 +19,8 @@ public  class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        
-    }
 
+    }
 
     #endregion
 }

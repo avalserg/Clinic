@@ -17,12 +17,9 @@ namespace MedicalCards.ExternalProviders
 
 
         public ManageUsersGrpcProvider(
-
             IConfiguration configuration)
         {
-
             _configuration = configuration;
-
         }
         public async Task<GetPatientDto?> GetPatientByIdAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -82,7 +79,6 @@ namespace MedicalCards.ExternalProviders
             catch (Exception)
             {
                 return null;
-
             }
         }
     }

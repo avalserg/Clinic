@@ -9,5 +9,6 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
         public string MedicineName { get; set; }
         public string ReleaseForm { get; set; }
         public string Amount { get; set; }
+
     }
 }

@@ -12,7 +12,13 @@ namespace MedicalCards.Domain
             DateTime issuingTime,
             Guid appointmentId,
             Guid doctorId,
-            Guid patientId
+            string doctorFirstName,
+            string doctorLastName,
+            string doctorPatronymic,
+            Guid patientId,
+            string patientFirstName,
+            string patientLastName,
+            string patientPatronymic
         ) : base(id)
         {
             MedicineName = medicineName;
@@ -22,7 +28,12 @@ namespace MedicalCards.Domain
             AppointmentId = appointmentId;
             DoctorId = doctorId;
             PatientId = patientId;
-
+            DoctorFirstName = doctorFirstName;
+            DoctorLastName = doctorLastName;
+            DoctorPatronymic = doctorPatronymic;
+            PatientFirstName = patientFirstName;
+            PatientLastName = patientLastName;
+            PatientPatronymic = patientPatronymic;
 
         }
 
@@ -33,7 +44,13 @@ namespace MedicalCards.Domain
         public DateTime IssuingTime { get; private set; }
 
         public Guid DoctorId { get; private set; }
+        public string DoctorFirstName { get; private set; }
+        public string DoctorLastName { get; private set; }
+        public string DoctorPatronymic { get; private set; }
         public Guid PatientId { get; private set; }
+        public string PatientFirstName { get; private set; }
+        public string PatientLastName { get; private set; }
+        public string PatientPatronymic { get; private set; }
         public Guid AppointmentId { get; private set; }
         public static Prescription Create(
             Guid id,
@@ -43,7 +60,13 @@ namespace MedicalCards.Domain
             DateTime issuingTime,
             Guid appointmentId,
             Guid doctorId,
-            Guid patientId
+            string doctorFirstName,
+            string doctorLastName,
+            string doctorPatronymic,
+            Guid patientId,
+            string patientFirstName,
+            string patientLastName,
+            string patientPatronymic
         )
         {
 
@@ -55,7 +78,13 @@ namespace MedicalCards.Domain
                 issuingTime,
                 appointmentId,
                 doctorId,
-                patientId
+                doctorFirstName,
+                doctorLastName,
+                doctorPatronymic,
+                patientId,
+                patientFirstName,
+                patientLastName,
+                patientPatronymic
             );
 
             //some  logic to create entity

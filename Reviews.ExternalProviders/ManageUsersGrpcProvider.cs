@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using PatientsGrpc;
 using Reviews.Application.Abstractions.ExternalProviders;
 using Reviews.Application.DTOs.ExternalProviders;
-using Reviews.ExternalProviders.Exceptions;
 
 namespace Reviews.ExternalProviders
 {
@@ -34,6 +33,7 @@ namespace Reviews.ExternalProviders
                 {
                     Id = id.ToString(),
                 }, cancellationToken: cancellationToken);
+
                 var dto = new GetPatientDto();
                 await foreach (var reply in patientReply.ResponseStream.ReadAllAsync(cancellationToken))
                 {
@@ -50,7 +50,7 @@ namespace Reviews.ExternalProviders
             }
             catch (Exception)
             {
-                throw new ExternalServiceNotAvailable("ManageUsers", $"{_configuration["ManageUsersServiceGrpcUrl"]}/{nameof(client.GetPatient)}"!);
+                return null;
 
             }
 

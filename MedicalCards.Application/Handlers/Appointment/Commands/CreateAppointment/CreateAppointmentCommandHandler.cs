@@ -51,7 +51,7 @@ internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointme
 
     public async Task<Result<CreateAppointmentDto>> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
-        //// only doctors can add appointment 
+        // only doctors can add appointment 
         if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor))
         {
             throw new ForbiddenException();
@@ -72,7 +72,7 @@ internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointme
         {
             return Result.Failure<CreateAppointmentDto>(DomainErrors.Appointment.AppointmentPatientNotFound(medicalCard.PatientId));
         }
-        // TODO only doctor can create appointment
+
         var newAppointmentGuid = Guid.NewGuid();
 
 

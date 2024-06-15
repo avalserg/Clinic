@@ -3,9 +3,9 @@ namespace MedicalCards.Application.DTOs.ExternalProviders;
 public class GetDoctorDto
 {
 
-    public string DoctorFirstName { get; set; }
-    public string DoctorLastName { get; set; }
-    public string DoctorPatronymic { get; set; }
+    public string DoctorFirstName { get; set; } = default!;
+    public string DoctorLastName { get; set; } = default!;
+    public string DoctorPatronymic { get; set; } = default!;
 
 
     public string Speciality { get; set; }
@@ -15,7 +15,6 @@ public class GetDoctorDto
         DoctorFirstName = doctorFirstName;
         DoctorLastName = doctorLastName;
         DoctorPatronymic = doctorPatronymic;
-
         Speciality = speciality;
     }
     public GetDoctorDto() { }

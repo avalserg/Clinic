@@ -5,4 +5,6 @@ using MedicalCards.Domain.Shared;
 
 namespace MedicalCards.Application.Caches.Appointment;
 
-public class AppointmentsListMemoryCache : BaseCache<Result<BaseListDto<GetAppointmentDto>>>;
+public class AppointmentsListMemoryCache : BaseCache<Result<BaseListDto<GetAppointmentDto>>>
+{
+};

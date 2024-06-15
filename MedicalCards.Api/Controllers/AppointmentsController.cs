@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCards.Api.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class AppointmentsController : ApiController
     {
@@ -21,7 +22,7 @@ namespace MedicalCards.Api.Controllers
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointmentByIdAsync(
             Guid id,
@@ -42,7 +43,7 @@ namespace MedicalCards.Api.Controllers
         /// <param name="getListAppointmentsQuery"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+
         [HttpGet]
         public async Task<IActionResult> GetAllAppointmentsAsync(
             [FromQuery] GetAppointmentsQuery getListAppointmentsQuery,
@@ -66,7 +67,7 @@ namespace MedicalCards.Api.Controllers
         /// <param name="labelFreeText"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+
         [HttpGet("totalCount")]
         public async Task<IActionResult> GetCountAppointmentsAsync(string? labelFreeText, CancellationToken cancellationToken)
         {

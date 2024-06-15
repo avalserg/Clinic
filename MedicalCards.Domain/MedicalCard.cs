@@ -49,7 +49,6 @@ namespace MedicalCards.Domain
             string address
         )
         {
-            //TODO check what card with patientId not exist 
 
             var medicalCard = new MedicalCard(
                 id,
@@ -74,7 +73,6 @@ namespace MedicalCards.Domain
             string address
         )
         {
-            //TODO check what card with patientId not exist 
 
             FirstName = firstName;
             LastName = lastName;

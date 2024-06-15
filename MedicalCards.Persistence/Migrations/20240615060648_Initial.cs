@@ -38,6 +38,13 @@ namespace MedicalCards.Persistence.Migrations
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DescriptionEpicrisis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionAnamnesis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorPatronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientPatronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Speciality = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssuingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PrescriptionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MedicalCardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -63,7 +70,13 @@ namespace MedicalCards.Persistence.Migrations
                     Amount = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssuingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DoctorFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorPatronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PatientFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientPatronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppointmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

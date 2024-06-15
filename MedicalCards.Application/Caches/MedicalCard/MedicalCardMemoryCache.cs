@@ -4,4 +4,6 @@ using MedicalCards.Domain.Shared;
 
 namespace MedicalCards.Application.Caches.MedicalCard;
 
-public class MedicalCardMemoryCache : BaseCache<Result<GetMedicalCardDto>>;
+public class MedicalCardMemoryCache : BaseCache<Result<GetMedicalCardDto>>
+{
+};

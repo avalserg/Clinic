@@ -22,12 +22,12 @@ namespace PatientTickets.Api.Controllers
         public PatientTicketsController(ISender sender) : base(sender) { }
 
         /// <summary>
-        /// 
+        /// Get All Patient Tickets
         /// </summary>
         /// <param name="getListPatientsQuery"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPatientTicketsAsync(
             [FromQuery] GetPatientTicketsQuery getListPatientsQuery,
@@ -45,12 +45,12 @@ namespace PatientTickets.Api.Controllers
             return Ok(result.Value);
         }
         /// <summary>
-        /// 
+        /// Get patient ticket by id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientTicketByIdAsync(
             Guid id,
@@ -113,8 +113,8 @@ namespace PatientTickets.Api.Controllers
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
-        [HttpGet("{doctorId}/time")]
+        [Authorize]
+        [HttpGet("{doctorId}/dateAppointment")]
         public async Task<IActionResult> GetPatientTicketsTimeWithTheDoctorByDateAsync(Guid doctorId, [FromQuery] GetDateRequest request, CancellationToken cancellationToken)
         {
 
@@ -125,20 +125,21 @@ namespace PatientTickets.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Update patient ticket as visited
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPatch("{id}/IsDone")]
-        public async Task<IActionResult> UpdateToDoIsDoneAsync(Guid id, CancellationToken cancellationToken)
+        [Authorize]
+        [HttpPatch("{id}/IsVisited")]
+        public async Task<IActionResult> UpdatePatientVisitToTheDoctorAsync(Guid id, CancellationToken cancellationToken)
         {
             var patientTicket = await Sender.Send(new UpdatePatientTicketHasVisitCommand() { Id = id }, cancellationToken);
             return Ok(patientTicket);
 
         }
         /// <summary>
-        /// 
+        /// Delete patient ticket
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>

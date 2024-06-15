@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using MedicalCards.Application.Abstractions.ExternalProviders;
 using MedicalCards.Application.Abstractions.Persistence.Repository.Read;
+using MedicalCards.Application.Abstractions.Service;
 using MedicalCards.Application.BaseRealizations;
 using MedicalCards.Application.Caches.Prescription;
 using MedicalCards.Application.DTOs.Prescription;
+using MedicalCards.Domain.Enums;
 using MedicalCards.Domain.Errors;
+using MedicalCards.Domain.Exceptions.Base;
 using MedicalCards.Domain.Shared;
 
 namespace MedicalCards.Application.Handlers.Prescription.Queries.GetPrescription
@@ -13,30 +15,32 @@ namespace MedicalCards.Application.Handlers.Prescription.Queries.GetPrescription
     {
         private readonly IBaseReadRepository<Domain.Prescription> _prescriptionReadRepository;
         private readonly IMapper _mapper;
-        private readonly IManageUsersProviders _applicationUsersProviders;
+
+        private readonly ICurrentUserService _currentUserService;
         public GetPrescriptionQueryHandler(
             IBaseReadRepository<Domain.Prescription> prescriptionReadRepository,
             IMapper mapper,
-            PrescriptionMemoryCache cache, IManageUsersProviders applicationUsersProviders) : base(cache)
+            PrescriptionMemoryCache cache,
+            ICurrentUserService currentUserService) : base(cache)
         {
             _mapper = mapper;
-            _applicationUsersProviders = applicationUsersProviders;
+            _currentUserService = currentUserService;
             _prescriptionReadRepository = prescriptionReadRepository;
         }
         public override async Task<Result<GetPrescriptionDto>> SentQueryAsync(GetPrescriptionQuery request, CancellationToken cancellationToken)
         {
+            // only doctors and admins can view appointment 
+            if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor) &&
+                !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
+            {
+                throw new ForbiddenException();
+            }
             var prescription = await _prescriptionReadRepository.AsAsyncRead().SingleOrDefaultAsync(pt => pt.Id == request.Id, cancellationToken);
             if (prescription is null)
             {
                 return Result.Failure<GetPrescriptionDto>(
                     DomainErrors.Prescription.PrescriptionNotFound(request.Id));
             }
-            //var ownerMedicalCard = await _applicationUsersProviders.GetPatientByIdAsync(prescription.PatientId, cancellationToken);
-            //if (ownerMedicalCard is null)
-            //{
-            //    // TODO Result
-            //    throw new ArgumentException();
-            //}
 
             return _mapper.Map<GetPrescriptionDto>(prescription);
 

@@ -43,9 +43,6 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
 
-
-
-
     var app = builder.Build();
 
     app.RunDbMigrations();

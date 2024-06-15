@@ -6,7 +6,9 @@ using MedicalCards.Application.Abstractions.Persistence.Repository.Writing;
 using MedicalCards.Application.Abstractions.Service;
 using MedicalCards.Application.Caches.Prescription;
 using MedicalCards.Application.DTOs.Prescription;
+using MedicalCards.Domain.Enums;
 using MedicalCards.Domain.Errors;
+using MedicalCards.Domain.Exceptions.Base;
 using MedicalCards.Domain.Shared;
 using Microsoft.Extensions.Logging;
 
@@ -45,30 +47,38 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
             _patientMemoryCache = patientMemoryCache;
             _currentUserService = currentUserService;
         }
+        /// <summary>
+        /// Create Prescription by appointment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ForbiddenException"></exception>
         public async Task<Result<CreatePrescriptionDto>> Handle(CreatePrescriptionCommand request, CancellationToken cancellationToken)
         {
-            //// only doctors can add appointment 
-            //if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor))
-            //{
-            //    throw new ForbiddenException();
-            //}
-            var appointment = await _readAppointmentsRepository.AsAsyncRead().SingleOrDefaultAsync(pt => pt.Id == request.AppointmentId, cancellationToken);
+            // only doctors can add appointment 
+            if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor))
+            {
+                throw new ForbiddenException();
+            }
+
+            var appointment = await _readAppointmentsRepository.AsAsyncRead()
+                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
             if (appointment is null)
             {
                 return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentNotFound(request.AppointmentId));
             }
+            var doctor = await _applicationUsersProviders.GetDoctorByIdAsync(appointment.DoctorId, cancellationToken);
+            if (doctor is null)
+            {
+                return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentDoctorNotFound(appointment.DoctorId));
+            }
+            var patient = await _applicationUsersProviders.GetPatientByIdAsync(appointment.PatientId, cancellationToken);
+            if (patient is null)
+            {
+                return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentPatientNotFound(appointment.PatientId));
+            }
 
-            //var doctor = await _applicationUsersProviders.GetDoctorByIdAsync(request.DoctorId, cancellationToken);
-            //if (doctor is null)
-            //{
-            //    return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentDoctorNotFound(request.DoctorId));
-            //}
-            //var patient = await _readAppointmentsRepository.AsAsyncRead().SingleOrDefaultAsync(p=>p.PatientId == , cancellationToken);
-            //if (patient is null)
-            //{
-            //    return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentPatientNotFound(medicalCard.PatientId));
-            //}
-            // TODO only doctor can create appointment
             var newPrescriptionGuid = Guid.NewGuid();
 
 
@@ -78,10 +88,15 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
                 request.ReleaseForm,
                 request.Amount,
                 DateTime.Now,
-                appointment.Id,
+                request.AppointmentId,
                 appointment.DoctorId,
-                appointment.PatientId
-
+                doctor.DoctorFirstName,
+                doctor.DoctorLastName,
+                doctor.DoctorPatronymic,
+                appointment.PatientId,
+                patient.FirstName,
+                patient.LastName,
+                patient.Patronymic
             );
 
 

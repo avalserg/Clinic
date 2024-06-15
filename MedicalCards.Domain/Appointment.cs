@@ -61,7 +61,7 @@ namespace MedicalCards.Domain
         public string? PrescriptionId { get; private set; }
         public List<Prescription>? Prescriptions { get; private set; }
         public Guid MedicalCardId { get; private set; }
-        // public MedicalCard MedicalCard { get; private set; }
+
         public static Appointment Create(
             Guid id,
             string descriptionEpicrisis,

@@ -7,6 +7,7 @@ using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Shared;
+using MassTransit;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
@@ -36,7 +37,7 @@ namespace ManageUsers.Application.Tests.Patients
         private readonly NullLogger<CreatePatientCommandHandler> _logger = new();
         private readonly PatientsCountMemoryCache _countCache;
         private readonly PatientMemoryCache _patientMemoryCache;
-
+        private readonly IPublishEndpoint _publish;
         public CreatePatientCommandTestsWithSubstitute()
         {
             _patientsRepositoryMock = Substitute.For<IBaseWriteRepository<Patient>>();
@@ -47,6 +48,7 @@ namespace ManageUsers.Application.Tests.Patients
             _listCache = Substitute.For<PatientsListMemoryCache>();
             _countCache = Substitute.For<PatientsCountMemoryCache>();
             _patientMemoryCache = Substitute.For<PatientMemoryCache>();
+            _publish = Substitute.For<IPublishEndpoint>();
             _handler = new CreatePatientCommandHandler(
                 _patientsRepositoryMock,
                 _usersRepositoryMock,
@@ -55,7 +57,8 @@ namespace ManageUsers.Application.Tests.Patients
                 _logger,
                 _countCache,
                 _patientMemoryCache,
-                _userRoleRepositoryMock);
+                _userRoleRepositoryMock,
+                _publish);
         }
 
         [Fact]

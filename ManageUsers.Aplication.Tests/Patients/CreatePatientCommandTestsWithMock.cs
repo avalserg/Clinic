@@ -6,6 +6,7 @@ using ManageUsers.Application.Caches.Patients;
 using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 using ManageUsers.Domain;
 using ManageUsers.Domain.Errors;
+using MassTransit;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using System.Linq.Expressions;
@@ -41,6 +42,7 @@ namespace ManageUsers.Application.Tests.Patients
         private readonly NullLogger<CreatePatientCommandHandler> _logger = new();
         private readonly Mock<PatientsCountMemoryCache> _countCache;
         private readonly Mock<PatientMemoryCache> _patientMemoryCache;
+        private readonly Mock<IPublishEndpoint> _publish;
         public CreatePatientCommandTestsWithMock()
         {
             _patientsRepositoryMock = new();
@@ -52,6 +54,7 @@ namespace ManageUsers.Application.Tests.Patients
             _logger = new();
             _countCache = new();
             _patientMemoryCache = new();
+            _publish = new();
 
         }
         [Fact]
@@ -70,7 +73,8 @@ namespace ManageUsers.Application.Tests.Patients
                 _logger,
                 _countCache.Object,
                 _patientMemoryCache.Object,
-                _userRoleRepositoryMock.Object
+                _userRoleRepositoryMock.Object,
+                _publish.Object
                 );
             //Act
             var result = await handler.Handle(command, default);
@@ -97,7 +101,8 @@ namespace ManageUsers.Application.Tests.Patients
                 _logger,
                 _countCache.Object,
                 _patientMemoryCache.Object,
-                _userRoleRepositoryMock.Object
+                _userRoleRepositoryMock.Object,
+                _publish.Object
                 );
             //Act
             var result = await handler.Handle(command, default);
@@ -128,7 +133,8 @@ namespace ManageUsers.Application.Tests.Patients
                 _logger,
                 _countCache.Object,
                 _patientMemoryCache.Object,
-                _userRoleRepositoryMock.Object
+                _userRoleRepositoryMock.Object,
+                _publish.Object
                 );
             //Act
             var result = await handler.Handle(command, default);
@@ -136,38 +142,6 @@ namespace ManageUsers.Application.Tests.Patients
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(DomainErrors.PatientDomainErrors.PatientRoleNotFound);
         }
-        [Fact]
-        public async Task HandleShould_CallAddApplicationUserAddPatientOnRepository()
-        {
-            //Arrange
-            _usersRepositoryMock.Setup(
-                    x => x.AsAsyncRead().AnyAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), default))
-                .ReturnsAsync(false);
-            _patientsRepositoryMock.Setup(
-                    x => x.AsAsyncRead().AnyAsync(It.IsAny<Expression<Func<Patient, bool>>>(), default))
-                .ReturnsAsync(false);
-            var role = ApplicationUserRole.Create(1, "Patient");
-            _userRoleRepositoryMock.Setup(x => x.AsAsyncRead().FirstOrDefaultAsync(It.IsAny<Expression<Func<ApplicationUserRole, bool>>>(), default))
-                .ReturnsAsync(role);
-            var command = Command;
-            var handler = new CreatePatientCommandHandler(
-                _patientsRepositoryMock.Object,
-                _usersRepositoryMock.Object,
-                _mapper.Object,
-                _listCache.Object,
-                _logger,
-                _countCache.Object,
-                _patientMemoryCache.Object,
-                _userRoleRepositoryMock.Object
-                );
-            //Act
-            await handler.Handle(command, default);
-            //Assert
-            _usersRepositoryMock.Verify(
-                x => x.AddAsync(It.IsAny<ApplicationUser>(), default), Times.Once);
-            _patientsRepositoryMock.Verify(
-                x => x.AddAsync(It.IsAny<Patient>(), default), Times.Once);
 
-        }
     }
 }

@@ -73,7 +73,7 @@ namespace Reviews.Api.Controllers
         /// <param name="createReviewRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateReviewAsync(
             CreateReviewRequest createReviewRequest,

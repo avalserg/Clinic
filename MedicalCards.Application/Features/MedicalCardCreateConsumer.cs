@@ -20,8 +20,7 @@ namespace MedicalCards.Application.Features
         private readonly MedicalCardsCountMemoryCache _countCache;
         private readonly MedicalCardMemoryCache _medicalCardMemoryCache;
         public MedicalCardCreateConsumer(
-            IBaseWriteRepository<MedicalCard> medicalCards,
-            MedicalCardMemoryCache medicalCardMemoryCache,
+           MedicalCardMemoryCache medicalCardMemoryCache,
             MedicalCardsListMemoryCache listCache,
             MedicalCardsCountMemoryCache countCache,
             ILogger<MedicalCardCreateConsumer> logger,

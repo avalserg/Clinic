@@ -8,9 +8,9 @@ namespace MedicalCards.Application.DTOs.Prescription
         public Guid DoctorId { get; set; }
         public Guid PatientId { get; set; }
         public Guid AppointmentId { get; set; }
-        public string MedicineName { get; set; }
-        public string ReleaseForm { get; set; }
-        public string Amount { get; set; }
+        public string MedicineName { get; set; } = default!;
+        public string ReleaseForm { get; set; } = default!;
+        public string Amount { get; set; } = default!;
         public DateTime IssuingTime { get; set; }
 
     }
