@@ -4,6 +4,7 @@ using ManageUsers.Application.Handlers.Doctor.Commands.CreateDoctor;
 using ManageUsers.Application.Handlers.Doctor.Commands.DeleteDoctor;
 using ManageUsers.Application.Handlers.Doctor.Commands.UpdateDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetCountDoctors;
+using ManageUsers.Application.Handlers.Doctor.Queries.GetCountDoctorsByCategories;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctor;
 using ManageUsers.Application.Handlers.Doctor.Queries.GetDoctors;
 using MediatR;
@@ -71,10 +72,24 @@ namespace ManageUsers.Api.Controllers
         public async Task<IActionResult> GetCountDoctorsAsync(string? labelFreeText, CancellationToken cancellationToken)
         {
 
-            var users = await Sender.Send(new GetCountDoctorsQuery() { FreeText = labelFreeText },
+            var usersCount = await Sender.Send(new GetCountDoctorsQuery() { FreeText = labelFreeText },
                 cancellationToken);
+            var count = await Sender.Send(new GetCountDoctorsByCategoriesQuery(), cancellationToken);
+            return Ok(usersCount);
+        }
+        /// <summary>
+        /// Count all doctors
+        /// </summary>
+        /// <param name="labelFreeText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("countByCategories")]
+        public async Task<IActionResult> GetCountDoctorsByCategoriesAsync(CancellationToken cancellationToken)
+        {
 
-            return Ok(users);
+            var count = await Sender.Send(new GetCountDoctorsByCategoriesQuery(), cancellationToken);
+            return Ok(count);
         }
         /// <summary>
         /// Get certain doctor by id

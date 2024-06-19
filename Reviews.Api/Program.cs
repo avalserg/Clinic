@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Reviews.Api;
 using Reviews.Api.Middlewares;
 using Reviews.Application;
@@ -41,7 +42,19 @@ try
         .AddDistributedCachesServices(builder.Configuration)
         .AddControllers()
         .AddNewtonsoftJson();
-
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1);
+        options.ReportApiVersions = true;
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ApiVersionReader = ApiVersionReader.Combine(
+            new UrlSegmentApiVersionReader(),
+            new HeaderApiVersionReader("X-Api-Version"));
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+        options.SubstituteApiVersionInUrl = true;
+    });
 
 
     builder.Services.AddEndpointsApiExplorer();

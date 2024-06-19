@@ -3,14 +3,13 @@ using Microsoft.Extensions.Logging;
 using PatientTickets.Application.Abstractions.Messaging;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Writing;
 using PatientTickets.Application.Caches;
-using PatientTickets.Application.DTOs;
 using PatientTickets.Domain.Entities;
 using PatientTickets.Domain.Errors;
 using PatientTickets.Domain.Shared;
 
 namespace PatientTickets.Application.Handlers.Commands.UpdatePatientTicketHasVisit
 {
-    public class UpdatePatientTicketHasVisitCommandHandler : ICommandHandler<UpdatePatientTicketHasVisitCommand, GetPatientTicketDto>
+    public class UpdatePatientTicketHasVisitCommandHandler : ICommandHandler<UpdatePatientTicketHasVisitCommand, bool>
     {
         private readonly IBaseWriteRepository<PatientTicket> _patientTickets;
         private readonly PatientTicketMemoryCache _patientTicketMemoryCache;
@@ -30,20 +29,20 @@ namespace PatientTickets.Application.Handlers.Commands.UpdatePatientTicketHasVis
             _listCache = listCache;
             _logger = logger;
         }
-        public async Task<Result<GetPatientTicketDto>> Handle(UpdatePatientTicketHasVisitCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(UpdatePatientTicketHasVisitCommand request, CancellationToken cancellationToken)
         {
             var patientTicket = await _patientTickets.AsAsyncRead().SingleOrDefaultAsync(pt => pt.Id == request.Id, cancellationToken);
             if (patientTicket is null)
             {
-                return Result.Failure<GetPatientTicketDto>(
+                return Result.Failure<bool>(
                     DomainErrors.PatientTicket.PatientTicketNotFound(request.Id));
             }
             patientTicket.UpdatePatientTicketHasVisit(true);
-            var updatedPatientTicket = await _patientTickets.UpdateAsync(patientTicket, cancellationToken);
+            await _patientTickets.UpdateAsync(patientTicket, cancellationToken);
             _listCache.Clear();
             _patientTicketMemoryCache.Clear();
             _logger.LogInformation($"PatientTicket {patientTicket.Id} has visit updated.");
-            return _mapper.Map<GetPatientTicketDto>(updatedPatientTicket);
+            return true;
         }
     }
 }

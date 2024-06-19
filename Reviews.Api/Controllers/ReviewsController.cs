@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,9 @@ namespace Reviews.Api.Controllers
     /// <summary>
     /// ReviewsController
     /// </summary>
-    [Route("[controller]")]
+
+    [ApiVersion(1)]
+    [Route("api/v{v:apiVersion}/[controller]")]
     public class ReviewsController : ApiController
     {
         /// <summary>
@@ -31,6 +34,7 @@ namespace Reviews.Api.Controllers
         /// <param name="getListPatientsQuery"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllReviewsAsync(

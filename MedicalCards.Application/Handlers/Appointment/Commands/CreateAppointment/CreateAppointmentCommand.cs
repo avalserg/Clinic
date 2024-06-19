@@ -5,7 +5,7 @@ namespace MedicalCards.Application.Handlers.Appointment.Commands.CreateAppointme
 
 public class CreateAppointmentCommand : ICommand<CreateAppointmentDto>
 {
-    public Guid MedicalCardId { get; init; }
+    public Guid PatientId { get; init; }
     public string DescriptionEpicrisis { get; init; } = default!;
     public string DescriptionAnamnesis { get; init; } = default!;
 

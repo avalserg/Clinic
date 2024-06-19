@@ -8,6 +8,7 @@ namespace MedicalCards.Application.DTOs.Appointment
         public Guid MedicalCardId { get; init; } = default!;
         public Guid DoctorId { get; set; }
         public Guid PatientId { get; set; }
+        public Guid PrescriptionId { get; set; }
 
         // history disease with patient`s complains
         public string DescriptionEpicrisis { get; set; } = default!;
@@ -22,5 +23,8 @@ namespace MedicalCards.Application.DTOs.Appointment
         public string PatientLastName { get; set; } = default!;
         public string PatientPatronymic { get; set; } = default!;
         public string Speciality { get; set; } = default!;
+        public DateTime IssuingTime { get; set; }
+        public bool HasPrescription { get; set; }
+
     }
 }

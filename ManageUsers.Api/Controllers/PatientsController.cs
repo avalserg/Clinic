@@ -4,6 +4,7 @@ using ManageUsers.Application.Handlers.Patient.Commands.CreatePatient;
 using ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
 using ManageUsers.Application.Handlers.Patient.Commands.UpdatePatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatients;
+using ManageUsers.Application.Handlers.Patient.Queries.GetCountPatientsByAge;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatient;
 using ManageUsers.Application.Handlers.Patient.Queries.GetPatients;
 using MediatR;
@@ -109,7 +110,20 @@ namespace ManageUsers.Api.Controllers
 
             return Ok(users);
         }
+        /// <summary>
+        /// Count all doctors
+        /// </summary>
+        /// <param name="labelFreeText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("countByAge")]
+        public async Task<IActionResult> GetCountPatientsByAgeAsync(CancellationToken cancellationToken)
+        {
 
+            var count = await Sender.Send(new GetCountPatientsByAgeQuery(), cancellationToken);
+            return Ok(count);
+        }
         /// <summary>
         /// Update patient
         /// </summary>
@@ -132,7 +146,7 @@ namespace ManageUsers.Api.Controllers
                 updatePatientRequest.Patronymic,
                 DateTime.Parse(updatePatientRequest.DateBirthday, null, DateTimeStyles.RoundtripKind),
                 updatePatientRequest.Address,
-                updatePatientRequest.PhoneNumber.Value,
+                updatePatientRequest.PhoneNumber,
                 updatePatientRequest.PassportNumber,
                 updatePatientRequest.Avatar
             );
@@ -148,16 +162,17 @@ namespace ManageUsers.Api.Controllers
         /// <summary>
         /// Delete patient
         /// </summary>
-        /// <param name="id"></param>
+
+        /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpDelete]
         [Authorize]
-        public async Task<IActionResult> DeletePatientAsync([FromBody] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeletePatientAsync([FromBody] DeletePatientRequest request, CancellationToken cancellationToken)
         {
-            await Sender.Send(new DeletePatientCommand() { Id = id }, cancellationToken);
+            await Sender.Send(new DeletePatientCommand() { Id = Guid.Parse(request.Id) }, cancellationToken);
 
-            return Ok($"User with ID = {id} was deleted");
+            return Ok($"User with ID = {request.Id} was deleted");
         }
 
 

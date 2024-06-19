@@ -35,7 +35,8 @@ namespace MedicalCards.Domain
             PatientLastName = patientLastName;
             PatientPatronymic = patientPatronymic;
             PatientId = patientId;
-
+            // always false after created
+            HasPrescription = false;
 
 
         }
@@ -54,7 +55,7 @@ namespace MedicalCards.Domain
         public string PatientFirstName { get; private set; }
         public string PatientLastName { get; private set; }
         public string PatientPatronymic { get; private set; }
-
+        public bool HasPrescription { get; private set; }
 
         public string Speciality { get; private set; }
         public DateTime IssuingTime { get; private set; }
@@ -99,5 +100,15 @@ namespace MedicalCards.Domain
             //some  logic to create entity
             return appointment;
         }
+
+        public void UpdateAppointmentHasPrescription(
+            bool hasPrescription,
+            string prescriptionId
+        )
+        {
+            HasPrescription = hasPrescription;
+            PrescriptionId = prescriptionId;
+        }
+
     }
 }

@@ -56,10 +56,11 @@ internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointme
         {
             throw new ForbiddenException();
         }
-        var medicalCard = await _readMedicalCardsRepository.AsAsyncRead().SingleOrDefaultAsync(pt => pt.Id == request.MedicalCardId, cancellationToken);
+        var medicalCard = await _readMedicalCardsRepository.AsAsyncRead().SingleOrDefaultAsync(pt => pt.PatientId == request.PatientId, cancellationToken);
         if (medicalCard is null)
         {
-            return Result.Failure<CreateAppointmentDto>(DomainErrors.MedicalCard.MedicalCardNotFound(request.MedicalCardId));
+            // TODO edit result
+            return Result.Failure<CreateAppointmentDto>(DomainErrors.MedicalCard.MedicalCardNotFound(request.PatientId));
         }
 
         var doctor = await _applicationUsersProviders.GetDoctorByIdAsync(request.DoctorId, cancellationToken);
@@ -67,7 +68,7 @@ internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointme
         {
             return Result.Failure<CreateAppointmentDto>(DomainErrors.Appointment.AppointmentDoctorNotFound(request.DoctorId));
         }
-        var patient = await _applicationUsersProviders.GetPatientByIdAsync(medicalCard.PatientId, cancellationToken);
+        var patient = await _applicationUsersProviders.GetPatientByIdAsync(request.PatientId, cancellationToken);
         if (patient is null)
         {
             return Result.Failure<CreateAppointmentDto>(DomainErrors.Appointment.AppointmentPatientNotFound(medicalCard.PatientId));
@@ -84,7 +85,7 @@ internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointme
             doctor.DoctorLastName,
             doctor.DoctorPatronymic,
             doctor.Speciality,
-            request.MedicalCardId,
+            medicalCard.Id,
             request.DoctorId,
             medicalCard.PatientId,
             patient.FirstName,

@@ -63,10 +63,11 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
             }
 
             var appointment = await _readAppointmentsRepository.AsAsyncRead()
-                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
+                .FirstOrDefaultAsync(a => a.PatientId == request.PatientId, cancellationToken);
             if (appointment is null)
             {
-                return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentNotFound(request.AppointmentId));
+                // TODO RESULT correct
+                return Result.Failure<CreatePrescriptionDto>(DomainErrors.Appointment.AppointmentNotFound(request.PatientId));
             }
             var doctor = await _applicationUsersProviders.GetDoctorByIdAsync(appointment.DoctorId, cancellationToken);
             if (doctor is null)
@@ -88,7 +89,7 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
                 request.ReleaseForm,
                 request.Amount,
                 DateTime.Now,
-                request.AppointmentId,
+                appointment.Id,
                 appointment.DoctorId,
                 doctor.DoctorFirstName,
                 doctor.DoctorLastName,

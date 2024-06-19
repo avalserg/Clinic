@@ -1,7 +1,6 @@
 ﻿using Authorization.Application.Models;
-using Authorization.Domain;
 
-namespace Authorization.Application.Services;
+namespace Authorization.Application.Abstractions.Service;
 
 public interface IJwtProvider
 {

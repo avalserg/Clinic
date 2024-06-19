@@ -4,9 +4,7 @@ using MedicalCards.Application.Abstractions.Service;
 using MedicalCards.Application.BaseRealizations;
 using MedicalCards.Application.Caches.Prescription;
 using MedicalCards.Application.DTOs.Prescription;
-using MedicalCards.Domain.Enums;
 using MedicalCards.Domain.Errors;
-using MedicalCards.Domain.Exceptions.Base;
 using MedicalCards.Domain.Shared;
 
 namespace MedicalCards.Application.Handlers.Prescription.Queries.GetPrescription
@@ -29,12 +27,12 @@ namespace MedicalCards.Application.Handlers.Prescription.Queries.GetPrescription
         }
         public override async Task<Result<GetPrescriptionDto>> SentQueryAsync(GetPrescriptionQuery request, CancellationToken cancellationToken)
         {
-            // only doctors and admins can view appointment 
-            if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor) &&
-                !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
-            {
-                throw new ForbiddenException();
-            }
+
+            //if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor) &&
+            //    !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin)&&)
+            //{
+            //    throw new ForbiddenException();
+            //}
             var prescription = await _prescriptionReadRepository.AsAsyncRead().SingleOrDefaultAsync(pt => pt.Id == request.Id, cancellationToken);
             if (prescription is null)
             {

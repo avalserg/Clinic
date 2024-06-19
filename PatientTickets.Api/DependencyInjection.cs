@@ -35,11 +35,10 @@ public static class DependencyInjection
             {
                 options.AddPolicy(CorsPolicy.AllowAll, policy =>
                 {
-                    policy.WithOrigins("https://localhost:3000", "https://localhost:3000/doctorRegister");
+
                     policy.AllowAnyHeader();
                     policy.AllowAnyMethod();
-                    policy.AllowAnyOrigin();
-                    policy.AllowCredentials();
+
                     policy.WithExposedHeaders("*");
                     policy.SetIsOriginAllowed(origin => true);
                 });

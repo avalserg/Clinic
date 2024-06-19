@@ -6,6 +6,6 @@ internal class CreateAppointmentCommandValidator : AbstractValidator<CreateAppoi
 {
     public CreateAppointmentCommandValidator()
     {
-        RuleFor(e => e.MedicalCardId).NotEmpty();
+        RuleFor(e => e.PatientId).NotEmpty();
     }
 }

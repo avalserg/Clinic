@@ -48,8 +48,8 @@ namespace MedicalCards.Application.Handlers.Appointment.Queries.GetAppointments
             {
                 query = query.Take(request.Limit.Value);
             }
-            // order by  last name
-            query = query.OrderBy(e => e.PatientId);
+            // order by  date appointment
+            query = query.OrderBy(e => e.IssuingTime);
 
             var entitiesResult = await _appointments.AsAsyncRead().ToArrayAsync(query, cancellationToken);
             var entitiesCount = await _appointments.AsAsyncRead().CountAsync(query, cancellationToken);

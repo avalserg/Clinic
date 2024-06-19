@@ -5,7 +5,7 @@ namespace MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescrip
 {
     public class CreatePrescriptionCommand : ICommand<CreatePrescriptionDto>
     {
-        public Guid AppointmentId { get; set; }
+        public Guid PatientId { get; set; }
         public string MedicineName { get; set; }
         public string ReleaseForm { get; set; }
         public string Amount { get; set; }

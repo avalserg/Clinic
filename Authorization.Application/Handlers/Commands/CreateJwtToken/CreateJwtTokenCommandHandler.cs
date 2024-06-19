@@ -4,7 +4,6 @@ using Authorization.Application.Abstractions.Persistence.Repository.Writing;
 using Authorization.Application.Abstractions.Service;
 using Authorization.Application.DTOs;
 using Authorization.Application.Models;
-using Authorization.Application.Services;
 using Authorization.Domain;
 using Authorization.Domain.Errors;
 using Authorization.Domain.Shared;

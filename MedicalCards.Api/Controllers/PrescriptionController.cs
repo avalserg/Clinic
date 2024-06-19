@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MedicalCards.Api.Abstractions;
+using MedicalCards.Application.Handlers.Appointment.Commands.UpdateAppointmentHasPrescription;
 using MedicalCards.Application.Handlers.Prescription.Commands.CreatePrescription;
 using MedicalCards.Application.Handlers.Prescription.Queries.GetCountPrescriptions;
 using MedicalCards.Application.Handlers.Prescription.Queries.GetPrescription;
@@ -92,6 +93,8 @@ namespace MedicalCards.Api.Controllers
             {
                 return HandleFailure(result);
             }
+            // update Appointment has prescription
+            await Sender.Send(new UpdateAppointmentHasPrescriptionCommand() { Id = result.Value.AppointmentId, PrescriptionId = result.Value.Id.ToString() }, cancellationToken);
             return Ok(result.Value);
         }
     }

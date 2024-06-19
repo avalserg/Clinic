@@ -7,7 +7,9 @@ using PatientTickets.Application.Handlers.Commands.CreatePatientTicket;
 using PatientTickets.Application.Handlers.Commands.DeletePatientTicket;
 using PatientTickets.Application.Handlers.Commands.UpdatePatientTicketHasVisit;
 using PatientTickets.Application.Handlers.Queries.GetBusyTimeWithTheDoctor;
+using PatientTickets.Application.Handlers.Queries.GetCountPatientsPerDay;
 using PatientTickets.Application.Handlers.Queries.GetCountPatientTickets;
+using PatientTickets.Application.Handlers.Queries.GetCountPatientTicketsPerYearByMonths;
 using PatientTickets.Application.Handlers.Queries.GetPatientTicket;
 using PatientTickets.Application.Handlers.Queries.GetPatientTickets;
 
@@ -106,7 +108,34 @@ namespace PatientTickets.Api.Controllers
 
             return Ok(users);
         }
+        /// <summary>
+        /// Count all doctors
+        /// </summary>
+        /// <param name="labelFreeText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("countOnTimePerDay")]
+        public async Task<IActionResult> GetCountPatientTicketsOnTimePerDayAsync(CancellationToken cancellationToken)
+        {
 
+            var count = await Sender.Send(new GetCountPatientTicketsPerDayQuery(), cancellationToken);
+            return Ok(count);
+        }
+        /// <summary>
+        /// Count all doctors
+        /// </summary>
+        /// <param name="labelFreeText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("countOnMonthPerYear")]
+        public async Task<IActionResult> GetCountPatientTicketsPerYearByMonthsAsync(CancellationToken cancellationToken)
+        {
+
+            var count = await Sender.Send(new GetCountPatientTicketsPerYearByMonthsQuery(), cancellationToken);
+            return Ok(count);
+        }
         /// <summary>
         ///  Get busy time patient tickets by date to concrete doctor
         /// </summary>
@@ -134,8 +163,8 @@ namespace PatientTickets.Api.Controllers
         [HttpPatch("{id}/IsVisited")]
         public async Task<IActionResult> UpdatePatientVisitToTheDoctorAsync(Guid id, CancellationToken cancellationToken)
         {
-            var patientTicket = await Sender.Send(new UpdatePatientTicketHasVisitCommand() { Id = id }, cancellationToken);
-            return Ok(patientTicket);
+            var isVisited = await Sender.Send(new UpdatePatientTicketHasVisitCommand() { Id = id }, cancellationToken);
+            return Ok(isVisited.Value);
 
         }
         /// <summary>

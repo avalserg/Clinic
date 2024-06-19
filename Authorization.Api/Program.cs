@@ -3,12 +3,12 @@ using Authorization.Api.Middlewares;
 using Authorization.Api.OptionsSetup;
 using Authorization.Application;
 using Authorization.Application.Middlewares;
+using Authorization.ExternalProviders;
 using Authorization.Persistence;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Authorization.ExternalProviders;
 
 try
 {
@@ -29,7 +29,7 @@ try
         .WriteTo.File($"{builder.Configuration["Logging:LogsFolder"]}/Error-.txt", LogEventLevel.Error,
             rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30, buffered: true));
     builder.Services.ConfigureOptions<JwtOptionsSetup>();
-    
+
     builder.Services
         .AddSwaggerWidthJwtAuth(Assembly.GetExecutingAssembly(), appName, version, appName)
         //.AddSwaggerForControllersWidthJwtAuth()
@@ -40,11 +40,11 @@ try
         .AddCoreAuthServices()
         .AddExternalProviders()
         .AddHttpClient()
-        //.AddAllCors()
+        .AddAllCors()
         .AddAuthApplication()
         .AddControllers()
         .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-   
+
     builder.Services.AddEndpointsApiExplorer();
     var app = builder.Build();
 
@@ -57,7 +57,7 @@ try
         .UseAuthentication()
         .UseAuthorization()
         .UseHttpsRedirection();
-        
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger(c => c.RouteTemplate = appPrefix + "/swagger/{documentname}/swagger.json");
@@ -75,7 +75,7 @@ try
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        //.WithOrigins("https://localhost:3000))
+        //.WithOrigins("https://localhost:3000)
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();

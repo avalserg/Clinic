@@ -2,8 +2,6 @@
 using MedicalCards.Application.Abstractions.Service;
 using MedicalCards.Application.BaseRealizations;
 using MedicalCards.Application.Caches.MedicalCard;
-using MedicalCards.Domain.Enums;
-using MedicalCards.Domain.Exceptions.Base;
 
 namespace MedicalCards.Application.Handlers.Prescription.Queries.GetCountPrescriptions
 {
@@ -23,11 +21,11 @@ namespace MedicalCards.Application.Handlers.Prescription.Queries.GetCountPrescri
         public override async Task<int> SentQueryAsync(GetCountPrescriptionsQuery request, CancellationToken cancellationToken)
         {
             // only doctors and admins can view appointment 
-            if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor) &&
-                !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
-            {
-                throw new ForbiddenException();
-            }
+            //if (!_currentUserService.UserInRole(ApplicationUserRolesEnum.Doctor) &&
+            //    !_currentUserService.UserInRole(ApplicationUserRolesEnum.Admin))
+            //{
+            //    throw new ForbiddenException();
+            //}
             var count = await _prescriptionRepository.AsAsyncRead().CountAsync(cancellationToken);
             return count;
         }
