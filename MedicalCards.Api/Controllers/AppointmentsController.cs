@@ -67,7 +67,7 @@ namespace MedicalCards.Api.Controllers
         /// <param name="labelFreeText"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-
+        [AllowAnonymous]
         [HttpGet("totalCount")]
         public async Task<IActionResult> GetCountAppointmentsAsync(string? labelFreeText, CancellationToken cancellationToken)
         {
