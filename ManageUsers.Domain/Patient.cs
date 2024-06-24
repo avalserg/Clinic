@@ -26,6 +26,8 @@ namespace ManageUsers.Domain
             Avatar = avatar;
             PassportNumber = passportNumber;
             ApplicationUserId = applicationUserId;
+            // after creating always false
+            IsDeleted = false;
         }
 
         private Patient()
@@ -39,7 +41,7 @@ namespace ManageUsers.Domain
         public PhoneNumber PhoneNumber { get; private set; }
         public string PassportNumber { get; private set; }
         // Mark patient as deleted entity
-        // public bool IsDeleted { get; private set; }
+        public bool IsDeleted { get; private set; }
         public string? Avatar { get; private set; }
         [ForeignKey("ApplicationUser")]
         public Guid ApplicationUserId { get; private set; }
@@ -97,6 +99,16 @@ namespace ManageUsers.Domain
         {
             Avatar = avatar;
         }
+        public void UpdateIsDeletedToTrue(
+
+
+        )
+        {
+
+            IsDeleted = true;
+
+        }
+
 
     }
 }

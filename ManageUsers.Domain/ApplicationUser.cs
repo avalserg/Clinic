@@ -15,6 +15,7 @@ public class ApplicationUser
         Login = login;
         PasswordHash = passwordHash;
         ApplicationUserRoleId = applicationUserRoleId;
+        IsDeleted = false;
     }
 
     private ApplicationUser() { }
@@ -27,7 +28,7 @@ public class ApplicationUser
     public string PasswordHash { get; private set; }
 
     // Mark app user as deleted entity
-    // public bool IsDeleted { get; private set; }
+    public bool IsDeleted { get; private set; }
 
     public ApplicationUserRole ApplicationUserRole { get; private set; } = default!;
 
@@ -48,5 +49,11 @@ public class ApplicationUser
         //some  logic create entity
         return applicationUser;
     }
+    public void UpdateIsDeletedToTrue(
+    )
+    {
 
+        IsDeleted = true;
+
+    }
 }

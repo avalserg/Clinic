@@ -3,6 +3,7 @@ using PatientTickets.Api.Middlewares;
 using PatientTickets.Application;
 using PatientTickets.Application.Middlewares;
 using PatientTickets.ExternalProviders;
+using PatientTickets.Infarastructure;
 using PatientTickets.Persistence;
 using Serilog;
 using Serilog.Events;
@@ -36,6 +37,7 @@ try
         .AddCoreAuthApiServices(builder.Configuration)
         .AddPersistenceServices(builder.Configuration)
         .AddCoreAuthServices()
+        .AddDistributedCachesServices(builder.Configuration)
         .AddExternalProviders()
         .AddHttpClient()
         .AddAuthApplication()

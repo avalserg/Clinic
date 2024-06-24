@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace ManageUsers.Application.Handlers.Patient;
 
-internal static class ListAdminWhere
+internal static class ListPatientWhere
 {
     public static Expression<Func<Domain.Patient, bool>> Where(ListPatientFilter filter)
     {

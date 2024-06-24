@@ -40,6 +40,7 @@ public static class DependencyInjection
             busConfigurator.SetKebabCaseEndpointNameFormatter();
             busConfigurator.AddConsumer<MedicalCardOwnerUpdatedConsumer>();
             busConfigurator.AddConsumer<MedicalCardCreateConsumer>();
+            busConfigurator.AddConsumer<MedicalCardDeleteConsumer>();
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {
                 configurator.Host("localhost", "/", h =>

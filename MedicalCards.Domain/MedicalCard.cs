@@ -25,6 +25,7 @@ namespace MedicalCards.Domain
             DateBirthday = dateBirthDay;
             PhoneNumber = phoneNumber;
             Address = address;
+            IsDeleted = false;
         }
 
         private MedicalCard() { }
@@ -36,7 +37,7 @@ namespace MedicalCards.Domain
         public DateTime DateBirthday { get; private set; }
         public string Address { get; private set; }
         public string PhoneNumber { get; private set; }
-
+        public bool IsDeleted { get; private set; }
         public List<Appointment> Appointments { get; private set; }
         public static MedicalCard Create(
             Guid id,
@@ -82,6 +83,10 @@ namespace MedicalCards.Domain
             Address = address;
 
         }
+        public void UpdateIsDeletedToTrue()
+        {
+            IsDeleted = true;
 
+        }
     }
 }

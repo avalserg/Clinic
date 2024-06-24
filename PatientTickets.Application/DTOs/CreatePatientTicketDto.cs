@@ -15,6 +15,7 @@ namespace PatientTickets.Application.DTOs
 
         public string CabinetNumber { get; set; }
         public string DoctorSpeciality { get; set; }
+        public bool HasDoctorVisit { get; set; }
 
     }
 }

@@ -15,6 +15,7 @@ namespace MedicalCards.Persistence.EntityTypeConfigurations
                 .HasMany(x => x.Appointments)
                 .WithOne()
                 .HasForeignKey(x => x.MedicalCardId);
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

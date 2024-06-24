@@ -1,9 +1,10 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using PatientTickets.Application.Abstractions.Caches;
 using PatientTickets.Application.Abstractions.Messaging;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Writing;
 using PatientTickets.Application.Abstractions.Service;
-using PatientTickets.Application.Caches;
+
 using PatientTickets.Domain.Entities;
 using PatientTickets.Domain.Enums;
 using PatientTickets.Domain.Errors;
@@ -17,19 +18,19 @@ internal class DeletePatientTicketCommandHandler : ICommandHandler<DeletePatient
     private readonly IBaseWriteRepository<PatientTicket> _patientTicket;
     private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
-    private readonly PatientTicketsListMemoryCache _listCache;
+    private readonly IPatientTicketsListCache _listCache;
     private readonly ILogger<DeletePatientTicketCommandHandler> _logger;
-    private readonly PatientTicketsCountMemoryCache _countCache;
-    private readonly PatientTicketMemoryCache _patientTicketCache;
+    private readonly IPatientTicketsCountCache _countCache;
+    private readonly IPatientTicketCache _patientTicketCache;
 
     public DeletePatientTicketCommandHandler(
         IBaseWriteRepository<PatientTicket> patientTicket,
         IMapper mapper,
-        PatientTicketsListMemoryCache listCache,
+        IPatientTicketsListCache listCache,
         ILogger<DeletePatientTicketCommandHandler> logger,
-        PatientTicketsCountMemoryCache countCache,
+        IPatientTicketsCountCache countCache,
         ICurrentUserService currentUserService,
-        PatientTicketMemoryCache patientTicketCache)
+        IPatientTicketCache patientTicketCache)
     {
 
         _patientTicket = patientTicket;

@@ -75,6 +75,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManageUsers.Application.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{75AF4DDD-7C01-4563-A2C7-0DB8A02B3C16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientTickets.Infarastructure", "PatientTickets.Infarastructure\PatientTickets.Infarastructure.csproj", "{621FE05E-AE99-4097-87CF-E466B1FC5061}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +191,10 @@ Global
 		{75AF4DDD-7C01-4563-A2C7-0DB8A02B3C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75AF4DDD-7C01-4563-A2C7-0DB8A02B3C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75AF4DDD-7C01-4563-A2C7-0DB8A02B3C16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{621FE05E-AE99-4097-87CF-E466B1FC5061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{621FE05E-AE99-4097-87CF-E466B1FC5061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{621FE05E-AE99-4097-87CF-E466B1FC5061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{621FE05E-AE99-4097-87CF-E466B1FC5061}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,6 +228,7 @@ Global
 		{B441E33B-894A-4810-84F7-CCE9BD18EE12} = {8D26F97C-DF63-4788-99F8-70906D803E00}
 		{2DD799E1-E999-4399-802C-4E14C48B78ED} = {B441E33B-894A-4810-84F7-CCE9BD18EE12}
 		{75AF4DDD-7C01-4563-A2C7-0DB8A02B3C16} = {CB695518-70CF-4D15-B4EE-EE13A24408F2}
+		{621FE05E-AE99-4097-87CF-E466B1FC5061} = {CA1D271E-CF0F-4DB8-8C0A-56ADE198CCC5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E99E4150-DDB4-4F6B-A0FD-B3623AC405C5}

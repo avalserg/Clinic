@@ -1,6 +1,7 @@
-﻿using PatientTickets.Application.Abstractions.Persistence.Repository.Read;
+﻿using PatientTickets.Application.Abstractions.Caches;
+using PatientTickets.Application.Abstractions.Persistence.Repository.Read;
 using PatientTickets.Application.BaseRealizations;
-using PatientTickets.Application.Caches;
+
 using PatientTickets.Domain.Entities;
 
 namespace PatientTickets.Application.Handlers.Queries.GetCountPatientTickets
@@ -11,7 +12,7 @@ namespace PatientTickets.Application.Handlers.Queries.GetCountPatientTickets
 
 
 
-        public GetCountPatientTicketsQueryHandler(IBaseReadRepository<PatientTicket> userRepository, PatientTicketsCountMemoryCache cache) : base(cache)
+        public GetCountPatientTicketsQueryHandler(IBaseReadRepository<PatientTicket> userRepository, IPatientTicketsCountCache cache) : base(cache)
         {
             _patientTicketRepository = userRepository;
         }

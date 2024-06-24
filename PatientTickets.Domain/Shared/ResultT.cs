@@ -1,9 +1,11 @@
-﻿namespace PatientTickets.Domain.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace PatientTickets.Domain.Shared;
 
 public class Result<TValue> : Result
 {
     private readonly TValue? _value;
-
+    [JsonConstructor]
     protected internal Result(TValue? value, bool isSuccess, Error error)
         : base(isSuccess, error) =>
         _value = value;

@@ -1,68 +1,14 @@
 services:
-
-  mssql:
-    container_name: clinic-sql-server
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    restart: unless-stopped
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "0bd7903b-f568-4894-8d72-3c1b507e5644"
-    volumes:
-      - my-volume:/var/opt/mssql
-    ports:
-      - "1433:1433"
-          
   
-  authorization.api:
-    image: authorization.api
-    build:
-      context: .
-      dockerfile: Authorization.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10001:10001"
-    
-  manageUsers.api:
-    image: manageUsers.api
-    build:
-      context: .
-      dockerfile: ManageUsers.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10002:10002"
-    
-  medicalCards.api:
-    image: medicalCards.api
-    build:
-      context: .
-      dockerfile: MedicalCards.Api/Dockerfile
-    restart: unless-stopped 
-    ports:
-      - "10003:10003"
-    
-  patientTickets.api:
-    image: patientTickets.api
-    build:
-      context: .
-      dockerfile: PatientTickets.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10004:10004"
-    
-  reviews.api:
-    image: reviews.api
-    build:
-      context: .
-      dockerfile: Reviews.Api/Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10005:10005"
-    
- 
   redis:
     image: redis
     ports:
       - "6379:6379"
+
+  redisPatientTickets:
+    image: redis
+    ports:
+      - "6377:6377"
 
   clinic-mq:
     image: rabbitmq:management
@@ -78,5 +24,3 @@ services:
         RABBITMQ_DEFAULT_USER: guest
         RABBITMQ_DEFAULT_PASS: guest
 
-volumes:
-  my-volume:

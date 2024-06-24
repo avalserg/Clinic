@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using PatientTickets.Application.Abstractions.Caches;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Read;
 using PatientTickets.Application.BaseRealizations;
-using PatientTickets.Application.Caches;
+
 using PatientTickets.Application.DTOs;
 using PatientTickets.Domain.Entities;
 using PatientTickets.Domain.Errors;
@@ -13,7 +14,7 @@ namespace PatientTickets.Application.Handlers.Queries.GetPatientTicket
     {
         private readonly IBaseReadRepository<PatientTicket> _patientTickets;
         private readonly IMapper _mapper;
-        public GetPatientTicketQueryHandler(IBaseReadRepository<PatientTicket> patientTickets, IMapper mapper, PatientTicketMemoryCache cache) : base(cache)
+        public GetPatientTicketQueryHandler(IBaseReadRepository<PatientTicket> patientTickets, IMapper mapper, IPatientTicketCache cache) : base(cache)
         {
             _mapper = mapper;
             _patientTickets = patientTickets;

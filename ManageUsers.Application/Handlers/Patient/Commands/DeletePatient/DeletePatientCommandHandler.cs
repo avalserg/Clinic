@@ -1,3 +1,4 @@
+using Contracts;
 using ManageUsers.Application.Abstractions.Messaging;
 using ManageUsers.Application.Abstractions.Persistence.Repository.Writing;
 using ManageUsers.Application.Abstractions.Service;
@@ -7,6 +8,7 @@ using ManageUsers.Domain.Enums;
 using ManageUsers.Domain.Errors;
 using ManageUsers.Domain.Exceptions.Base;
 using ManageUsers.Domain.Shared;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace ManageUsers.Application.Handlers.Patient.Commands.DeletePatient;
@@ -25,6 +27,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
     private readonly ILogger<DeletePatientCommandHandler> _logger;
 
     private readonly PatientMemoryCache _userCache;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public DeletePatientCommandHandler(
         IBaseWriteRepository<Domain.ApplicationUser> users,
@@ -33,7 +36,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
         PatientsListMemoryCache listCache,
         PatientsCountMemoryCache countCache,
         ILogger<DeletePatientCommandHandler> logger,
-        PatientMemoryCache userCache)
+        PatientMemoryCache userCache, IPublishEndpoint publishEndpoint)
     {
         _users = users;
         _patient = patient;
@@ -42,6 +45,7 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
         _countCache = countCache;
         _logger = logger;
         _userCache = userCache;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Result> Handle(DeletePatientCommand request, CancellationToken cancellationToken)
@@ -65,9 +69,20 @@ internal class DeletePatientCommandHandler : ICommandHandler<DeletePatientComman
             return Result.Failure(
                 DomainErrors.ApplicationUserDomainErrors.NotFound(request.Id));
         }
-        await _patient.RemoveAsync(patient, cancellationToken);
 
-        await _users.RemoveAsync(user, cancellationToken);
+        patient.UpdateIsDeletedToTrue();
+        await _patient.UpdateAsync(patient, cancellationToken);
+        user.UpdateIsDeletedToTrue();
+        await _users.UpdateAsync(user, cancellationToken);
+
+        // publish to Rabbit MQ
+        await _publishEndpoint.Publish(new UserDeletedEvent()
+        {
+            Id = patient.Id,
+
+        }, cancellationToken);
+
+
         _listCache.Clear();
         _countCache.Clear();
         _logger.LogWarning(

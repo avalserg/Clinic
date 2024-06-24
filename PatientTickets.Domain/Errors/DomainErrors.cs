@@ -9,7 +9,10 @@ public static class DomainErrors
     {
         public static readonly Func<string, Error> PatientTicketTimeIsBusy = time => new(
               "PatientTicket.PatientTicketTimeIsBusy",
-              $"The login {time} is already in use");
+              $"The time {time} is already in use");
+        public static readonly Func<string, Error> PatientTicketTimeAlreadyPassed = time => new(
+              "PatientTicket.PatientTicketTimeAlreadyPassed",
+              $"The time {time} is already passed");
         public static readonly Func<Guid, Error> PatientTicketNotFound = id => new(
               "PatientTicket.PatientTicketNotFound",
               $"The PatientTicket {id} not found");

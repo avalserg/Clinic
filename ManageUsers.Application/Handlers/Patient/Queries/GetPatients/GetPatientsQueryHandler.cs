@@ -23,7 +23,7 @@ internal class GetPatientsQueryHandler : BaseCashedQuery<GetPatientsQuery, BaseL
 
     public override async Task<BaseListDto<GetPatientDto>> SentQueryAsync(GetPatientsQuery request, CancellationToken cancellationToken)
     {
-        var query = _users.AsQueryable().Where(ListAdminWhere.Where(request));
+        var query = _users.AsQueryable().Where(ListPatientWhere.Where(request)).Where(u => !u.IsDeleted);
 
 
         if (request.Offset.HasValue)

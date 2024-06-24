@@ -28,6 +28,7 @@ namespace ManageUsers.Persistence.EntityTypeConfigurations.Users
                 .Property(x => x.PhoneNumber)
                 .HasConversion(x => x.Value, v => PhoneNumber.Create(v).Value);
 
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

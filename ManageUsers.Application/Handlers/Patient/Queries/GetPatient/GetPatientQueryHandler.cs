@@ -12,7 +12,7 @@ internal class GetPatientQueryHandler : BaseCashedQuery<GetPatientQuery, GetPati
     private readonly IBaseReadRepository<Domain.Patient> _users;
 
     private readonly IMapper _mapper;
-    
+
 
     public GetPatientQueryHandler(IBaseReadRepository<Domain.Patient> users, IMapper mapper, PatientMemoryCache cache) : base(cache)
     {
@@ -22,13 +22,13 @@ internal class GetPatientQueryHandler : BaseCashedQuery<GetPatientQuery, GetPati
 
     public override async Task<GetPatientDto> SentQueryAsync(GetPatientQuery request, CancellationToken cancellationToken)
     {
-       
-        var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
+
+        var user = await _users.AsAsyncRead().SingleOrDefaultAsync(e => e.Id == request.Id && !e.IsDeleted, cancellationToken);
         if (user is null)
         {
             throw new PatientNotFoundDomainException(request.Id);
         }
-       
+
         return _mapper.Map<GetPatientDto>(user);
     }
 }

@@ -32,7 +32,6 @@ try
 
     builder.Services
         .AddSwaggerWidthJwtAuth(Assembly.GetExecutingAssembly(), appName, version, appName)
-        //.AddSwaggerForControllersWidthJwtAuth()
         .AddCoreApiServices()
         .AddCoreApplicationServices()
         .AddCoreAuthApiServices(builder.Configuration)
@@ -49,7 +48,7 @@ try
     var app = builder.Build();
 
     app.RunDbMigrations();
-    //.RegisterApis(Assembly.GetExecutingAssembly(), $"{appPrefix}/api/{version}");
+
 
 
     app.UseCoreExceptionHandler()
@@ -67,15 +66,13 @@ try
             options.SwaggerEndpoint("/" + appPrefix + $"/swagger/{version}/swagger.json", version);
             options.RoutePrefix = appPrefix + "/swagger";
         });
-        //app.UseSwagger();
-        //app.UseSwaggerUI();
+
     }
-    //app.UseCors(CorsPolicy.AllowAll);
+
     app.UseCors(x => x
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        //.WithOrigins("https://localhost:3000)
         .SetIsOriginAllowed(origin => true));
     app.MapControllers();
     app.Run();

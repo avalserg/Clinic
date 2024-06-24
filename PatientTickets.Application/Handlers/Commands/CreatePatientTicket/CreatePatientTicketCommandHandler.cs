@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using PatientTickets.Application.Abstractions.Caches;
 using PatientTickets.Application.Abstractions.ExternalProviders;
 using PatientTickets.Application.Abstractions.Messaging;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Read;
 using PatientTickets.Application.Abstractions.Persistence.Repository.Writing;
 using PatientTickets.Application.Abstractions.Service;
-using PatientTickets.Application.Caches;
 using PatientTickets.Application.DTOs;
 using PatientTickets.Domain.Entities;
 using PatientTickets.Domain.Enums;
@@ -22,23 +22,23 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
     private readonly IBaseReadRepository<PatientTicket> _patientTicketReadRepository;
     private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
-    private readonly PatientTicketsListMemoryCache _listCache;
+    private readonly IPatientTicketsListCache _listCache;
     private readonly ILogger<CreatePatientTicketCommandHandler> _logger;
-    private readonly PatientTicketsCountMemoryCache _countCache;
-    private readonly PatientTicketMemoryCache _patientTicketMemoryCache;
+    private readonly IPatientTicketsCountCache _countCache;
+    private readonly IPatientTicketCache _patientTicketCache;
     private readonly IManageUsersProviders _applicationUsersProviders;
     public CreatePatientTicketCommandHandler(
         IMapper mapper,
         ILogger<CreatePatientTicketCommandHandler> logger,
         IBaseWriteRepository<PatientTicket> patientTicketRepository,
-        PatientTicketMemoryCache patientTicketMemoryCache,
-        PatientTicketsCountMemoryCache countCache,
-        PatientTicketsListMemoryCache listCache, ICurrentUserService currentUserService, IManageUsersProviders applicationUsersProviders, IBaseReadRepository<PatientTicket> patientTicketReadRepository)
+        IPatientTicketCache patientTicketCache,
+        IPatientTicketsCountCache countCache,
+        IPatientTicketsListCache listCache, ICurrentUserService currentUserService, IManageUsersProviders applicationUsersProviders, IBaseReadRepository<PatientTicket> patientTicketReadRepository)
     {
         _mapper = mapper;
         _logger = logger;
         _patientTicketRepository = patientTicketRepository;
-        _patientTicketMemoryCache = patientTicketMemoryCache;
+        _patientTicketCache = patientTicketCache;
         _countCache = countCache;
         _listCache = listCache;
         _currentUserService = currentUserService;
@@ -83,6 +83,10 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
         {
             return Result.Failure<CreatePatientTicketDto>(DomainErrors.PatientTicket.PatientTicketTimeIsBusy(completeDate.ToString(CultureInfo.CurrentCulture)));
         }
+        if (completeDate < DateTime.Now)
+        {
+            return Result.Failure<CreatePatientTicketDto>(DomainErrors.PatientTicket.PatientTicketTimeAlreadyPassed(completeDate.ToString(CultureInfo.CurrentCulture)));
+        }
         var patientTicket = PatientTicket.Create(
             newPatientTicketGuid,
             request.PatientId,
@@ -102,7 +106,7 @@ internal class CreatePatientTicketCommandHandler : ICommandHandler<CreatePatient
 
         _listCache.Clear();
         _countCache.Clear();
-        _patientTicketMemoryCache.Clear();
+        _patientTicketCache.Clear();
         _logger.LogInformation($"New patientTicket {patientTicket.Id} created.");
 
         return _mapper.Map<CreatePatientTicketDto>(patientTicket);
